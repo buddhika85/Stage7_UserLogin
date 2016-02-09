@@ -1,0 +1,189 @@
+﻿<div>
+    <h4>{{vm.title}}</h4>
+    <br />
+
+    <!-- panel for - Product information-->
+    <div class="panel panel-default">
+
+        <div class="panel-body">
+
+            <fieldset>
+                <legend style="font-size:medium;" id="productSearchPanelHeading" class="panel-heading">Product information</legend>
+
+                <div id="productSerahcForm">
+                    <!--Information on search-->
+                    <div class="form-group row">
+                        <p class="col-md-12">
+                            <kbd>IMPORTANT:</kbd>&nbsp;&nbsp;
+                            To amend stock counts - first select the product <code>category</code>,
+                            then based on that the <code>condition</code>, then the <code>brand</code>
+                            and finally the <code>model</code>. All are mandatory selections.
+                        </p>
+                    </div>
+
+                    <div class="form-group row">
+
+                        <!--category selection-->
+                        <label for="selectCategory" class="control-label col-md-1 fontWeightNormal">Category</label>
+                        <div class="col-md-4">
+                            <select id="selectCategory">
+                                <option>---- Select Category ----</option>
+                            </select>
+                        </div>
+
+                        <!--condition selection-->
+                        <label for="selectCondition" class="control-label col-md-1 fontWeightNormal">Condition</label>
+                        <div class="col-md-4">
+                            <select id="selectCondition">
+                                <option>---- Select Condition ----</option>
+                            </select>
+                        </div>
+
+                        <div class="col-md-2">
+                            <button class="col-md-12 fontWeightNormal" ng-click="vm.resetSearch()" id="resetBtn">Reset Search</button>
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+
+                        <!--brand selection-->
+                        <label for="selectBrand" class="control-label col-md-1 fontWeightNormal">Brand</label>
+                        <div class="col-md-4">
+                            <select id="selectBrand">
+                                <option>---- Select Brand ----</option>
+                            </select>
+                        </div>
+
+                        <!--model selection-->
+                        <label for="selectModel" class="control-label col-md-1 fontWeightNormal">Model</label>
+                        <div class="col-md-4">
+                            <select id="selectModel">
+                                <option>---- Select Model ----</option>
+                            </select>
+                        </div>
+
+                        <div class="col-md-2">
+                            <button class="col-md-12 fontWeightNormal" ng-click="vm.amendStock()" id="btnSearchProducts">Amend Stock</button>
+                        </div>
+                    </div>
+
+                    <!--error message-->
+                    <div class="form-group row">
+                        <div class="col-md-12">
+                            <label class="control-label fontWeightNormal" style="color:red" id="lblErrorMessage"></label>
+                        </div>
+                    </div>
+                </div>
+            </fieldset>
+
+        </div>
+    </div>
+
+
+    <!--Product grid -->
+    <div class="panel panel-default">
+
+        <div class="panel-body" >
+
+            <fieldset>
+                <legend style="font-size:medium;" id="productPanelHeading" class="panel-heading">Products with stock counts</legend>
+                <!--Information on search-->
+                <div class="form-group row">
+                    <p class="col-md-12">
+                        <kbd>IMPORTANT:</kbd>&nbsp;&nbsp;
+                        In the 'counted' table column <span style="text-align:center; padding-left:1%"/> 
+                        <span style="background-color:green; text-align:center; padding-left:2%; padding-right: 2%">Yes</span>
+                        <span style="text-align:center; padding-right:1%" /> means  
+                        <code>stock counted</code> and,
+                        <span style="text-align:center; padding-left:1%" />
+                        <span style="background-color:darkorange; text-align:center; padding-left:2%; padding-right: 2%">No</span>
+                        <span style="text-align:center; padding-right:1%" /> means  
+                        <code>stock NOT counted</code>
+                    </p>
+                </div>
+                <!--<div class="form-group row">
+                    <br />
+                </div>-->
+                <div class="form-group row">
+                    <div class="col-md-1"></div>
+                    <div class="col-md-10" id="productsGridDiv">
+
+                        <div class="row table-responsive">
+                            <!--JS Data table -->
+                            <table cellpadding="0" cellspacing="0" border="0" class="display table-condensed table-striped" id="productsGrid"></table>
+                        </div>
+                    </div>
+                    <div class="col-md-1"></div>
+                </div>
+            </fieldset>
+        </div>
+    </div>
+
+
+    <!-- Modal to insert/edit/view info-->
+    <div id="myModal" class="modal fade" role="dialog">
+        <div class="modal-dialog">
+
+            <!-- Modal content-->
+            <div class="modal-content">
+
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title" id="modalTitle">Amend Stock count : {{vm.productListId}}</h4>
+                </div>
+
+                <div class="modal-body">                       
+                                                
+                    <div class="row formRawPaddingCustom">
+                        <label for="category" class="control-label col-md-2 fontWeightNormal">Category</label>
+                        <div class="col-md-4">
+                            <input type="text" id="category" disabled value="{{vm.categoryName}}" />
+                        </div>
+                        <label for="condition" class="control-label col-md-2 fontWeightNormal">Condition</label>
+                        <div class="col-md-4">
+                            <input type="text" id="condition" disabled value="{{vm.conditionName}}" />
+                        </div>
+                    </div>
+
+                    <div class="row formRawPaddingCustom">
+                        <label for="brand" class="control-label col-md-2 fontWeightNormal">Brand</label>
+                        <div class="col-md-4">
+                            <input type="text" id="brand" disabled value="{{vm.brandName}}" />
+                        </div>
+                        <label for="modelName" class="control-label col-md-2 fontWeightNormal">Model</label>
+                        <div class="col-md-4">
+                            <input type="text" id="modelName" disabled value="{{vm.modelName}}" />
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <label for="countedSpan" class="control-label col-md-2 fontWeightNormal">Counted</label>
+                        <div class="col-md-4">
+                            <!--<span id="counted" ng-bind-html="{{vm.counted}}"></span>-->
+                            <span id="countedSpan"></span>
+                        </div>
+                        <label for="stockCount" class="control-label col-md-2 fontWeightNormal">Stock count</label>
+                        <div class="col-md-4">
+                            <input type="text" id="stockCount" ng-model="vm.stockCount" onkeypress="return isNumberKey(event)" maxlength="8" />
+                        </div>
+                    </div>
+
+                    <!-- error message section -->
+                    <div class="row">
+                        <div class="col-md-12">
+                            <label class="control-label fontWeightNormal" style="color:red" id="lblErrorMessagePopup"></label>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="modal-footer">
+                    <button id="btnSave" type="button" class="btn-sm btn-primary" ng-click='vm.saveStockAmendment()'>Save</button>
+                    <button id="btnCancel" type="button" class="btn-sm btn-default" data-dismiss="modal">Cancel</button>
+                </div>
+
+            </div>
+        </div>
+    </div>
+    <!--End modal popup-->
+
+</div>

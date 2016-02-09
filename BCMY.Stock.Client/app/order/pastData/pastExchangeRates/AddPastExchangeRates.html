@@ -1,0 +1,105 @@
+﻿<div>
+    <h4>{{vm.title}}</h4>
+    
+    <!-- panel for - exchange rate information-->
+    <div class="panel panel-default">
+
+        <div class="panel-body">
+
+            <fieldset>
+                <legend style="font-size:medium;" class="panel-heading" id="customerHeaderPanel">Exchange Rate - with 1 GBP</legend>
+                <div id="pastErDiv">
+
+                    <!--inputs -->
+                    <div class="form-group row">
+
+                        <!-- date selection -->
+                        <div class="col-md-1">
+                            <label for="dateFrom" class="control-label fontWeightNormal">Date</label>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <input type="text" id="datePicker" name="dateP" ng-model="vm.dateInput">
+                            </div>
+                        </div>
+                          
+                        <!-- euro input -->                     
+                        <div class="col-md-1">
+                            <label for="inputEuro" class="control-label fontWeightNormal">Euro ER</label>
+                        </div>
+                        <div class="col-md-3">
+                            <input type="text" maxlength="4" placeholder="euro exchange rate" id="inputEuro" ng-pattern="/^[0-9]{1,7}(\.[0-9]+)?$/" onkeypress="return isNumberKeyDecimal(event, this.id)" ng-model="vm.euroInput" />
+                        </div>
+                        
+                        <!-- usd input-->
+                        <div class="col-md-1">
+                            <label for="inputUsd" class="control-label fontWeightNormal">Usd ER</label>
+                        </div>
+                        <div class="col-md-3">
+                            <input type="text" maxlength="4" placeholder="usd exchange rate" id="inputUsd" ng-pattern="/^[0-9]{1,7}(\.[0-9]+)?$/" onkeypress="return isNumberKeyDecimal(event, this.id)" ng-model="vm.usdInput" />
+                        </div>
+
+                    </div>
+
+                    <div class="form-group row">
+                        <div class="col-md-12">
+                            <br />
+                        </div>
+                    </div>
+
+                    <!-- buttons and error messages -->
+                    <div class="form-group row">
+                        <div class="col-md-7">                            
+                            <label class="control-label fontWeightNormal" style="color:red" ng-bind="vm.errorMsg"></label>
+                        </div>
+                        <div class="col-md-2">
+                            <button class="col-md-12 fontWeightNormal" ng-click="vm.saveExchangeRates(vm)">Save E R</button>
+                        </div>                        
+                        <div class="col-md-2">
+                            <button class="col-md-12 fontWeightNormal" ng-click="vm.reset(vm)">Reset</button>
+                        </div>
+                        <div class="col-md-1">
+                        </div>         
+                    </div>
+                </div>
+
+            </fieldset>
+
+        </div>
+    </div>
+    <!-- end panel for - exchange rate information-->
+
+    <!-- panel for - Display ERs-->
+    <div class="panel panel-default">
+
+        <div class="panel-body">
+
+            <fieldset>
+                <legend style="font-size:medium;" class="panel-heading" id="searchResultHeaderPanel">All exchange rates</legend>
+
+                <!--empty raw-->
+                <div class="row">
+                    <div class="col-md-12" style="padding:5px">
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div >
+                        <div class="col-md-1"></div>
+
+                        <div class="col-md-10">
+                            <div class="row table-responsive">
+                                <!--JS Data table -->
+                                <table cellpadding="0" cellspacing="0" border="0" class="display table-condensed" id="ersGrid"></table>
+                            </div>
+                        </div>
+
+                        <div class="col-md-1"></div>
+                    </div>
+                </div>
+            </fieldset>
+        </div>
+    </div>
+    <!-- End panel for - Search result-->
+
+</div>
