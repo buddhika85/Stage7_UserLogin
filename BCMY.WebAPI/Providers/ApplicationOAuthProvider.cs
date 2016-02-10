@@ -10,6 +10,7 @@ using Microsoft.Owin.Security;
 using Microsoft.Owin.Security.Cookies;
 using Microsoft.Owin.Security.OAuth;
 using BCMY.WebAPI.Models;
+using System.Web.Configuration;
 
 namespace BCMY.WebAPI.Providers
 {
@@ -27,28 +28,80 @@ namespace BCMY.WebAPI.Providers
             _publicClientId = publicClientId;
         }
 
+        /// <summary>
+        /// user login - validation of the username and password
+        /// </summary
         public override async Task GrantResourceOwnerCredentials(OAuthGrantResourceOwnerCredentialsContext context)
         {
-            var userManager = context.OwinContext.GetUserManager<ApplicationUserManager>();
-
+            ApplicationUserManager userManager = context.OwinContext.GetUserManager<ApplicationUserManager>();
             ApplicationUser user = await userManager.FindAsync(context.UserName, context.Password);
 
             if (user == null)
             {
-                context.SetError("invalid_grant", "The user name or password is incorrect.");
-                return;
+                // no user with username and password
+                // check if the username exists, but incorrect password
+                user = userManager.FindByName(context.UserName);
+
+                if (user == null)
+                {
+                    // invalid username and password
+                    context.SetError("invalid_grant", "The username or password is incorrect.");
+                    return;
+                }
+                else
+                {
+                    // invalid password
+                    // increment the invalid user login attempts and login attempt time
+                    user.InvalidLoginAttemptCount = user.InvalidLoginAttemptCount + 1;
+                    user.LastInvalidLoginAttemptTime = DateTime.Now;
+                    user.IsLoggedIn = false;
+                    int allowableInvalidLoginCount = int.Parse(WebConfigurationManager.AppSettings["InvalidLoginAttemptCount"]);
+                    if (user.InvalidLoginAttemptCount > allowableInvalidLoginCount)
+                    {
+                        user.Locked = true;
+                    }
+                    userManager.Update(user);
+
+                    context.SetError("invalid_grant", "The username or password is incorrect.");
+                    
+                    return;
+                }
             }
+            else
+            {
+                // valid login
+                ClaimsIdentity oAuthIdentity = await user.GenerateUserIdentityAsync(userManager, OAuthDefaults.AuthenticationType);
+                ClaimsIdentity cookiesIdentity = await user.GenerateUserIdentityAsync(userManager, CookieAuthenticationDefaults.AuthenticationType);
 
-            ClaimsIdentity oAuthIdentity = await user.GenerateUserIdentityAsync(userManager,
-               OAuthDefaults.AuthenticationType);
-            ClaimsIdentity cookiesIdentity = await user.GenerateUserIdentityAsync(userManager,
-                CookieAuthenticationDefaults.AuthenticationType);
-
-            AuthenticationProperties properties = CreateProperties(user.UserName);
-            AuthenticationTicket ticket = new AuthenticationTicket(oAuthIdentity, properties);
-            context.Validated(ticket);
-            context.Request.Context.Authentication.SignIn(cookiesIdentity);
+                AuthenticationProperties properties = CreateProperties(user.UserName);
+                AuthenticationTicket ticket = new AuthenticationTicket(oAuthIdentity, properties);
+                context.Validated(ticket);
+                context.Request.Context.Authentication.SignIn(cookiesIdentity);
+            }
         }
+
+        //public override async Task GrantResourceOwnerCredentials(OAuthGrantResourceOwnerCredentialsContext context)
+        //{
+        //    var userManager = context.OwinContext.GetUserManager<ApplicationUserManager>();
+
+        //    ApplicationUser user = await userManager.FindAsync(context.UserName, context.Password);
+
+        //    if (user == null)
+        //    {
+        //        context.SetError("invalid_grant", "The user name or password is incorrect.");
+        //        return;
+        //    }
+
+        //    ClaimsIdentity oAuthIdentity = await user.GenerateUserIdentityAsync(userManager,
+        //       OAuthDefaults.AuthenticationType);
+        //    ClaimsIdentity cookiesIdentity = await user.GenerateUserIdentityAsync(userManager,
+        //        CookieAuthenticationDefaults.AuthenticationType);
+
+        //    AuthenticationProperties properties = CreateProperties(user.UserName);
+        //    AuthenticationTicket ticket = new AuthenticationTicket(oAuthIdentity, properties);
+        //    context.Validated(ticket);
+        //    context.Request.Context.Authentication.SignIn(cookiesIdentity);
+        //}
 
         public override Task TokenEndpoint(OAuthTokenEndpointContext context)
         {

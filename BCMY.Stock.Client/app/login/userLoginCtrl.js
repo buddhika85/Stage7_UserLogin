@@ -22,8 +22,8 @@
 
     function defineModel(vm, $http, blockUI)
     {
-        vm.username = '';
-        vm.password = '';
+        vm = readRememberMeCookie(vm);                      // assign remember me values to username and password
+        vm.error = '';
         return vm;
     }
 
@@ -31,7 +31,7 @@
     {        
         DisableTopNavigationBar();    // disable the top navigation bar - before login
         vm.title = "BCMY Stock Management";
-
+        vm.rememberMe = false;
         return vm;
     }
 
@@ -41,50 +41,118 @@
             loginUser(vm, $http);
         };
 
+        vm.fogotPassword = function ()
+        {
+            fogotPassword($http);
+        }
+
         return vm;
     }
 
     // manage user login
     function loginUser(vm, $http)
     {
-        //alert("Login user : " + vm.username + " | " + vm.password);
-        
-        var tokenUrl = "https://localhost:44302" + "/Token";
-        var messageHeaders = {
-            'Content-Type': 'application/x-www-form-urlencoded'
-        };
-        var dataForBody = "grant_type=password&" +
-                "username=" + 'buddhika@bcmy.co.uk' + "&" +
-                "Password=" + 'Test123$';
+        alert("Login user : " + vm.username + " | " + vm.password);
 
-        $http({
-            method: 'POST',
-            url: tokenUrl,
-            headers: messageHeaders,
-            data: dataForBody
-        }).success(function (data) {
-            // set the access token
-            debugger
-            localStorage["access_token"] = data.access_token;
-            localStorage["userName"] = data.userName;
-            localStorage["token_type"] = data.token_type;
-            //localStorage[".expires"] = data.expires;
-            //localStorage[".issued"] = data.issued;
-            localStorage["access_token"] = data.access_token;
-            localStorage["expires_in"] = data.expires_in;
+        vm.error = '';
+        var isValid = validateInputs(vm);
+        if (isValid) {
+            var tokenUrl = "https://localhost:44302" + "/Token";
+            var messageHeaders = {
+                'Content-Type': 'application/x-www-form-urlencoded'
+            };
 
-            alert(data.access_token);
-            
+            // valid 
+            //var dataForBody = "grant_type=password&" +
+            //        "username=" + 'buddhika@bcmy.co.uk' + "&" +
+            //        "Password=" + 'Test123$';
+            // inavlid
+            //var dataForBody = "grant_type=password&" +
+            //        "username=" + 'buddhika@bcmy.co.uk' + "&" +
+            //        "Password=" + 'test123$';
+            var dataForBody = "grant_type=password&" +
+                    "username=" + vm.username + "&" +
+                    "Password=" + vm.password;
+            $http({
+                method: 'POST',
+                url: tokenUrl,
+                headers: messageHeaders,
+                data: dataForBody
+            }).success(function (data) {
+                // set the access token
+                debugger
+                localStorage["access_token"] = data.access_token;
+                localStorage["userName"] = data.userName;
+                localStorage["token_type"] = data.token_type;
+                //localStorage[".expires"] = data.expires;
+                //localStorage[".issued"] = data.issued;
+                localStorage["access_token"] = data.access_token;
+                localStorage["expires_in"] = data.expires_in;
 
-        }).error(function (data) {
-            alert(data.error);
-        });
-        
-        // if login success - show top navigation bar        
-        vm.showTopNavigationBar = true;
-        
+                // if login success - show top navigation bar        
+                vm.showTopNavigationBar = true;
+
+                // write credential cookie
+                if (vm.rememberMe)
+                {
+                    writeRememberMeCookie(vm);
+                }
+                alert(data.access_token);
+
+            }).error(function (data) {                
+                // data.error="invalid_grant"            
+                vm.error = 'Error - ' + data.error_description;  // Error - The username or password is incorrect.
+            });
+        }
+        else {
+            // invalid username or password - client side validation fails
+            vm.error = 'Error - The username or password is incorrect.';
+        }
     }
 
+    // verifies the format of the username and password
+    function validateInputs(vm)
+    {
+        var isValid = false;
+
+        // username - validate for an email
+        if (validateEmail(vm.username))
+        {
+            // valid username
+            if (vm.password.length >= 6)
+            {
+                // password - min length = 6, non letter or digit, must have a digit, must have both upper and lower case chars
+                // TO DO - write rest of the validations
+                isValid = true;
+            }
+        }
+        return isValid;
+    }
+
+
+    // manage fogot password 
+    function fogotPassword($http) {
+        alert("fogot password - under construction");
+    }
+
+    // manage writing cookie to remember username and password
+    function writeRememberMeCookie(vm)
+    {
+        alert("Remember me option - cookie writing - under construction");
+        // https://docs.angularjs.org/api/ngCookies/service/$cookies
+        // http://stackoverflow.com/questions/10961963/how-to-access-cookies-in-angularjs
+        // https://docs.angularjs.org/api/ngCookies
+    }
+
+    // manage reading cookie to remember username and password
+    function readRememberMeCookie(vm)
+    {
+        alert("Remember me option - cookie reading - under construction");
+        vm.username = '';
+        vm.password = '';
+        return vm;
+    }
+        
     
     // used to disable the top navigation bar - before login
     // Ref - http://stackoverflow.com/questions/6961678/disable-enable-all-elements-in-div

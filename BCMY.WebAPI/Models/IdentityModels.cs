@@ -5,6 +5,7 @@ using Microsoft.AspNet.Identity.EntityFramework;
 using Microsoft.AspNet.Identity.Owin;
 using System;
 using System.Data.Entity;
+using System.Web;
 
 namespace BCMY.WebAPI.Models
 {
@@ -21,27 +22,6 @@ namespace BCMY.WebAPI.Models
         : IdentityUser<string, ApplicationUserLogin,
         ApplicationUserRole, ApplicationUserClaim>
     {
-        public ApplicationUser()
-        {
-            this.Id = Guid.NewGuid().ToString();
-        }
-
-
-        // ** Add authenticationtype as method parameter:
-        public async Task<ClaimsIdentity>
-            GenerateUserIdentityAsync(ApplicationUserManager manager, string authenticationType)
-        {
-            // Note the authenticationType must match the one defined in CookieAuthenticationOptions.AuthenticationType
-            var userIdentity = await manager.CreateIdentityAsync(this, authenticationType);
-            // Add custom user claims here
-            return userIdentity;
-        }
-
-        //public string Address { get; set; }
-        //public string City { get; set; }
-        //public string State { get; set; }
-        //public string PostalCode { get; set; }
-
         public Util.Enums.Titles Title { get; set; }
         public string FirstName { get; set; }
         public string LastName { get; set; }
@@ -53,6 +33,62 @@ namespace BCMY.WebAPI.Models
         public DateTime? LastLogInTime { get; set; }
         public DateTime? LastLogoutTime { get; set; }
         public bool IsLoggedIn { get; set; }
+        public int InvalidLoginAttemptCount { get; set; }
+        public DateTime? LastInvalidLoginAttemptTime { get; set; }
+        public bool Locked { get; set; }
+
+        public ApplicationUser()
+        {
+            this.Id = Guid.NewGuid().ToString();
+        }
+
+        // ** Add authenticationtype as method parameter:
+        public async Task<ClaimsIdentity>
+            GenerateUserIdentityAsync(ApplicationUserManager manager, string authenticationType)
+        {
+            // Note the authenticationType must match the one defined in CookieAuthenticationOptions.AuthenticationType
+            ClaimsIdentity  userIdentity = await manager.CreateIdentityAsync(this, authenticationType);
+
+            // store login custom info
+            StoreCustomInfo(userIdentity);
+
+            // Add custom user claims here
+            return userIdentity;
+        }
+
+        /// <summary>
+        /// used to store 
+        /// </summary>
+        private void StoreCustomInfo(ClaimsIdentity userIdentity)
+        {
+            try
+            {
+                if (userIdentity != null && userIdentity.IsAuthenticated)
+                {                    
+                    string username = userIdentity.GetUserName();
+                    ApplicationUserManager userManager = HttpContext.Current.GetOwinContext().GetUserManager<ApplicationUserManager>();
+                    ApplicationUser user = userManager.FindByName(username);
+                    if (user != null)
+                    {
+                        user.IsLoggedIn = true;
+                        user.Locked = false;
+                        user.LastLogInTime = DateTime.Now;
+                        user.LastLogoutTime = null;
+                        user.InvalidLoginAttemptCount = 0;  // clear out invalid user login attempts, as this login attempt is successful
+                        userManager.Update(user);                        
+                    }
+                    else
+                    {
+                        throw new Exception() { Source = string.Format("Error - user {0} not found", username) };
+                    }
+                }
+            }
+            catch (Exception ex)
+            {                
+                throw;
+            }
+        } 
+
     }
 
 
@@ -81,7 +117,7 @@ namespace BCMY.WebAPI.Models
     {
         public ApplicationDbContext()
             : base("DefaultConnection")
-        {
+        {            
         }
 
         static ApplicationDbContext()
@@ -90,7 +126,7 @@ namespace BCMY.WebAPI.Models
         }
 
         public static ApplicationDbContext Create()
-        {
+        {            
             return new ApplicationDbContext();
         }
 

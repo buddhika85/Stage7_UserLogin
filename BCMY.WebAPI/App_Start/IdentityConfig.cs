@@ -44,7 +44,7 @@ namespace BCMY.WebAPI
                 RequireDigit = true,
                 RequireLowercase = true,
                 RequireUppercase = true,
-            };
+            };            
             var dataProtectionProvider = options.DataProtectionProvider;
             if (dataProtectionProvider != null)
             {
@@ -157,7 +157,10 @@ namespace BCMY.WebAPI
                         RegistrationDate = DateTime.Now,
                         LastLogInTime = null,
                         LastLogoutTime = null,
-                        IsLoggedIn = false
+                        IsLoggedIn = false,
+                        InvalidLoginAttemptCount = 0,
+                        LastInvalidLoginAttemptTime = null,
+                        Locked = false
                     },
                     new ApplicationUser() {
                         UserName = "jeremy@bcmy.co.uk",
@@ -173,7 +176,10 @@ namespace BCMY.WebAPI
                         RegistrationDate = DateTime.Now,
                         LastLogInTime = null,
                         LastLogoutTime = null,
-                        IsLoggedIn = false
+                        IsLoggedIn = false,
+                        InvalidLoginAttemptCount = 0,
+                        LastInvalidLoginAttemptTime = null,
+                        Locked = false
                     },
                     new ApplicationUser() {
                         UserName = "buddhika@bcmy.co.uk",
@@ -189,7 +195,10 @@ namespace BCMY.WebAPI
                         RegistrationDate = DateTime.Now,
                         LastLogInTime = null,
                         LastLogoutTime = null,
-                        IsLoggedIn = false
+                        IsLoggedIn = false,
+                        InvalidLoginAttemptCount = 0,
+                        LastInvalidLoginAttemptTime = null,
+                        Locked = false
                     }
                 };
                 InsertUsers(userManager, users);

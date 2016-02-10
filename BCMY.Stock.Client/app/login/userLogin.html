@@ -1,65 +1,48 @@
-﻿<div class="container">
-    <!--Ref - http://bootsnipp.com/snippets/featured/simple-login-form-bootsnipp-style-colorgraph -->
-    <style type="text/css">
-        .wrapper {    
-	        margin-top: 80px;
-	        margin-bottom: 20px;
-        }
+﻿<div>
 
-        .form-signin {
-          max-width: 420px;
-          padding: 30px 38px 66px;
-          margin: 0 auto;
-          background-color: #eee;
-          border: 3px dotted rgba(0,0,0,0.1);  
-          }
+    <div class="form-group row">
 
-        .form-signin-heading {
-          text-align:center;
-          margin-bottom: 30px;
-        }
+        <div class="col-md-3">
+        </div>
 
-        .form-control {
-          position: relative;
-          font-size: 16px;
-          height: auto;
-          padding: 10px;
-        }
+        <div class="col-md-6">
+            <div class="panel panel-default">
+                <div class="panel-heading" style="padding:2%; text-align:center">
+                    <h3 class="panel-title">{{vm.title}}</h3>
+                </div>
+                <div class="panel-body">
+                    <div class="form-group row">
+                        <label class="col-md-offset-1 col-md-2">Username</label>
+                        <input class="col-md-7" type="text" placeholder="username" autofocus ng-model="vm.username" />
+                        <label class="col-md-2" style="color:red">*</label>
+                    </div>
+                    <div class="form-group row">
+                        <label class="col-md-offset-1 col-md-2">Password</label>
+                        <input class="col-md-7" type="password" placeholder="password" ng-model="vm.password" />
+                        <label class="col-md-2" style="color:red">*</label>
+                    </div>
 
-        input[type="text"] {
-          margin-bottom: 0px;
-          border-bottom-left-radius: 0;
-          border-bottom-right-radius: 0;
-        }
+                    <!--<div class="form-group row" style="padding-top:1%"></div>-->
+                    <div class="form-group row">
+                        <button class="col-md-offset-3 col-md-2" ng-click="vm.login()">Sign in</button>
+                        <div class="col-md-5">
+                            <span><input type="checkbox" ng-checked={{vm.rememberMe}}></span>
+                            <span>Remember me</span>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <button class="col-md-offset-3 col-md-5 col-md-offset-4 btn-link text-left" style="padding-left:0%" ng-click="vm.fogotPassword()">Fogot password</button>
+                    </div>
+                    <div class="form-group row">
+                        <label class="col-md-offset-3 col-md-9 control-label fontWeightNormal" style="color:red; padding-left:0%">{{vm.error}}</label>
+                    </div>
+                </div>
+            </div>
+        </div>
 
-        input[type="password"] {
-          margin-bottom: 20px;
-          border-top-left-radius: 0;
-          border-top-right-radius: 0;
-        }
+        <div class="col-md-3">
+        </div>
 
-        .colorgraph {
-          height: 7px;
-          border-top: 0;
-          background: #c4e17f;
-          border-radius: 5px;
-          background-image: -webkit-linear-gradient(left, #c4e17f, #c4e17f 12.5%, #f7fdca 12.5%, #f7fdca 25%, #fecf71 25%, #fecf71 37.5%, #f0776c 37.5%, #f0776c 50%, #db9dbe 50%, #db9dbe 62.5%, #c49cde 62.5%, #c49cde 75%, #669ae1 75%, #669ae1 87.5%, #62c2e4 87.5%, #62c2e4);
-          background-image: -moz-linear-gradient(left, #c4e17f, #c4e17f 12.5%, #f7fdca 12.5%, #f7fdca 25%, #fecf71 25%, #fecf71 37.5%, #f0776c 37.5%, #f0776c 50%, #db9dbe 50%, #db9dbe 62.5%, #c49cde 62.5%, #c49cde 75%, #669ae1 75%, #669ae1 87.5%, #62c2e4 87.5%, #62c2e4);
-          background-image: -o-linear-gradient(left, #c4e17f, #c4e17f 12.5%, #f7fdca 12.5%, #f7fdca 25%, #fecf71 25%, #fecf71 37.5%, #f0776c 37.5%, #f0776c 50%, #db9dbe 50%, #db9dbe 62.5%, #c49cde 62.5%, #c49cde 75%, #669ae1 75%, #669ae1 87.5%, #62c2e4 87.5%, #62c2e4);
-          background-image: linear-gradient(to right, #c4e17f, #c4e17f 12.5%, #f7fdca 12.5%, #f7fdca 25%, #fecf71 25%, #fecf71 37.5%, #f0776c 37.5%, #f0776c 50%, #db9dbe 50%, #db9dbe 62.5%, #c49cde 62.5%, #c49cde 75%, #669ae1 75%, #669ae1 87.5%, #62c2e4 87.5%, #62c2e4);
-        }
-    </style>
-    <div class="wrapper">
-        <form class="form-signin">
-            <h3 class="form-signin-heading">{{vm.title}}</h3>
-            <hr class="colorgraph"><br>
-
-            <input type="text" class="form-control" name="Username" placeholder="Username" required="" autofocus=""
-                   ng-model="vm.username" />
-            <input type="password" class="form-control" name="Password" placeholder="Password" required="" 
-                   ng-model="vm.password"/>
-
-            <button class="btn btn-lg btn-primary btn-block" ng-click="vm.login()">Login</button>
-        </form>
     </div>
+
 </div>
