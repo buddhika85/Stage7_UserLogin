@@ -55,7 +55,7 @@
         alert("Login user : " + vm.username + " | " + vm.password);
 
         vm.error = '';
-        var isValid = validateInputs(vm);
+        var isValid = validateInputs(vm);           
         if (isValid) {
             var tokenUrl = "https://localhost:44302" + "/Token";
             var messageHeaders = {
@@ -70,6 +70,8 @@
             //var dataForBody = "grant_type=password&" +
             //        "username=" + 'buddhika@bcmy.co.uk' + "&" +
             //        "Password=" + 'test123$';
+
+            // Commented for testing
             var dataForBody = "grant_type=password&" +
                     "username=" + vm.username + "&" +
                     "Password=" + vm.password;
@@ -99,10 +101,24 @@
                 }
                 alert(data.access_token);
 
+                // test
+                $http({
+                    method: "get",
+                    headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + localStorage["access_token"] },
+                    url: ('https://localhost:44302/api/roleTest')
+                })
+                .success(function (data) {
+                    debugger;
+                    alert(data);
+                }).error(function (data) {
+                    debugger;
+                    alert('Error - ' + data.message);    // Authorization has been denied for this request.
+                });
+
             }).error(function (data) {                
                 // data.error="invalid_grant"            
                 vm.error = 'Error - ' + data.error_description;  // Error - The username or password is incorrect.
-            });
+            });            
         }
         else {
             // invalid username or password - client side validation fails

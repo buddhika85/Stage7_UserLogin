@@ -5,6 +5,7 @@ using System.Net.Http;
 using System.Web.Http;
 using Microsoft.Owin.Security.OAuth;
 using Newtonsoft.Json.Serialization;
+using System.Web.Http.Cors;
 
 namespace BCMY.WebAPI
 {
@@ -22,7 +23,9 @@ namespace BCMY.WebAPI
 
             config.Formatters.JsonFormatter.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver();
 
-            config.EnableCors();
+            //config.EnableCors();
+            //var corsAttr = new EnableCorsAttribute("https://localhost:44301", "*", "*");
+            //config.EnableCors(corsAttr);
 
             // fix - Consider using a DataContractResolver or add any types not known statically to the list of known types - 
             // for example, by using the KnownTypeAttribute attribute or by adding them to the list of known types passed to DataContractSerializer.

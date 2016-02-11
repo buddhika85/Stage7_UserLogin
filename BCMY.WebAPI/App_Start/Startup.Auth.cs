@@ -10,6 +10,7 @@ using Microsoft.Owin.Security.OAuth;
 using Owin;
 using BCMY.WebAPI.Providers;
 using BCMY.WebAPI.Models;
+using Microsoft.Owin.Cors;
 
 namespace BCMY.WebAPI
 {
@@ -23,6 +24,7 @@ namespace BCMY.WebAPI
         public void ConfigureAuth(IAppBuilder app)
         {
             // Configure the db context and user manager to use a single instance per request
+            
             
             app.CreatePerOwinContext(ApplicationDbContext.Create);
             app.CreatePerOwinContext<ApplicationUserManager>(ApplicationUserManager.Create);
@@ -44,8 +46,17 @@ namespace BCMY.WebAPI
                 AllowInsecureHttp = true
             };
 
+
+            // This must come first to intercept the /Token requests 
+            // Ref - http://stackoverflow.com/questions/23642293/asp-net-web-api-2-cors-and-authentication-authorization-configuration
+            app.UseCors(CorsOptions.AllowAll);
+
+
+
             // Enable the application to use bearer tokens to authenticate users
             app.UseOAuthBearerTokens(OAuthOptions);
+
+            
 
             // Uncomment the following lines to enable logging in with third party login providers
             //app.UseMicrosoftAccountAuthentication(
