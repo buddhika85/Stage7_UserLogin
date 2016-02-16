@@ -32,6 +32,10 @@
         DisableTopNavigationBar();    // disable the top navigation bar - before login
         vm.title = "BCMY Stock Management";
         vm.rememberMe = false;
+
+        // for testing
+        vm.username = 'buddhika@bcmy.co.uk';
+        vm.password = 'Test123$';
         return vm;
     }
 
@@ -43,7 +47,7 @@
 
         vm.fogotPassword = function ()
         {
-            fogotPassword($http);
+            fogotPassword(vm, $http);
         }
 
         return vm;
@@ -101,19 +105,24 @@
                 }
                 alert(data.access_token);
 
-                // test
-                $http({
-                    method: "get",
-                    headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + localStorage["access_token"] },
-                    url: ('https://localhost:44302/api/roleTest')
-                })
-                .success(function (data) {
-                    debugger;
-                    alert(data);
-                }).error(function (data) {
-                    debugger;
-                    alert('Error - ' + data.message);    // Authorization has been denied for this request.
-                });
+                // navigate to dashboard view
+                window.location = window.location.protocol + "//" + window.location.host + "/#/dashboard";
+                
+                
+
+                //// test with user roles
+                //$http({
+                //    method: "get",
+                //    headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + localStorage["access_token"] },
+                //    url: ('https://localhost:44302/api/roleTest')
+                //})
+                //.success(function (data) {
+                //    debugger;
+                //    alert(data);
+                //}).error(function (data) {
+                //    debugger;
+                //    alert('Error - ' + data.message);    // Authorization has been denied for this request.
+                //});
 
             }).error(function (data) {                
                 // data.error="invalid_grant"            
@@ -124,6 +133,7 @@
             // invalid username or password - client side validation fails
             vm.error = 'Error - The username or password is incorrect.';
         }
+        return vm;
     }
 
     // verifies the format of the username and password
@@ -147,7 +157,7 @@
 
 
     // manage fogot password 
-    function fogotPassword($http) {
+    function fogotPassword(vm, $http) {
         alert("fogot password - under construction");
     }
 

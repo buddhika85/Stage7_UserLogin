@@ -24,6 +24,7 @@
 
                 vm.title = "Main Dashboard";
                 vm.exchangeRatesDateJson = null;
+                vm.showTopNavigationBar = true;
 
                 DrawExchangeRatesChart($http);
 
@@ -36,7 +37,7 @@
     // Ref - https://developers.google.com/chart/interactive/docs/gallery/linechart?hl=en
     function DrawExchangeRatesChart($http)
     {
-        $http.get('http://localhost:61945/api/Chart?chartName=EXCHANGE_RATE_DEVIATION').
+        $http.get('https://localhost:44302/api/Chart?chartName=EXCHANGE_RATE_DEVIATION').
         then(function (response) {
              
             // adapting data to the google charts

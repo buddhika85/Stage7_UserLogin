@@ -18,7 +18,7 @@ namespace BCMY.WebAPI.Controllers
     /// <summary>
     /// Used to expose chart related data
     /// </summary>
-    [EnableCorsAttribute("http://localhost:52448", "*", "*")]
+    [EnableCors(origins: "https://localhost:44301", headers: "*", methods: "*")]
     public class ChartController : ApiController
     {
         ObjectProvider objectProvider = null;
