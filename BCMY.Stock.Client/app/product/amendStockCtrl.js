@@ -48,7 +48,7 @@
         vm.httpService({
             method: "get",
             headers: { 'Content-Type': 'application/json' },
-            url: ('http://localhost:61945/api/productinfo/getcategories?getcategories=true'),
+            url: ('https://localhost:44302/api/productinfo/getcategories?getcategories=true'),
         }).success(function (data) {
             var listitems = '<option value=-1 selected="selected">---- Select Category ----</option>';
             $.each(data, function (index, item) {
@@ -109,7 +109,7 @@
     function saveStockAmendment(vm)
     {        
         //alert('save amended stock : ' + vm.productListId + ' ' + vm.stockCount);
-        var serverUrl = 'http://localhost:61945/api/ProductInfo?productId=' + vm.productListId + '&quantity=' + vm.stockCount;
+        var serverUrl = 'https://localhost:44302/api/ProductInfo?productId=' + vm.productListId + '&quantity=' + vm.stockCount;
         vm.httpService({
             method: "get",
             headers: { 'Content-Type': 'application/json' },
@@ -197,7 +197,7 @@
         }
             
         var searchResult = null;
-        var serverUrl = 'http://localhost:61945/api/ProductInfo?productlistId=' + modelId;
+        var serverUrl = 'https://localhost:44302/api/ProductInfo?productlistId=' + modelId;
         vm.httpService({
             method: "get",
             headers: { 'Content-Type': 'application/json' },
@@ -251,7 +251,7 @@
         vm.httpService({
             method: "get",
             headers: { 'Content-Type': 'application/json' },
-            url: ('http://localhost:61945/api/productinfo?withAmendData=true'),
+            url: ('https://localhost:44302/api/productinfo?withAmendData=true'),
         }).success(function (data) {            
             vm.tableRecords = data;
             //debugger
@@ -334,7 +334,7 @@
             vm.httpService({
                 method: "get",
                 headers: { 'Content-Type': 'application/json' },
-                url: ('http://localhost:61945/api/productinfo/categoryId?categoryId=' + selectedCategory),
+                url: ('https://localhost:44302/api/productinfo/categoryId?categoryId=' + selectedCategory),
             }).success(function (data) {
                 //alert(data.length);
                 $.each(data, function (index, item) {
@@ -366,7 +366,7 @@
         var selectedCondition = ddl.val();
         var selectedCategory = $('#selectCategory').val();
         var listitems = '<option value=-1 selected="selected">---- Select Brand ----</option>';
-        var serverUrl = 'http://localhost:61945/api/ProductInfo?categoryId=' + selectedCategory + '&conditionId=' + selectedCondition;
+        var serverUrl = 'https://localhost:44302/api/ProductInfo?categoryId=' + selectedCategory + '&conditionId=' + selectedCondition;
         if (selectedCondition != -1 && selectedCategory != -1) {
             vm.httpService({
                 method: "get",
@@ -403,7 +403,7 @@
         var selectedBrands = ddl.val();
         //alert("brand changed " + selectedBrand);
         var listitems = '<option value=-1 selected="selected">---- Select Model ----</option>';
-        var serverUrl = 'http://localhost:61945/api/ProductInfo?categoryId=' + selectedCategory + '&conditionId=' + selectedCondition + '&brandIdsCommaDelimited=' + selectedBrands;
+        var serverUrl = 'https://localhost:44302/api/ProductInfo?categoryId=' + selectedCategory + '&conditionId=' + selectedCondition + '&brandIdsCommaDelimited=' + selectedBrands;
         if (selectedBrands != -1 && selectedCondition != -1 && selectedCategory != -1) {
             vm.httpService({
                 method: "get",

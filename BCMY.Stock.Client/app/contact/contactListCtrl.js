@@ -13,7 +13,7 @@
     {
         var vm = this;
         vm.title = "Manage Contacts of the Customers/Suppliers";
-        vm.apiUrl = 'http://localhost:61945/api/contact/';          // web API url for update and insert
+        vm.apiUrl = 'https://localhost:44302/api/contact/';          // web API url for update and insert
 
         blockUI.start();
         contactResource.query(function (data) {                     // REST API call to get all the contacts with company names 
@@ -43,7 +43,7 @@
                     // insert                    
                     var newContact = getContactJsonObject(contactId);                   // creation of the json object                    
                     //var jsonStr = JSON.stringify(newContact);                           // covert to json string to pass to web service
-                    var serverUrl = 'http://localhost:61945/api/contact?id=' + newContact.id + '&title=' + newContact.title + '&firstName=' + newContact.firstName + '&lastName=' + newContact.lastName
+                    var serverUrl = 'https://localhost:44302/api/contact?id=' + newContact.id + '&title=' + newContact.title + '&firstName=' + newContact.firstName + '&lastName=' + newContact.lastName
                         + '&position=' + newContact.position + '&directDial=' + newContact.directDial + '&email=' + newContact.email + '&status=' + newContact.status + '&notes=' + newContact.notes
                         + '&customerSupplierId=' + newContact.customerSupplierId + '&extension=' + newContact.extension;
 
@@ -91,7 +91,7 @@
                     // update 
                     var newContact = getContactJsonObject(contactId);          // creation of the json object                    
                     //var jsonStr = JSON.stringify(newContact);                  // covert to json string to pass to web service
-                    var serverUrl = 'http://localhost:61945/api/contact?id=' + newContact.id + '&title=' + newContact.title + '&firstName=' + newContact.firstName + '&lastName=' + newContact.lastName
+                    var serverUrl = 'https://localhost:44302/api/contact?id=' + newContact.id + '&title=' + newContact.title + '&firstName=' + newContact.firstName + '&lastName=' + newContact.lastName
                         + '&position=' + newContact.position + '&directDial=' + newContact.directDial + '&email=' + newContact.email + '&status=' + newContact.status + '&notes=' + newContact.notes
                         + '&customerSupplierId=' + newContact.customerSupplierId + '&extension=' + newContact.extension;
 

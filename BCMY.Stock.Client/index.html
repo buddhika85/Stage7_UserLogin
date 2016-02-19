@@ -54,7 +54,7 @@
    
     <!--Top most navigation menu-->
     <nav class="navbar navbar-default">        
-        <div class="container-fluid" ng-show="{{vm.showTopNavigationBar}}">
+        <div class="container-fluid" ng-hide="{{vm.showTopNavigationBar}}" id="topNavigationBar">
             <!-- Brand and toggle get grouped for better mobile display -->
             <div class="navbar-header">
                 <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
@@ -78,7 +78,7 @@
                         </ul>
                     </li>
                     <li class="dropdown">
-                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Customer/Supplier <span class="caret"></span></a>
+                        <a class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Customer/Supplier <span class="caret"></span></a>
                         <ul class="dropdown-menu" role="menu">
                             <li><a ui-sref="customerSupplierList">Manage Customer/Supplier</a></li>
                             <li class="divider"></li>

@@ -172,7 +172,7 @@
         $http({
             method: "get",
             headers: { 'Content-Type': 'application/json' },
-            url: ('http://localhost:61945/api/OrderLine?orderId=' + orderId)
+            url: ('https://localhost:44302/api/OrderLine?orderId=' + orderId)
         })
         .success(function (data) {
             if (data == 'Success - Order confirmation successful - with all orderlines') {
@@ -180,7 +180,7 @@
                 $http({
                     method: "get",
                     headers: { 'Content-Type': 'application/json' },
-                    url: ('http://localhost:61945/api/Orderline?orderIdVal=' + orderId),
+                    url: ('https://localhost:44302/api/Orderline?orderIdVal=' + orderId),
                 }).success(function (dataOL) {
                     // redraw orderline grid and disable edit orderline and complete order buttons
                     DrawOrderlineGrid(dataOL, $http, vm);
@@ -221,7 +221,7 @@
                 $http({
                     method: "get",
                     headers: { 'Content-Type': 'application/json' },
-                    url: ('http://localhost:61945/api/Order?orderId=' + orderId)
+                    url: ('https://localhost:44302/api/Order?orderId=' + orderId)
                 })
                 .success(function (data) {
                     if (data == 'Success - Order confirmation successful')
@@ -310,7 +310,7 @@
         $http({
             method: "get",
             headers: { 'Content-Type': 'application/json' },
-            url: ('http://localhost:61945/api/SalesOrder?companyId=' + companyId + '&contactFulName=' + contactFulName + 
+            url: ('https://localhost:44302/api/SalesOrder?companyId=' + companyId + '&contactFulName=' + contactFulName + 
                 '&vat=' + vat + '&currency=' + currency)
         })
         .success(function (data) {
@@ -420,7 +420,7 @@
             $http({
                 method: "get",
                 headers: { 'Content-Type': 'application/json' },
-                url: ('http://localhost:61945/api/productinfo/categoryId?categoryId=' + selectedCategory),
+                url: ('https://localhost:44302/api/productinfo/categoryId?categoryId=' + selectedCategory),
             }).success(function (data) {
                 //alert(data.length);
                 $.each(data, function (index, item) {
@@ -453,7 +453,7 @@
         var selectedCondition = ddl.val();
         var selectedCategory = $('#selectCategory').val();
         var listitems = '<option value=-1 selected="selected">---- Select Brand ----</option>';
-        var serverUrl = 'http://localhost:61945/api/ProductInfo?categoryId=' + selectedCategory + '&conditionId=' + selectedCondition;
+        var serverUrl = 'https://localhost:44302/api/ProductInfo?categoryId=' + selectedCategory + '&conditionId=' + selectedCondition;
         if (selectedCondition != -1 && selectedCategory != -1) {
             $http({
                 method: "get",
@@ -491,7 +491,7 @@
         var selectedBrands = ddl.val();
         //alert("brand changed " + selectedBrand);
         var listitems = '<option value=-1 selected="selected">---- Select Model ----</option>';
-        var serverUrl = 'http://localhost:61945/api/ProductInfo?categoryId=' + selectedCategory + '&conditionId=' + selectedCondition + '&brandIdsCommaDelimited=' + selectedBrands;
+        var serverUrl = 'https://localhost:44302/api/ProductInfo?categoryId=' + selectedCategory + '&conditionId=' + selectedCondition + '&brandIdsCommaDelimited=' + selectedBrands;
         if (selectedBrands != -1 && selectedCondition != -1 && selectedCategory != -1) {
             $http({
                 method: "get",
@@ -551,7 +551,7 @@
             $http({
                 method: "get",
                 headers: { 'Content-Type': 'application/json' },
-                url: ('http://localhost:61945/api/Contact?customerSupplierId=' + selectedValue),
+                url: ('https://localhost:44302/api/Contact?customerSupplierId=' + selectedValue),
             }).success(function (data) {
                 var listitems = '<option value=-1 selected="selected">---- Select Contact ----</option>';
                 $.each(data, function (index, item) {
@@ -592,7 +592,7 @@
             $http({
                 method: "get",
                 headers: { 'Content-Type': 'application/json' },
-                url: ('http://localhost:61945/api/customerSupplier?contactFulName=' + selectedFulName),
+                url: ('https://localhost:44302/api/customerSupplier?contactFulName=' + selectedFulName),
             }).success(function (data) {                            
                 var listitems = '<option value=-1 selected="selected">---- Select Customer ----</option>';
                 $.each(data, function (index, item) {                    
@@ -720,7 +720,7 @@
         $http({
             method: "get",
             headers: { 'Content-Type': 'application/json' },
-            url: ('http://localhost:61945/api/ProductInfo?productlistId=' + productListId),
+            url: ('https://localhost:44302/api/ProductInfo?productlistId=' + productListId),
         }).success(function (data) {
             if (data != null) {
                 marketValueGBP = data.marketvalueGBP;
@@ -820,7 +820,7 @@
         $http({
             method: "get",
             headers: { 'Content-Type': 'application/json' },
-            url: ('http://localhost:61945/api/status'),
+            url: ('https://localhost:44302/api/status'),
         }).success(function (data) {
             var listitems = '';
             $.each(data, function (index, item) {                
@@ -890,7 +890,7 @@
     {
         var selectedCurrency = $('#selectCurrency option:selected').text().toUpperCase();
         var currentCompany = $('#selectCustSupp').find(":selected").text();
-        var serverUrl = 'http://localhost:61945/api/Negotiation?orderId=' + newOrderId + '&productListId=' + productListId + '&confirmed=true' + '&custSupName=' + currentCompany + '&count=3&selectedCurrency=' + selectedCurrency;
+        var serverUrl = 'https://localhost:44302/api/Negotiation?orderId=' + newOrderId + '&productListId=' + productListId + '&confirmed=true' + '&custSupName=' + currentCompany + '&count=3&selectedCurrency=' + selectedCurrency;
         $http({
             method: "get",
             headers: { 'Content-Type': 'application/json' },
@@ -966,7 +966,7 @@
             var totalAmountVal = $('#totalIncome').text();
             var orderId = $('#orderId').val();
 
-            var serverUrl = 'http://localhost:61945/api/Negotiation?productListId=' + productListId + '&quantityVal=' + quantityVal + '&pricePerItem=' + pricePerItem
+            var serverUrl = 'https://localhost:44302/api/Negotiation?productListId=' + productListId + '&quantityVal=' + quantityVal + '&pricePerItem=' + pricePerItem
                 + '&totalAmountVal=' + totalAmountVal + '&status=' + status + '&orderIdVal=' + orderId;
             $http({
                 method: "get",
@@ -1006,7 +1006,7 @@
     // Refreshing the negotiations 
     function RefreshProductNegotiations($http, orderId, productListId) {
 
-        var serverUrl = 'http://localhost:61945/api/Negotiation?orderId=' + orderId + '&productListId=' + productListId;
+        var serverUrl = 'https://localhost:44302/api/Negotiation?orderId=' + orderId + '&productListId=' + productListId;
         $http({
             method: "get",
             headers: { 'Content-Type': 'application/json' },
@@ -1075,7 +1075,7 @@
             var totalAmountVal = $('#totalIncome').text();
             var orderId = $('#orderId').val();
 
-            var serverUrl = 'http://localhost:61945/api/Orderline?productListId=' + productListId + '&quantityVal=' + quantityVal + '&pricePerItem=' + pricePerItem
+            var serverUrl = 'https://localhost:44302/api/Orderline?productListId=' + productListId + '&quantityVal=' + quantityVal + '&pricePerItem=' + pricePerItem
                 + '&totalAmountVal=' + totalAmountVal + '&statusVal=' + status + '&orderIdVal=' + orderId;
             $http({
                 method: "get",
@@ -1259,7 +1259,7 @@
 
     // used to make server call to delete or reject an orderline
     function DeleteRejectOrderline($http, deleteOrReject, orderlineId, orderId, row) {
-        var serverUrl = 'http://localhost:61945/api/orderline?orderId=' + orderId + '&orderlineId=' + orderlineId + '&deleteOrReject=' + deleteOrReject;
+        var serverUrl = 'https://localhost:44302/api/orderline?orderId=' + orderId + '&orderlineId=' + orderlineId + '&deleteOrReject=' + deleteOrReject;
         $http({
             method: "get",
             headers: { 'Content-Type': 'application/json' },
@@ -1315,7 +1315,7 @@
     {
         //alert('Edit order line id : ' + dataRow.id);
         var selectedCurrency = $('#selectCurrency option:selected').text().toUpperCase();
-        var serverUrl = 'http://localhost:61945/api/Orderline?orderlineId=' + dataRow.id + '&orderCurrency=' + selectedCurrency;
+        var serverUrl = 'https://localhost:44302/api/Orderline?orderlineId=' + dataRow.id + '&orderCurrency=' + selectedCurrency;
         DisplayErrorMessage('', $('#lblErrorOrderLineMessage'));
         $http({
             method: "get",
@@ -1424,7 +1424,7 @@
         //var searchParams = getSearchParamsJsonObject(categoryId, conditionId, brandIds, modelIds);       // creation of the json object
         //var jsonStr = JSON.stringify(searchParams);                                                       // covert to json string to pass to web service
         var searchResult = '';
-        var serverUrl = 'http://localhost:61945/api/ProductInfo?categoryId=' + categoryId +
+        var serverUrl = 'https://localhost:44302/api/ProductInfo?categoryId=' + categoryId +
                 '&conditionId=' + conditionId + '&brandIds=' + brandIds + '&modelIds=' + modelIds;
         $http({
             method: "get",
@@ -1459,7 +1459,7 @@
         $http({
             method: "get",
             headers: { 'Content-Type': 'application/json' },
-            url: ('http://localhost:61945/api/productinfo/getcategories?getcategories=true'),
+            url: ('https://localhost:44302/api/productinfo/getcategories?getcategories=true'),
         }).success(function (data) {            
             var listitems = '<option value=-1 selected="selected">---- Select Category ----</option>';
             $.each(data, function (index, item) {                
@@ -1526,7 +1526,7 @@
         $http({
             method: "get",
             headers: { 'Content-Type': 'application/json' },
-            url: ('http://localhost:61945/api/status'),
+            url: ('https://localhost:44302/api/status'),
         }).success(function (data) {
             var listitems = '';
             $.each(data, function (index, item) {

@@ -17,7 +17,7 @@ using System.Web.Script.Serialization;
 
 namespace BCMY.WebAPI.Controllers
 {
-    [EnableCorsAttribute("http://localhost:52448", "*", "*")]
+    [EnableCors(origins: "https://localhost:44301", headers: "*", methods: "*")]
     public class ContactController : ApiController
     {
         ObjectProvider objectProvider = null;

@@ -77,7 +77,7 @@
         var creationDateFrom = $('#fromDatePicker').val() == '' ? '' : $('#fromDatePicker').val();
         var creationDateTo = $('#toDatePicker').val() == '' ? '' : $('#toDatePicker').val();
                 
-        var serverUrl = ('http://localhost:61945/api/order?companyId=' + companyId + '&contactFulName=' + contactFulName + '&orderId=' + orderId + '&status=' + status +
+        var serverUrl = ('https://localhost:44302/api/order?companyId=' + companyId + '&contactFulName=' + contactFulName + '&orderId=' + orderId + '&status=' + status +
                     '&orderType=' + orderType + '&creationDateFrom=' +  creationDateFrom + '&creationDateTo=' + creationDateTo);
 
         // repopulate the contact DDL based on company selection
@@ -196,7 +196,7 @@
                         $http({
                             method: "get",
                             headers: { 'Content-Type': 'application/json' },
-                            url: ('http://localhost:61945/api/Order?deleteOrderId=' + orderId),
+                            url: ('https://localhost:44302/api/Order?deleteOrderId=' + orderId),
                         }).success(function (data) {                           
                             refreshGridAfterDelete(row); // refresh grid if the deletion success                            
                             toastr.success(data);
@@ -335,7 +335,7 @@
             $http({
                 method: "get",
                 headers: { 'Content-Type': 'application/json' },
-                url: ('http://localhost:61945/api/Contact?customerSupplierId=' + selectedValue),
+                url: ('https://localhost:44302/api/Contact?customerSupplierId=' + selectedValue),
             }).success(function (data) {
                 var listitems = '<option value=-1 selected="selected">---- Select Contact ----</option>';
                 $.each(data, function (index, item) {
@@ -373,7 +373,7 @@
             $http({
                 method: "get",
                 headers: { 'Content-Type': 'application/json' },
-                url: ('http://localhost:61945/api/customerSupplier?contactFulName=' + selectedFulName),
+                url: ('https://localhost:44302/api/customerSupplier?contactFulName=' + selectedFulName),
             }).success(function (data) {
                 var listitems = '<option value=-1 selected="selected">---- Select Customer ----</option>';
                 $.each(data, function (index, item) {
@@ -404,7 +404,7 @@
         $http({
             method: "get",
             headers: { 'Content-Type': 'application/json' },
-            url: ('http://localhost:61945/api/status'),
+            url: ('https://localhost:44302/api/status'),
         }).success(function (data) {
             var listitems = '<option value=0 selected>all</option>';
             $.each(data, function (index, item) {

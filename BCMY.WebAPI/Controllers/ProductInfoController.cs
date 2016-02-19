@@ -19,7 +19,7 @@ namespace BCMY.WebAPI.Controllers
     /// <summary>
     /// This controller deals with product informationrelated data retrieval from [BCMY] external database
     /// </summary>
-    [EnableCorsAttribute("http://localhost:52448", "*", "*")]
+    [EnableCors(origins: "https://localhost:44301", headers: "*", methods: "*")]
     public class ProductInfoController : ApiController
     {
         ObjectProvider objectProvider = null;

@@ -16,7 +16,7 @@ using DataAccess_EF.ViewModels;
 
 namespace BCMY.WebAPI.Controllers
 {
-    [EnableCorsAttribute("http://localhost:52448", "*", "*")]
+    [EnableCors(origins: "https://localhost:44301", headers: "*", methods: "*")]
     public class OrderLineController : ApiController
     {
         ObjectProvider objectProvider = null;

@@ -24,7 +24,7 @@
 
                 vm.title = "Main Dashboard";
                 vm.exchangeRatesDateJson = null;
-                vm.showTopNavigationBar = true;
+                //vm.showTopNavigationBar = false;
 
                 DrawExchangeRatesChart($http);
 

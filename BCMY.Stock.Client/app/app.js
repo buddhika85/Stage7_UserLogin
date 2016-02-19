@@ -9,12 +9,8 @@
     app.config(["$stateProvider",
                 "$urlRouterProvider",
                 "blockUIConfig",
-                    function ($stateProvider, $urlRouterProvider, blockUIConfig) {
-
+                    function ($stateProvider, $urlRouterProvider, blockUIConfig) {                                         
                         
-                        // landing page
-                        $urlRouterProvider.otherwise("/login");
-
                         // user login
                         $stateProvider.state("login", {
                             url: "/login",
@@ -88,7 +84,11 @@
                             url: "/excelUpload/excelFiles",
                             templateUrl: "app/excelUpload/ExcelUpload.html",
                             controller: "ExcelUploadCtrl as vm"
-                        })
+                        });
+
+                        // landing page
+                        $urlRouterProvider.otherwise("/login");
+
                     }
                 ]
     );

@@ -11,7 +11,7 @@
     function customerSupplierListCtrl($http, customerSupplierResource, Upload, blockUI)
     {        
         var vm = this;
-        vm.apiUrl = 'http://localhost:61945/api/customerSupplier/';         // web API url for update and insert
+        vm.apiUrl = 'https://localhost:44302/api/customerSupplier/';         // web API url for update and insert
         vm.newCustomerSupplier = {};
         vm.title = "Manage Customers/Suppliers";        
         
@@ -47,7 +47,7 @@
                     // insert                    
                     var newCustomerSupplier = getCustomerSupplierJsonObject(custId);    // creation of the json object                    
                     //var jsonStr = JSON.stringify(newCustomerSupplier);                  // covert to json string to pass to web service
-                    var serverUrl = 'http://localhost:61945/api/customerSupplier?idVal=' + newCustomerSupplier.id + '&name=' + newCustomerSupplier.name + '&logo=""' +
+                    var serverUrl = 'https://localhost:44302/api/customerSupplier?idVal=' + newCustomerSupplier.id + '&name=' + newCustomerSupplier.name + '&logo=""' +
                          '&addressLine1=' + newCustomerSupplier.addressLine1 + '&addressLine2=' + newCustomerSupplier.addressLine2 + '&addressLine3=' + newCustomerSupplier.addressLine3 +
                          '&postcode=' + newCustomerSupplier.postcode + '&country=' + newCustomerSupplier.country + '&telephone=' + newCustomerSupplier.telephone +
                          '&bank=' + newCustomerSupplier.bank + '&vatNumber=' + newCustomerSupplier.vatNumber + '&accountNumber=' + newCustomerSupplier.accountNumber +
@@ -58,7 +58,7 @@
                     $http({
                         method: "get",
                         headers: { 'Content-Type': 'application/json' },
-                        url: serverUrl, //'http://localhost:61945/api/customerSupplier/',
+                        url: serverUrl, //'https://localhost:44302/api/customerSupplier/',
                         //data: JSON.stringify(jsonStr)
                     })
                     .success(function (data) {
@@ -100,7 +100,7 @@
                     var newCustomerSupplier = getCustomerSupplierJsonObject(custId);    // creation of the json object                    
                     //var jsonStr = JSON.stringify(updatedCustomerSupplier);                  // covert to json string to pass to web service
                     
-                    var serverUrl = 'http://localhost:61945/api/customerSupplier?idVal=' + newCustomerSupplier.id + '&name=' + newCustomerSupplier.name + '&logo=""' +
+                    var serverUrl = 'https://localhost:44302/api/customerSupplier?idVal=' + newCustomerSupplier.id + '&name=' + newCustomerSupplier.name + '&logo=""' +
                         '&addressLine1=' + newCustomerSupplier.addressLine1 + '&addressLine2=' + newCustomerSupplier.addressLine2 + '&addressLine3=' + newCustomerSupplier.addressLine3 +
                         '&postcode=' + newCustomerSupplier.postcode + '&country=' + newCustomerSupplier.country + '&telephone=' + newCustomerSupplier.telephone +
                         '&bank=' + newCustomerSupplier.bank + '&vatNumber=' + newCustomerSupplier.vatNumber + '&accountNumber=' + newCustomerSupplier.accountNumber +

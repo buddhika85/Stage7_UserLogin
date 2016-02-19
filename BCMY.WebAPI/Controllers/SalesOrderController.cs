@@ -15,7 +15,7 @@ using System.Web.Http.Cors;
 
 namespace BCMY.WebAPI.Controllers
 {
-    [EnableCorsAttribute("http://localhost:52448", "*", "*")]
+    [EnableCors(origins: "https://localhost:44301", headers: "*", methods: "*")]
     public class SalesOrderController : ApiController
     {
         ObjectProvider objectProvider = null;

@@ -71,7 +71,7 @@
             vm.httpService({
                 method: "get",
                 headers: { 'Content-Type': 'application/json' },
-                url: ('http://localhost:61945/api/exchangerate?date=' + vm.dateInput +'&euro=' + vm.euroInput + '&usd=' + vm.usdInput),
+                url: ('https://localhost:44302/api/exchangerate?date=' + vm.dateInput +'&euro=' + vm.euroInput + '&usd=' + vm.usdInput),
             }).success(function (data) {
                 if (data.indexOf('Exchange rates updated for') != -1)       // if true -- insert success
                 {
@@ -141,7 +141,7 @@
         vm.httpService({
             method: "get",
             headers: { 'Content-Type': 'application/json' },
-            url: ('http://localhost:61945/api/exchangerate'),
+            url: ('https://localhost:44302/api/exchangerate'),
         }).success(function (data) {            
             $('#ersGrid').dataTable({
                 "data": data,

@@ -4,19 +4,20 @@
 
     var module = angular.module("stockManagement");
 
-    module.controller("UserLoginCtrl", ["$http", "blockUI", userLoginCtrl]);    // attach controller to the module
+    module.controller("UserLoginCtrl", ["$http", "blockUI", "$rootScope", "$timeout", userLoginCtrl]);    // attach controller to the module
 
 
-    function userLoginCtrl($http, blockUI)                   // controller funcion
+    function userLoginCtrl($http, blockUI, $rootScope, $timeout)                   // controller funcion
     {
         //$('#topNavigationBar').hide();
 
         var vm = this;
-        vm.showTopNavigationBar = false;
+        DisableTopNavigationBar();
+        //vm.showTopNavigationBar = true;
         
         vm = defineModel(vm, $http, blockUI);
         vm = prepareInitialUI(vm);
-        vm = wireCommands(vm, $http);
+        vm = wireCommands(vm, $http, $rootScope, $timeout);
     }
 
 
@@ -39,22 +40,22 @@
         return vm;
     }
 
-    function wireCommands(vm, $http)
+    function wireCommands(vm, $http, $rootScope, $timeout)
     {
         vm.login = function () {
-            loginUser(vm, $http);
+            loginUser(vm, $http, $rootScope, $timeout);
         };
 
         vm.fogotPassword = function ()
         {
-            fogotPassword(vm, $http);
+            fogotPassword(vm, $http, $rootScope);
         }
 
         return vm;
     }
 
     // manage user login
-    function loginUser(vm, $http)
+    function loginUser(vm, $http, $rootScope, $timeout)
     {
         alert("Login user : " + vm.username + " | " + vm.password);
 
@@ -95,8 +96,13 @@
                 localStorage["access_token"] = data.access_token;
                 localStorage["expires_in"] = data.expires_in;
 
-                // if login success - show top navigation bar        
-                vm.showTopNavigationBar = true;
+                // if login success - show top navigation bar   
+                EnableTopNavigationBar();
+                //$timeout(function() {
+                //    $rootScope.$apply(function () {
+                //        vm.showTopNavigationBar = false;
+                //    });
+                //});
 
                 // write credential cookie
                 if (vm.rememberMe)
@@ -157,7 +163,7 @@
 
 
     // manage fogot password 
-    function fogotPassword(vm, $http) {
+    function fogotPassword(vm, $http, $rootScope) {
         alert("fogot password - under construction");
     }
 
@@ -183,18 +189,18 @@
     // used to disable the top navigation bar - before login
     // Ref - http://stackoverflow.com/questions/6961678/disable-enable-all-elements-in-div
     function DisableTopNavigationBar() {        
-        //$('#topNavigationBar').find('a').prop('disabled', true);
-        //$('#topNavigationBar a').click(function (e) {
-        //    e.preventDefault();
-        //});
-        //$('#topNavigationBar').css("visibility", "hidden");
+        $('#topNavigationBar').find('a').prop('disabled', true);
+        $('#topNavigationBar a').click(function (e) {
+            e.preventDefault();
+        });
+        $('#topNavigationBar').css("visibility", "hidden");
     }
 
     // used to enable the top navigation bar - after logged in
-    //function EnableTopNavigationBar() {
-    //    $('#topNavigationBar').find('a').prop('disabled', false);
-    //    $('#topNavigationBar a').unbind("click");
-    //    $('#topNavigationBar').css("visibility", "visible");
-    //}
+    function EnableTopNavigationBar() {
+        $('#topNavigationBar').find('a').prop('disabled', false);
+        $('#topNavigationBar a').unbind("click");
+        $('#topNavigationBar').css("visibility", "visible");
+    }
 
 }());

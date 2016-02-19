@@ -14,7 +14,7 @@ namespace BCMY.WebAPI.Controllers
     /// <summary>
     /// Returns common status values for the order, orderline stored in web.config file
     /// </summary>
-    [EnableCorsAttribute("http://localhost:52448", "*", "*")]
+    [EnableCors(origins: "https://localhost:44301", headers: "*", methods: "*")]
     public class StatusController : ApiController
     {
         // GET: api/Status
