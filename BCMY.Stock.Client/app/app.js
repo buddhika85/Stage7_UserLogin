@@ -4,13 +4,21 @@
 
     "use strict";
     var app = angular.module("stockManagement",
-                                ["ui.router", "common.services", "ngFileUpload", "blockUI"]);
+                               ["ui.router", "common.services", "ngFileUpload", "blockUI"]);
+  
 
     app.config(["$stateProvider",
                 "$urlRouterProvider",
                 "blockUIConfig",
-                    function ($stateProvider, $urlRouterProvider, blockUIConfig) {                                         
+                "$locationProvider",
+                function ($stateProvider, $urlRouterProvider, blockUIConfig, $locationProvider) {
                         
+                        //$locationProvider.html5Mode(true);
+                        //$locationProvider.html5Mode({
+                        //    enabled: true,
+                        //    requireBase: false
+                        //});                                               
+
                         // user login
                         $stateProvider.state("login", {
                             url: "/login",
@@ -84,15 +92,11 @@
                             url: "/excelUpload/excelFiles",
                             templateUrl: "app/excelUpload/ExcelUpload.html",
                             controller: "ExcelUploadCtrl as vm"
-                        });
+                        })
 
                         // landing page
                         $urlRouterProvider.otherwise("/login");
-
                     }
                 ]
     );
-
-    
-
 }());

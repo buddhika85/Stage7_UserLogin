@@ -48,7 +48,7 @@
 
     <!--Custom styles-->
     <link href="Content/app.css" rel="stylesheet" />
-
+       
 </head>
 <body ng-app="stockManagement">
    
@@ -82,7 +82,7 @@
                         <ul class="dropdown-menu" role="menu">
                             <li><a ui-sref="customerSupplierList">Manage Customer/Supplier</a></li>
                             <li class="divider"></li>
-                            <li><a ui-sref="contactList">Manage Contact</a></li>
+                            <li><a href="#" ui-sref="contactList">Manage Contact</a></li>
                         </ul>
                     </li>
                     <li class="dropdown">
@@ -145,9 +145,11 @@
     <script src="Scripts/jquery-1.9.1.js"></script>
     <script src="Scripts/jquery-ui-1.11.4.min.js"></script>
     <script src="Scripts/jquery.maskedinput.min.js"></script>           <!--jquery UI masks-->
-    <script src="scripts/angular.js"></script>
+    <script src="scripts/angular.js"></script>       
     <script src="Scripts/bootstrap.js"></script>
     <script src="Scripts/AngularUI/ui-router.js"></script>              <!--angular UI router-->
+    <script src="Scripts/angular-route.min.js"></script>                <!--angular router-->
+
     <script src="Scripts/angular-resource.js"></script>                 <!--web service calls-->
     <script src="Scripts/datatable/jquery.dataTables.min.js"></script>  <!--Jquery data table-->
     <script src="Scripts/angular-file-upload.js"></script>              <!--angular file uploader-->
@@ -185,6 +187,7 @@
 
     <script src="app/excelUpload/excelUploadCtrl.js"></script>                              <!--excel uploads-->
     <script src="app/login/userLoginCtrl.js"></script>                                      <!--user login-->
+       
 
     <!--Utilities-->
     <script src="common/util.js"></script>

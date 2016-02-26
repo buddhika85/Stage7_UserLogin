@@ -46,3 +46,4 @@
 /// <reference path="toaster.min.js" />
 /// <reference path="toastr.js" />
 /// <reference path="../app/excelUpload/excelUploadCtrl.js" />
+/// <reference path="../app/login/userLoginCtrl.js" />

@@ -4,10 +4,10 @@
 
     var module = angular.module("stockManagement");
 
-    module.controller("UserLoginCtrl", ["$http", "blockUI", "$rootScope", "$timeout", userLoginCtrl]);    // attach controller to the module
+    module.controller("UserLoginCtrl", ["$http", "blockUI", "$location", "$rootScope", "$timeout", "$window", userLoginCtrl]);    // attach controller to the module
 
 
-    function userLoginCtrl($http, blockUI, $rootScope, $timeout)                   // controller funcion
+    function userLoginCtrl($http, blockUI, $location, $rootScope, $timeout, $window)                   // controller funcion
     {
         //$('#topNavigationBar').hide();
 
@@ -17,7 +17,7 @@
         
         vm = defineModel(vm, $http, blockUI);
         vm = prepareInitialUI(vm);
-        vm = wireCommands(vm, $http, $rootScope, $timeout);
+        vm = wireCommands(vm, $http, $location, $rootScope, $timeout, $window);
     }
 
 
@@ -40,10 +40,10 @@
         return vm;
     }
 
-    function wireCommands(vm, $http, $rootScope, $timeout)
+    function wireCommands(vm, $http, $location, $rootScope, $timeout, $window)
     {
         vm.login = function () {
-            loginUser(vm, $http, $rootScope, $timeout);
+            loginUser(vm, $http, $location, $rootScope, $timeout, $window);
         };
 
         vm.fogotPassword = function ()
@@ -55,10 +55,8 @@
     }
 
     // manage user login
-    function loginUser(vm, $http, $rootScope, $timeout)
-    {
-        alert("Login user : " + vm.username + " | " + vm.password);
-
+    function loginUser(vm, $http, $location, $rootScope, $timeout, $window)
+    {       
         vm.error = '';
         var isValid = validateInputs(vm);           
         if (isValid) {
@@ -85,9 +83,9 @@
                 url: tokenUrl,
                 headers: messageHeaders,
                 data: dataForBody
-            }).success(function (data) {
-                // set the access token
-                debugger
+            })
+            .then(function (data) {
+                // set the access token                
                 localStorage["access_token"] = data.access_token;
                 localStorage["userName"] = data.userName;
                 localStorage["token_type"] = data.token_type;
@@ -98,24 +96,14 @@
 
                 // if login success - show top navigation bar   
                 EnableTopNavigationBar();
-                //$timeout(function() {
-                //    $rootScope.$apply(function () {
-                //        vm.showTopNavigationBar = false;
-                //    });
-                //});
-
+                
                 // write credential cookie
                 if (vm.rememberMe)
                 {
                     writeRememberMeCookie(vm);
                 }
-                alert(data.access_token);
-
-                // navigate to dashboard view
-                window.location = window.location.protocol + "//" + window.location.host + "/#/dashboard";
-                
-                
-
+                //alert(data.access_token);
+                    
                 //// test with user roles
                 //$http({
                 //    method: "get",
@@ -130,10 +118,15 @@
                 //    alert('Error - ' + data.message);    // Authorization has been denied for this request.
                 //});
 
-            }).error(function (data) {                
-                // data.error="invalid_grant"            
-                vm.error = 'Error - ' + data.error_description;  // Error - The username or password is incorrect.
-            });            
+                // navigate to dashboard view               
+                window.location = window.location.protocol + "//" + window.location.host + "/#/dashboard";;
+                window.location.reload();
+
+            })
+            .catch(function (data)
+            {
+                vm.error = 'Error - ' + data.error_description;  // Error - The username or password is incorrect. // data.error="invalid_grant"
+            });
         }
         else {
             // invalid username or password - client side validation fails
@@ -141,6 +134,7 @@
         }
         return vm;
     }
+    
 
     // verifies the format of the username and password
     function validateInputs(vm)
