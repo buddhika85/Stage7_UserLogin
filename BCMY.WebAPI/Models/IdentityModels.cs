@@ -94,7 +94,7 @@ namespace BCMY.WebAPI.Models
 
     // Must be expressed in terms of our custom UserRole:
     public class ApplicationRole : IdentityRole<string, ApplicationUserRole>
-    {
+    {   
         public ApplicationRole()
         {
             this.Id = Guid.NewGuid().ToString();
@@ -106,7 +106,7 @@ namespace BCMY.WebAPI.Models
             this.Name = name;
         }
 
-        public string Description { get; set; }
+        public string Description { get; set; }        
     }
 
 

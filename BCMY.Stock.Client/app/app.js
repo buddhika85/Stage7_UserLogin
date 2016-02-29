@@ -87,11 +87,18 @@
                             controller: "AmendStockCtrl as vm"
                         })
 
-                        // Amend stock quantities
+                        // upload excel
                         .state("excelUpload", {
                             url: "/excelUpload/excelFiles",
                             templateUrl: "app/excelUpload/ExcelUpload.html",
                             controller: "ExcelUploadCtrl as vm"
+                        })
+
+                        // role mangement
+                        .state("roleManagement", {
+                            url: "/admin/roles",
+                            templateUrl: "app/admin/role/roleListView.html",
+                            controller: "RoleListCtrl as vm"
                         })
 
                         // landing page

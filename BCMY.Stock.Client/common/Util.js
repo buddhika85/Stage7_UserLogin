@@ -234,4 +234,16 @@
     function RemoveOutlineBorders(element) {
         element.removeClass("errorBorder");
     }
+
+    // returns true if a string is not null or not a space/s
+    function isNotEmptyOrSpaces(str) {
+        var isNotEmpty = false;
+        if (str === null || str.match(/^ *$/) !== null) {
+            isNotEmpty = false;
+        }
+        else {
+            isNotEmpty = true;
+        }
+        return isNotEmpty;
+    }
 //}());

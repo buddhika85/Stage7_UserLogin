@@ -1,0 +1,67 @@
+﻿<div>
+    <h4>{{vm.title}}</h4>
+    <br />
+    <button ng-click='vm.insertRole()'>Insert new user role</button>
+    <br />
+    <br />
+
+    <!--Roles grid -->
+    <div class="table-responsive">
+        <!--JS Data table -->
+        <table cellpadding="0" cellspacing="0" border="0" class="display table-bordered" id="rolesGrid"></table>
+    </div>
+
+
+    <!-- Modal to insert/edit/view info-->
+    <div id="myModal" class="modal fade" role="dialog">
+        <div class="modal-dialog">
+
+            <!-- Modal content-->
+            <div class="modal-content">
+
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title" id="modalTitle">{{vm.popupTitle}}</h4>
+                </div>
+
+                <div class="modal-body">
+
+                    <div class="row formRawPaddingCustom">
+                        <label for="category" class="control-label col-md-2 fontWeightNormal">Name</label>
+                        <div class="col-md-4">
+                            <input type="text" ng-model="vm.roleName" placeholder="unique role name" ng-class="vm.roleNameClass"/>
+                        </div>                        
+                        <label for="stockCount" class="control-label col-md-2 fontWeightNormal">User count</label>
+                        <div class="col-md-4">
+                            <input type="text" ng-model="vm.userCount" onkeypress="return isNumberKey(event)" maxlength="5" placeholder="0" ng-disabled="vm.userCountDisabled"/>
+                        </div>
+                    </div>
+
+                    <div class="row formRawPaddingCustom">
+                        <label for="brand" class="control-label col-md-2 fontWeightNormal">Description</label>
+                        <div class="col-md-10">
+                            <textarea type="text" ng-model="vm.roleDesc" placeholder="description of the role" ng-class="vm.roleDescClass"/>
+                        </div>                       
+                    </div>
+
+                   
+
+                    <!-- error message section -->
+                    <div class="row">
+                        <div class="col-md-12">
+                            <label class="control-label fontWeightNormal" style="color:red"> {{vm.errorMessage}}</label>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="modal-footer">
+                    <button id="btnSave" type="button" class="btn-sm btn-primary" ng-click='vm.saveNewRole()'>Save</button>
+                    <button id="btnCancel" type="button" class="btn-sm btn-default" data-dismiss="modal">Cancel</button>
+                </div>
+
+            </div>
+        </div>
+    </div>
+    <!--End modal popup-->
+
+</div>
