@@ -84,7 +84,7 @@
                 headers: messageHeaders,
                 data: dataForBody
             })
-            .then(function (data) {
+            .success(function (data) {                
                 // set the access token                
                 localStorage["access_token"] = data.access_token;
                 localStorage["userName"] = data.userName;
@@ -123,7 +123,7 @@
                 window.location.reload();
 
             })
-            .catch(function (data)
+            .error(function (data)
             {
                 vm.error = 'Error - ' + data.error_description;  // Error - The username or password is incorrect. // data.error="invalid_grant"
             });

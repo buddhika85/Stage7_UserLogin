@@ -2,12 +2,13 @@
 
     "use strict";
     var module = angular.module("stockManagement");         // get module
-    module.controller("RoleListCtrl", ["$http", "blockUI", roleListCtrl]);    // attach controller to the module
+    module.controller("RoleListCtrl", ["$http", "blockUI", "$scope", roleListCtrl]);    // attach controller to the module
 
 
-    function roleListCtrl($http, blockUI)                   // controller funcion
+    function roleListCtrl($http, blockUI, $scope)                   // controller funcion
     {
         var vm = this;
+        vm.scope = $scope;
         vm = defineModel(vm, $http, blockUI);
         prepareInitialUI(vm);
         wireCommands(vm);
@@ -31,7 +32,7 @@
         vm.roleName = "";        
         vm.roleDesc = "";        
         vm.userCount = 0;
-        vm.userCountDisabled = false;            // number of users for the role
+        vm.userCountDisabled = true;            // number of users for the role
         vm.errorMessage = "";
                 
         return vm;
@@ -51,8 +52,8 @@
         vm.insertRole = function () {
             insertRole(vm);
         };
-        vm.saveNewRole = function () {
-            saveNewRole(vm);
+        vm.saveRole = function () {
+            saveRole(vm);
         };
     }
 
@@ -60,7 +61,9 @@
     function insertRole(vm)
     {
         //alert("Insert roles");
+        
         vm = defineModelForNewRole(vm);
+        vm.scope.$evalAsync(); //$apply();
 
         $('#myModal').modal({
             show: true,
@@ -70,24 +73,54 @@
     }
 
     // used to save a new role
-    function saveNewRole(vm)
+    function saveRole(vm)
     {        
         var isValid = validateInputs(vm);
-        //alert(isValid + " save new role " + vm.roleName + " " + vm.roleDesc + vm.userCount);
+        //alert(isValid + " save new role " + vm.roleName + " " + vm.roleDesc + vm.userCount);        
         if (isValid)
         {
-            //vm.httpService({
-            //    method: "get",
-            //    headers: { 'Content-Type': 'application/json' },
-            //    url: ('https://localhost:44302/api/role'),
-            //}).success(function (data) {
-            //    roles = data;
-            //    drawHelper(roles);
-            //}
-            //).error(function (data) {
-            //    alert('error - web service access')     // display error message            
-            //});
+            var dataForBody = "roleName=" + vm.roleName + "&desc=" + vm.roleDesc;
+            var serverUrl = null;
+            // check for insert or update/edit
+            if (vm.popupTitle.indexOf('Edit') > -1) {
+                serverUrl = ('https://localhost:44302/api/EditRoleAsync?' + dataForBody);
+            }
+            else {
+                serverUrl = ('https://localhost:44302/api/CreateRoleAsync?' + dataForBody);                
+            }
+            
+            // service call
+            performInsertEditServiceCall(vm, serverUrl);
         }
+    }
+
+    // used to perform either insert, edit or delete service call to the http service
+    function performInsertEditServiceCall(vm, serverUrl)
+    {
+        vm.httpService({
+            method: "post",
+            headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + localStorage["access_token"] },
+            url: serverUrl
+        }).success(function (data) {
+
+            if (data.indexOf('Success') > -1) {
+
+                // refersh the grid to display the updated record
+                //var table = $('#rolesGrid').DataTable();
+                //table.destroy();
+                drawRoleGrid(vm);                
+                toastr.success(data);
+                $('#myModal').modal('hide');
+            }
+            else {
+                vm.errorMessage = data;     // display error message
+                toastr.warning(data);
+            }
+        }
+        ).error(function (data) {
+            vm.errorMessage = data;     // display error message
+            toastr.error(data);
+        });
     }
 
     // used to get available role info and used to create the roles grid
@@ -100,7 +133,7 @@
             url: ('https://localhost:44302/api/role'),
         }).success(function (data) {            
             roles = data;            
-            drawHelper(roles);
+            drawHelper(roles, vm);
         }
         ).error(function (data) {            
             alert('error - web service access')     // display error message            
@@ -108,8 +141,9 @@
     }
 
     // used to draw roles grid
-    function drawHelper(roles)
-    {        
+    function drawHelper(roles, vm)
+    {
+        $('#rolesGrid').html("");                           
         $('#rolesGrid').dataTable({
             "data": roles,
             "aoColumns": [
@@ -130,29 +164,125 @@
                     },
 
                    
-                    { "sTitle": "Edit", "defaultContent": "<button class='roleInfo'>Edit</button>" },
-                    { "sTitle": "Delete", "defaultContent": "<button class='roleDelete'>Delete</button>" }
+                    { "sTitle": "Edit", "defaultContent": "<button class='roleInfo'><span class='glyphicon glyphicon-edit'></span></button>" },
+                    { "sTitle": "Delete", "defaultContent": "<button class='roleDelete'><span class='glyphicon glyphicon-remove'></span></button>" }
             ],
             "bDestroy": true,           
             "aLengthMenu": [[15, 50, 100, 200, 500, 700, 1000, -1], [15, 50, 100, 200, 500, 700, 1000, "All"]],
             "iDisplayLength": -1
-        });
+        });           
 
-        // data table
         var table = $('#rolesGrid').DataTable();
 
         // on edit button clicks
         $('#rolesGrid tbody').on('click', 'button.roleInfo', function () {
-            var data = table.row($(this).parents('tr')).data();
-            alert("Edit Role : " + data.name);
+            //var table = $('#rolesGrid').DataTable();
+            var data = table.row($(this).parents('tr')).data();           
+            editRole(vm, data);
         });
 
         // on delete button clicks
-        $('#rolesGrid tbody').on('click', 'button.roleDelete', function () {
+        $('#rolesGrid tbody').on('click', 'button.roleDelete', function () {            
+            //var table = $('#rolesGrid').DataTable();
             var data = table.row($(this).parents('tr')).data();
-            alert("Delete Role : " + data.name);
+            deleteRole(vm, data);
         });
 
+    }
+
+    // used to edit a role
+    function editRole(vm, record)
+    {
+        //alert("Edit Role : " + record.name);
+        
+        vm = defineModelForEditRole(vm, record);
+        vm.scope.$evalAsync(); //$apply();
+
+        $('#myModal').modal({
+            show: true,
+            keyboard: true,
+            backdrop: true
+        });
+    }
+
+    // used to edit a role
+    function deleteRole(vm, record)
+    {        
+        //alert("Delete Role : " + record.name + " " + record.users.length);        
+        // check whether the role has existing users
+        if (record.users.length == 0) {
+            bootbox.dialog({
+                message: "Are you sure that you want to delete role " + record.name + " ?",
+                title: "Confirm Role Deletion",
+                buttons: {                    
+                    main: {
+                        label: "Yes",
+                        className: "btn-primary",
+                        callback: function () {
+                            var dataForBody = "roleName=" + record.name;
+                            var serverUrl = ('https://localhost:44302/api/DeleteRoleAsync?' + dataForBody);
+                            vm.httpService({
+                                method: "post",
+                                headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + localStorage["access_token"] },
+                                url: serverUrl
+                            }).success(function (data) {
+
+                                if (data.indexOf('Success') > -1) {
+
+                                    // refersh the grid to display the updated record
+                                    //var table = $('#rolesGrid').DataTable();
+                                    //table.destroy();
+                                    drawRoleGrid(vm);                                    
+                                    toastr.success(data);
+                                }
+                                else {
+                                    vm.errorMessage = data;     // display error message
+                                    toastr.warning(data);
+                                }
+                            }
+                            ).error(function (data) {
+                                vm.errorMessage = data;     // display error message
+                                toastr.error(data);
+                            });
+                        }
+                    },
+                    danger: {
+                        label: "No",
+                        className: "btn-danger",
+                        callback: function () {
+                            toastr.warning("Role not deleted");
+                        }
+                    }
+                }
+            });
+        }
+        else {
+            bootbox.dialog({
+                message: "Role not deleted as the role is assigned to " + record.users.length + " users",
+                title: "Role cannot be deleted",
+                buttons: {
+                    main: {
+                        label: "OK",
+                        className: "btn-primary",
+                        callback: function () {
+                            toastr.warning("Role not deleted as the role is assigned to " + record.users.length + " users");
+                        }
+                    }
+                }
+            });
+        }
+    }
+
+    // used to initiate initial popup attributes of the model object
+    function defineModelForEditRole(vm, record) {
+        vm.popupTitle = "Edit Role - " + record.name;
+        vm.roleName = record.name;
+        vm.roleDesc = record.description;
+        vm.userCount = record.users.length;
+        vm.userCountDisabled = true;            // number of users for the role
+        vm.errorMessage = "";
+
+        return vm;
     }
 
     // used to validate user inputs
@@ -169,7 +299,7 @@
         else {
             isValid = false;
             vm.roleNameClass = "errorBorder";
-            vm.errorMessage = "Error - Please insert description";
+            vm.errorMessage = "Error - Please insert unique role name";
             
         }
 
