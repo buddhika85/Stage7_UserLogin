@@ -1,0 +1,230 @@
+﻿<div>
+    <h4>{{vm.title}}</h4>
+    <br />
+    
+
+    <!-- panel for - Create user-->
+    <div class="panel panel-default">
+
+        <div class="panel-body">
+
+            <fieldset>
+                <legend style="font-size:medium;" class="panel-heading" id="newUserHeaderPanel">Create a new user</legend>
+                <div id="newUserInputSection">
+                    <div class="form-group row">
+                        <!--username-->
+                        <label for="username" class="control-label col-md-2 fontWeightNormal">Username</label>
+                        <div class="col-md-4">
+                            <input type="text" placeholder="email" id="username" class="col-md-10" />
+                        </div>
+
+                        <!--role-->
+                        <label for="selectRole" class="control-label col-md-2 fontWeightNormal">User role</label>
+                        <div class="col-md-4">
+                            <select id="selectRole" class="col-md-10">
+                                <option>---- Select Role ----</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        
+                        <!--first name-->
+                        <label for="firstName" class="control-label col-md-2 fontWeightNormal">First name</label>
+                        <div class="col-md-4">
+                            <input type="text" placeholder="first name" id="firstName" class="col-md-10" />
+                        </div>
+                        <!--last name-->
+                        <label for="lastName" class="control-label col-md-2 fontWeightNormal">Last name</label>
+                        <div class="col-md-4">
+                            <input type="text" placeholder="last name" id="lastName" class="col-md-10" />
+                        </div>
+                    </div>
+                    <div class="form-group row">
+
+                        <!--position-->
+                        <label for="position" class="control-label col-md-2 fontWeightNormal">Position</label>
+                        <div class="col-md-4">
+                            <input type="text" placeholder="position" id="position" class="col-md-10" />
+                        </div>
+                        
+                        <div class="col-md-6">                            
+                        </div>
+                    </div>
+                    <div class="form-group row">
+
+                        <!--employment date-->
+                        <label for="empDate" class="control-label col-md-2 fontWeightNormal">Employment date</label>
+                        <div class="col-md-4">
+                            <input type="text" placeholder="employement date" id="empDate" class="col-md-10" />
+                        </div>
+                        <!--registration date-->
+                        <label for="regDate" class="control-label col-md-2 fontWeightNormal">Registration date</label>
+                        <div class="col-md-4">
+                            <input type="text" placeholder="registration date" id="regDate" class="col-md-10" />
+                        </div>
+                    </div>
+                    <div class="form-group row">  
+                    </div>
+                    <div class="form-group row">                                                
+                        
+                        <!--error message -->
+                        <div class="col-md-8">
+                            <label class="control-label fontWeightNormal" style="color:red"> {{vm.errorMessage}}</label>
+                        </div>
+                        <!--buttons -->
+                        <div class="col-md-4">                            
+                            <div class="col-md-5" style="padding-left:0">
+                                <button class="col-md-12 fontWeightNormal btn-primary" ng-click="vm.createUser()" id="btnSearchOrders">Create user</button>
+                            </div>
+                            <!--<div class="col-md-1">
+                            </div>-->
+                            <div class="col-md-5" style="padding-right:0">
+                                <button class="col-md-12 fontWeightNormal" ng-click="vm.resetCreateForm()" id="btnResetSearch">Reset form</button>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </fieldset>
+
+        </div>
+    </div>
+    <!-- end panel for - create user-->
+
+    <!-- panel for - Search users-->
+    <div class="panel panel-default">
+
+        <div class="panel-body">
+
+            <fieldset>
+                <legend style="font-size:medium;" class="panel-heading" id="searchHeaderPanel">Search and then Edit/Delete user</legend>
+                <div id="searchUserInputSection">
+                    <div class="form-group row">
+                        <!--username-->
+                        <label for="usernameE" class="control-label col-md-2 fontWeightNormal">Username</label>
+                        <div class="col-md-4">
+                            <input type="text" placeholder="email" id="usernameE" class="col-md-10" />
+                        </div>
+
+                        <!--role-->
+                        <label for="selectRoleE" class="control-label col-md-2 fontWeightNormal">User role</label>
+                        <div class="col-md-4">
+                            <select id="selectRoleE" class="col-md-10">
+                                <option>---- Select Role ----</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+
+                        <!--first name-->
+                        <label for="firstNameE" class="control-label col-md-2 fontWeightNormal">First name</label>
+                        <div class="col-md-4">
+                            <input type="text" placeholder="first name" id="firstNameE" class="col-md-10" />
+                        </div>
+                        <!--last name-->
+                        <label for="lastNameE" class="control-label col-md-2 fontWeightNormal">Last name</label>
+                        <div class="col-md-4">
+                            <input type="text" placeholder="last name" id="lastNameE" class="col-md-10" />
+                        </div>
+                    </div>
+                    <div class="form-group row">
+
+                        <!--position-->
+                        <label for="positionE" class="control-label col-md-2 fontWeightNormal">Position</label>
+                        <div class="col-md-4">
+                            <input type="text" placeholder="position" id="positionE" class="col-md-10" />
+                        </div>
+
+                        <div class="col-md-6">
+                        </div>
+                    </div>
+                    <div class="form-group row">
+
+                        <!--employment date-->
+                        <label for="empDateE" class="control-label col-md-2 fontWeightNormal">Employment date</label>
+                        <div class="col-md-4">
+                            <input type="text" placeholder="employement date" id="empDateE" class="col-md-10" />
+                        </div>
+                        <!--registration date-->
+                        <label for="regDateE" class="control-label col-md-2 fontWeightNormal">Registration date</label>
+                        <div class="col-md-4">
+                            <input type="text" placeholder="registration date" id="regDateE" class="col-md-10" />
+                        </div>
+                    </div>
+                    <div class="form-group row">
+
+                        <!--last login date-->
+                        <label for="lastLoginDateE" class="control-label col-md-2 fontWeightNormal">Last login date &amp time</label>
+                        <div class="col-md-4">
+                            <input type="text" placeholder="last login date" id="lastLoginDateE" class="col-md-10" />
+                        </div>
+                        <!--last invalid login date-->
+                        <label for="lastInvalidDateE" class="control-label col-md-2 fontWeightNormal">Last invalid login date &amp time</label>
+                        <div class="col-md-4">
+                            <input type="text" placeholder="last invalid login date" id="lastInvalidDateE" class="col-md-10" />
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                    </div>
+                    <div class="form-group row">
+
+                        <!--error message -->
+                        <div class="col-md-8">
+                            <label class="control-label fontWeightNormal" style="color:red"> {{vm.errorMessageSearch}}</label>
+                        </div>
+                        <!--buttons -->
+                        <div class="col-md-4">
+                            <div class="col-md-5" style="padding-left:0">
+                                <button class="col-md-12 fontWeightNormal btn-default" ng-click="vm.searchUsers()" id="btnSearchOrders">Search users</button>
+                            </div>
+                            <!--<div class="col-md-1">
+                            </div>-->
+                            <div class="col-md-5" style="padding-right:0">
+                                <button class="col-md-12 fontWeightNormal" ng-click="vm.resetSearchForm()" id="btnResetSearch">Reset form</button>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </fieldset>
+
+        </div>
+    </div>
+    <!-- end panel for - create user-->
+
+    <!-- panel for - Search result of users - users grid -->
+    <div class="panel panel-default">
+
+        <div class="panel-body">
+
+            <fieldset>
+                <legend style="font-size:medium;" class="panel-heading" id="searchResultHeaderPanel">Users</legend>
+                <div id="searchResultsSection">
+                    <!--empty raw-->
+                    <div class="row">
+                        <div class="col-md-12" style="padding:5px">
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div id="searchResultSection">
+                            <div class="col-md-1"></div>
+
+                            <div class="col-md-10">
+                                <div class="row table-responsive">
+                                    <!--JS Data table -->
+                                    <table cellpadding="0" cellspacing="0" border="0" class="display table-bordered" id="usersGrid"></table>
+                                </div>
+                            </div>
+
+                            <div class="col-md-1"></div>
+                        </div>
+                    </div>
+                </div>
+            </fieldset>
+        </div>
+    </div>
+    <!-- End panel for - Search result users - users grid -->
+
+</div>

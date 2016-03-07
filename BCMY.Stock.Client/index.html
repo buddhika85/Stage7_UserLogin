@@ -32,6 +32,7 @@
     <link href="Content/jquery-ui.min.css" rel="stylesheet" />
     <link href="Content/jquery-ui.structure.min.css" rel="stylesheet" />
     <link href="Content/jquery-ui.theme.min.css" rel="stylesheet" />
+    <link href="Content/jquery-ui-timepicker-addon.css" rel="stylesheet" />
 
     <!--Jquery.DataTable-->
     <link href="Content/datatable/jquery.dataTables.css" rel="stylesheet" />
@@ -75,7 +76,7 @@
                         <ul class="dropdown-menu" role="menu">
                             <li><a ui-sref="amendStock">Amend Stock</a></li>
                             <li><a ui-sref="roleManagement">Role management</a></li>
-                            <li><a href="#">User management</a></li>
+                            <li><a ui-sref="userManagement">User management</a></li>
                         </ul>
                     </li>
                     <li class="dropdown">
@@ -159,6 +160,7 @@
     <script src="Scripts/bootbox.min.js"></script>                      <!--bootbox - confirm, alert...etc boxes-->
     <!--<script src="Scripts/toaster.min.js"></script>-->               <!--toaster - non-blocking notification jQuery library-->
     <script src="Scripts/toastr.js"></script>                           <!--toaster - non-blocking notification jQuery library-->
+    <script src="Scripts/jquery-ui-timepicker-addon.js"></script>       <!--jquery - date time picker plugin-->
 
     <!--Google charts -->
     <script src="Scripts/GoogleCharts/corechart.js"></script>
@@ -187,7 +189,8 @@
 
     <script src="app/excelUpload/excelUploadCtrl.js"></script>                              <!--excel uploads-->
     <script src="app/login/userLoginCtrl.js"></script>                                      <!--user login-->
-    <script src="app/admin/role/roleListCtrl.js"></script>                                  <!--role manager-->
+    <script src="app/admin/role/roleListCtrl.js"></script>                                  <!--role management-->
+    <script src="app/admin/user/userListCtrl.js"></script>                                  <!--user management-->
        
 
     <!--Utilities-->

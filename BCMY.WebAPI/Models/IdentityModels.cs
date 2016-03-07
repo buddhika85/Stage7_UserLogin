@@ -6,6 +6,7 @@ using Microsoft.AspNet.Identity.Owin;
 using System;
 using System.Data.Entity;
 using System.Web;
+using System.Collections.Generic;
 
 namespace BCMY.WebAPI.Models
 {
@@ -16,6 +17,28 @@ namespace BCMY.WebAPI.Models
     public class ApplicationUserLogin : IdentityUserLogin<string> { }
     public class ApplicationUserClaim : IdentityUserClaim<string> { }
     public class ApplicationUserRole : IdentityUserRole<string> { }
+
+    // a view model to represent application users with their roles
+    public class ApplicationUserViewModel
+    {        
+        public Util.Enums.Titles Title { get; set; }
+        public string FirstName { get; set; }
+        public string LastName { get; set; }
+        public string Position { get; set; }
+        public string DirectDial { get; set; }
+        public int? Extension { get; set; }
+        public DateTime? EmploymentDate { get; set; }       // start date
+        public DateTime? RegistrationDate { get; set; }
+        public DateTime? LastLogInTime { get; set; }
+        public DateTime? LastLogoutTime { get; set; }
+        public bool IsLoggedIn { get; set; }
+        public int InvalidLoginAttemptCount { get; set; }
+        public DateTime? LastInvalidLoginAttemptTime { get; set; }
+        public bool Locked { get; set; }
+        public string Id { get; set; }
+        public string UserName { get; set; }
+        public List<ApplicationRole> Roles { get; set; }       // roles assigned to the user
+    }
 
     // Must be expressed in terms of our custom Role and other types:
     public class ApplicationUser

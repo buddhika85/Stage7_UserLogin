@@ -101,6 +101,13 @@
                             controller: "RoleListCtrl as vm"
                         })
 
+                        // user mangement
+                        .state("userManagement", {
+                            url: "/admin/users",
+                            templateUrl: "app/admin/user/userListView.html",
+                            controller: "UserListCtrl as vm"
+                        })
+
                         // landing page
                         $urlRouterProvider.otherwise("/login");
                     }

@@ -48,3 +48,5 @@
 /// <reference path="../app/excelUpload/excelUploadCtrl.js" />
 /// <reference path="../app/login/userLoginCtrl.js" />
 /// <reference path="../app/admin/role/roleListCtrl.js" />
+/// <reference path="../app/admin/user/userListCtrl.js" />
+/// <reference path="jquery-ui-timepicker-addon.js" />
