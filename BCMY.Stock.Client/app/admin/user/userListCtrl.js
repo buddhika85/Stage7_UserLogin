@@ -20,10 +20,46 @@
         vm.scope = $scope;
         vm.blockUI = blockUI;
 
-        vm.errorMessage = "error";
-        vm.errorMessageSearch = "error - s";
+        vm.errorMessage = "sample error";
+        vm.errorMessageSearch = "sample error search";
+
+        definePopupModelAttributes(vm);
 
         return vm;
+    }
+
+    function definePopupModelAttributes(vm)
+    {
+        vm.popupTitle = "title";
+        vm.username = "username";
+        vm.position = "position";
+        vm.firstname = "first name";
+        vm.lastname = "last name";
+        vm.telephone = "telephone";
+        vm.extension = "extension";
+        vm.roles = -1; // default selection
+        vm.employmentDate = "emp date";
+        vm.registrationDate = "reg date";
+        vm.loginDateTime = "last login DT";
+        vm.logoutDateTime = "last logout DT";
+        vm.invalidLoginAttemptCount = 0;
+        vm.invalidLoginDtP = "last invalid DT";
+        vm.locked = "not locked";
+
+        vm.usernameDisabled = false;
+        vm.positionDisabled = false;
+        vm.firstNameDisabled = false;
+        vm.lastNameDisabled = false;
+        vm.telephoneDisabled = false;
+        vm.extensionDisabled = false;
+        vm.rolesDisabled = false;
+        vm.regDateDisabled = false;
+        vm.empDateDisabled = false;
+        vm.loginDtPDisabled = false;
+        vm.logoutDtPeDisabled = false;
+        vm.invalidLoginAttCountDisabled = false;
+        vm.invalidLoginDtPDisabled = false;
+        vm.lockedDisabled = false;
     }
         
     function prepareInitialUI(vm)
@@ -69,7 +105,7 @@
             headers: { 'Content-Type': 'application/json' },
             url: ('https://localhost:44302/api/user'),
         }).success(function (data) {
-            debugger
+            
             users = data;
             drawHelper(users, vm);
         }
@@ -89,12 +125,68 @@
                     { "mData": "firstName", "sTitle": "First name", "bVisible": true },
                     { "mData": "lastName", "sTitle": "Last name", "bVisible": true },
                     { "mData": "position", "sTitle": "Position", "bVisible": true },
+                    {
+                        "mData": "directDial", "sTitle": "Telephone", "bVisible": true
+                    },
+                    {
+                        "mData": "extension", "sTitle": "Ext", "bVisible": true
+                    },
+                    {
+                        "mData": "userRoles", "sTitle": "User roles", "bVisible": true
+                    },
+                    //{
+                    //    "mData": "roles", "sTitle": "User roles", "sClass": "right", "mRender": function (data, type, row) {
+                    //        if (data != null) {
+                    //            var userRolesCsv = "";
+                    //            $.each(data, function (index, value) {                                     
+                    //                if (userRolesCsv == "") {
+                    //                    userRolesCsv = value.name;
+                    //                }
+                    //                else {
+                    //                    userRolesCsv += (value.name + ", ");
+                    //                }                                    
+                    //            });
+                    //            return userRolesCsv;
+                    //        }
+                    //        else {
+                    //            return "No roles";
+                    //        }
+                    //    },
+                    //    "aTargets": [0]
+                    //},
+                    { "mData": "position", "sTitle": "Position", "bVisible": true },
+                    { "mData": "employmentDate", "sTitle": "Employment Date", "bVisible": true },
+                    { "mData": "registrationDate", "sTitle": "Registration Date", "bVisible": true },
+                    { "mData": "lastLogInTime", "sTitle": "Last LogIn Time", "bVisible": true },
+                    { "mData": "lastLogoutTime", "sTitle": "lastLogoutTime", "bVisible": true },
+                    {
+                        "mData": "isLoggedIn", "sTitle": "Logged in?", "sClass": "right", "mRender": function (data, type, row) {
+                            if (data == true) {
+                                return '<div style="background-color:darkorange; text-align:center">IN</div> ';
+                            }
+                            else {
+                                return '<div style="background-color:green; text-align:center">OUT</div> ';
+                            }
+                        },
+                        "aTargets": [0]
+                    },
+                    { "mData": "invalidLoginAttemptCount", "sTitle": "invalidLoginAttemptCount", "bVisible": true },
+                    { "mData": "lastInvalidLoginAttemptTime", "sTitle": "lastInvalidLoginAttemptTime", "bVisible": true },
+                    {
+                        "mData": "locked", "sTitle": "Locked?", "sClass": "right", "mRender": function (data, type, row) {
+                            if (data == false) {
+                                return '<div style="background-color:lightblue; text-align:center">NO</div> ';
+                            }
+                            else {
+                                return '<div style="background-color:red; text-align:center">LOCKED</div> ';
+                            }
+                        },
+                        "aTargets": [0]
+                    },
 
-                    
-
-
-                    { "sTitle": "Edit", "defaultContent": "<button class='userInfo'><span class='glyphicon glyphicon-edit'></span></button>" },
-                    { "sTitle": "Lock", "defaultContent": "<button class='userLock'><span class='glyphicon glyphicon-lock'></span></button>" },
+                    { "sTitle": "More info", "defaultContent": "<button class='userInfo'><span class='glyphicon glyphicon-search'></span></button>" },
+                    { "sTitle": "Edit", "defaultContent": "<button class='editUser'><span class='glyphicon glyphicon-edit'></span></button>" },
+                    { "sTitle": "Lock/Unlock", "defaultContent": "<button class='userLock'><span class='glyphicon glyphicon-lock'></span></button>" },
                     { "sTitle": "Delete", "defaultContent": "<button class='userDelete'><span class='glyphicon glyphicon-remove'></span></button>" }
             ],
             "bDestroy": true,
@@ -105,10 +197,17 @@
         var table = $('#usersGrid').DataTable();
 
         // on edit button clicks
-        $('#usersGrid tbody').on('click', 'button.userInfo', function () {
+        $('#usersGrid tbody').on('click', 'button.editUser', function () {
 
             var data = table.row($(this).parents('tr')).data();
             editUser(vm, data);
+        });
+
+        // on info button clicks
+        $('#usersGrid tbody').on('click', 'button.userInfo', function () {
+
+            var data = table.row($(this).parents('tr')).data();
+            userInformation(vm, data);
         });
 
         // on lock button clicks
@@ -130,6 +229,19 @@
     function editUser(vm, record)
     {
         alert("edit username : " + record.userName);
+    }
+
+    function userInformation(vm, record)
+    {
+        alert("info on username : " + record.userName);
+        //vm = defineModelForInfoPopup(vm, record);
+        //vm.scope.$evalAsync(); //$apply();
+
+        $('#myModal').modal({
+            show: true,
+            keyboard: true,
+            backdrop: true
+        });
     }
     
     function lockUser(vm, record)
@@ -235,7 +347,59 @@
                 $(".ui-datepicker").css('font-size', 12)
             }
         });
-
+        
+        // popup
+        $("#empDateP").datepicker({
+            defaultDate: "+1w",
+            changeMonth: true,
+            numberOfMonths: 1,
+            dateFormat: "dd/mm/yy",
+            beforeShow: function () {
+                $(".ui-datepicker").css('font-size', 12)
+            },
+            onClose: function (selectedDate) {
+                $("#regDateP").datepicker("option", "minDate", selectedDate);
+            }
+        });
+        $("#regDateP").datepicker({
+            defaultDate: "+1w",
+            changeMonth: true,
+            numberOfMonths: 1,
+            dateFormat: "dd/mm/yy",
+            beforeShow: function () {
+                $(".ui-datepicker").css('font-size', 12)
+            },
+            onClose: function (selectedDate) {
+                $("#empDateP").datepicker("option", "maxDate", selectedDate);
+            }
+        });
+        $("#loginDtP").datetimepicker({
+            defaultDate: "+1w",
+            changeMonth: true,
+            numberOfMonths: 1,
+            dateFormat: "dd/mm/yy",
+            beforeShow: function () {
+                $(".ui-datepicker").css('font-size', 12)
+            }
+        });
+        $("#logoutDtP").datetimepicker({
+            defaultDate: "+1w",
+            changeMonth: true,
+            numberOfMonths: 1,
+            dateFormat: "dd/mm/yy",
+            beforeShow: function () {
+                $(".ui-datepicker").css('font-size', 12)
+            }
+        });
+        $("#invalidLoginDtP").datetimepicker({
+            defaultDate: "+1w",
+            changeMonth: true,
+            numberOfMonths: 1,
+            dateFormat: "dd/mm/yy",
+            beforeShow: function () {
+                $(".ui-datepicker").css('font-size', 12)
+            }
+        });
     }
 
 }());

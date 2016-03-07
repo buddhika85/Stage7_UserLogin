@@ -26,18 +26,19 @@ namespace BCMY.WebAPI.Models
         public string LastName { get; set; }
         public string Position { get; set; }
         public string DirectDial { get; set; }
-        public int? Extension { get; set; }
-        public DateTime? EmploymentDate { get; set; }       // start date
-        public DateTime? RegistrationDate { get; set; }
-        public DateTime? LastLogInTime { get; set; }
-        public DateTime? LastLogoutTime { get; set; }
+        public string Extension { get; set; }
+        public string EmploymentDate { get; set; }       // start date
+        public string RegistrationDate { get; set; }
+        public string LastLogInTime { get; set; }
+        public string LastLogoutTime { get; set; }
         public bool IsLoggedIn { get; set; }
         public int InvalidLoginAttemptCount { get; set; }
-        public DateTime? LastInvalidLoginAttemptTime { get; set; }
+        public string LastInvalidLoginAttemptTime { get; set; }
         public bool Locked { get; set; }
         public string Id { get; set; }
         public string UserName { get; set; }
         public List<ApplicationRole> Roles { get; set; }       // roles assigned to the user
+        public string UserRoles { get; set; }
     }
 
     // Must be expressed in terms of our custom Role and other types:
