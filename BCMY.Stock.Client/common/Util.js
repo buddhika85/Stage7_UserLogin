@@ -15,8 +15,7 @@
     }
 
     // validate email addresses
-    function validateEmail(email) {
-        debugger
+    function validateEmail(email) {        
         var re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
         return re.test(email);
     }
@@ -245,5 +244,19 @@
             isNotEmpty = true;
         }
         return isNotEmpty;
+    }
+
+    // returns true if the name is only having alphabetical characters, (no numbers, special characters or...etc)
+    function isaValidName(name)
+    {
+        var re = /^[A-Za-z\s]+$/;
+        return re.test(name);
+    }
+
+    // returns true if a date is in - dd/mm/yyyy format with proper numbers for date, month and year
+    function isValidDate(date)
+    {
+        var re = /^([0-9]{2})\/([0-9]{2})\/([0-9]{4})$/;
+        return re.test(date);
     }
 //}());

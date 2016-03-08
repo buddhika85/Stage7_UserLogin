@@ -15,14 +15,14 @@
                         <!--username-->
                         <label for="username" class="control-label col-md-2 fontWeightNormal">Username</label>
                         <div class="col-md-4">
-                            <input type="text" placeholder="email" id="username" class="col-md-10" />
+                            <input type="text" placeholder="email" id="username" class="col-md-10" ng-model="vm.usernameCreate" ng-class="vm.usernameCreateClass" />
                         </div>
 
                         <!--role-->
                         <label for="selectRole" class="control-label col-md-2 fontWeightNormal">User role</label>
                         <div class="col-md-4">
-                            <select id="selectRole" class="col-md-10">
-                                <option>---- Select Role ----</option>
+                            <select id="selectRole" class="col-md-10" multiple ng-model="vm.rolesInCreate" ng-class="vm.rolesInCreateClass">
+                                <option ng-repeat="role in vm.roles" value="{{role.name}}">{{role.name}}</option>
                             </select>
                         </div>
                     </div>
@@ -31,12 +31,12 @@
                         <!--first name-->
                         <label for="firstName" class="control-label col-md-2 fontWeightNormal">First name</label>
                         <div class="col-md-4">
-                            <input type="text" placeholder="first name" id="firstName" class="col-md-10" />
+                            <input type="text" placeholder="first name" id="firstName" class="col-md-10" ng-model="vm.firstNameCreate" ng-class="vm.firstNameCreateClass" />
                         </div>
                         <!--last name-->
                         <label for="lastName" class="control-label col-md-2 fontWeightNormal">Last name</label>
                         <div class="col-md-4">
-                            <input type="text" placeholder="last name" id="lastName" class="col-md-10" />
+                            <input type="text" placeholder="last name" id="lastName" class="col-md-10" ng-model="vm.lastNameCreate" ng-class="vm.lastNameCreateClass" />
                         </div>
                     </div>
                     <div class="form-group row">
@@ -44,7 +44,7 @@
                         <!--position-->
                         <label for="position" class="control-label col-md-2 fontWeightNormal">Position</label>
                         <div class="col-md-4">
-                            <input type="text" placeholder="position" id="position" class="col-md-10" />
+                            <input type="text" placeholder="position" id="position" class="col-md-10" ng-model="vm.positionCreate" ng-class="vm.positionCreateClass" />
                         </div>
                         
                         <div class="col-md-6">                            
@@ -55,13 +55,13 @@
                         <!--Direct dial-->
                         <label for="telephoneN" class="control-label col-md-2 fontWeightNormal">Telephone</label>
                         <div class="col-md-4">
-                            <input type="text" placeholder="Direct dial" id="telephoneN" class="col-md-10" />
+                            <input type="text" placeholder="Direct dial" id="telephoneN" class="col-md-10" ng-model="vm.telephoneCreate" ng-class="vm.telephoneCreateClass" />
                         </div>
 
                         <!--extension-->
                         <label for="extension" class="control-label col-md-2 fontWeightNormal">Ext</label>
                         <div class="col-md-4">
-                            <input type="text" placeholder="extension" id="extension" class="col-md-10" />
+                            <input type="text" placeholder="extension" id="extension" class="col-md-10" ng-model="vm.extensionCreate" onkeypress="return isNumberKey(event)" maxlength="5" />
                         </div>
                     </div>
                     <div class="form-group row">
@@ -69,12 +69,12 @@
                         <!--employment date-->
                         <label for="empDate" class="control-label col-md-2 fontWeightNormal">Employment date</label>
                         <div class="col-md-4">
-                            <input type="text" placeholder="employement date" id="empDate" class="col-md-10" />
+                            <input type="text" placeholder="employement date" id="empDate" class="col-md-10" ng-model="vm.empDateCreate" ng-class="vm.empDateCreateClass" />
                         </div>
                         <!--registration date-->
                         <label for="regDate" class="control-label col-md-2 fontWeightNormal">Registration date</label>
                         <div class="col-md-4">
-                            <input type="text" placeholder="registration date" id="regDate" class="col-md-10" />
+                            <input type="text" placeholder="registration date" id="regDate" class="col-md-10" ng-model="vm.regDateCreate" ng-class="vm.regDateCreateClass" />
                         </div>
                     </div>
                     <div class="form-group row">  
@@ -83,7 +83,7 @@
                         
                         <!--error message -->
                         <div class="col-md-8">
-                            <label class="control-label fontWeightNormal" style="color:red"> {{vm.errorMessage}}</label>
+                            <label class="control-label fontWeightNormal" style="color:red"> {{vm.errorMessageCreate}}</label>
                         </div>
                         <!--buttons -->
                         <div class="col-md-4">                            
@@ -123,8 +123,8 @@
                         <!--role-->
                         <label for="selectRoleE" class="control-label col-md-2 fontWeightNormal">User role</label>
                         <div class="col-md-4">
-                            <select id="selectRoleE" class="col-md-10">
-                                <option>---- Select Role ----</option>
+                            <select id="selectRoleE" class="col-md-10" multiple ng-model="vm.rolesInSearch">
+                                <option ng-repeat="role in vm.roles" value="{{role.name}}">{{role.name}}</option>
                             </select>
                         </div>
                     </div>
@@ -288,7 +288,7 @@
                         </div>
                         <label for="ext" class="control-label col-md-2 fontWeightNormal">Extension</label>
                         <div class="col-md-4">
-                            <input type="text" id="ext" ng-model="vm.extension" placeholder="telephone extension" ng-class="vm.extensionClass" ng-disabled="vm.extensionDisabled" />
+                            <input type="text" id="ext" ng-model="vm.extension" placeholder="telephone extension" ng-class="vm.extensionClass" ng-disabled="vm.extensionDisabled" onkeypress="return isNumberKey(event)" maxlength="5" />
                         </div>
                     </div>
 
@@ -296,8 +296,8 @@
                     <div class="row formRawPaddingCustom">
                         <label for="roles" class="control-label col-md-2 fontWeightNormal">User roles</label>
                         <div class="col-md-4">
-                            <select id="roles" ng-model="vm.roles" ng-class="vm.rolesClass" ng-disabled="vm.rolesDisabled">
-                                <option value="-1">---- Select Role ----</option>
+                            <select id="roles" ng-class="vm.rolesClass" ng-disabled="vm.rolesDisabled" multiple ng-model="vm.rolesInPopup">
+                                <option ng-repeat="role in vm.roles" value="{{role.name}}">{{role.name}}</option>
                             </select>  
                         </div>
                         <label for="locked" class="control-label col-md-2 fontWeightNormal">Locked</label>
@@ -345,7 +345,7 @@
                     <!-- error message section -->
                     <div class="row">
                         <div class="col-md-12">
-                            <label class="control-label fontWeightNormal" style="color:red"> {{vm.errorMessage}}</label>
+                            <label class="control-label fontWeightNormal" style="color:red"> {{vm.errorMessagePopup}}</label>
                         </div>
                     </div>
                 </div>

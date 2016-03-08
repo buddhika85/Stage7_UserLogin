@@ -19,15 +19,49 @@
         vm.httpService = $http;
         vm.scope = $scope;
         vm.blockUI = blockUI;
-
-        vm.errorMessage = "sample error";
+                
         vm.errorMessageSearch = "sample error search";
+        vm.roles = null;
 
+        // for the roles drop downs
+        vm.httpService({
+            method: "get",
+            headers: { 'Content-Type': 'application/json' },
+            url: ('https://localhost:44302/api/role'),
+        }).success(function (data) {            
+            vm.roles = data;
+            vm.roles.unshift({ id: '-1', name: '---- Select Role ----' });  // add element on top of the roles list for select data bind
+        }
+        ).error(function (data) {
+            alert('error - web service access')     // display error message            
+        });
+        
+        defineCreateFormAttributes(vm);
         definePopupModelAttributes(vm);
 
         return vm;
     }
 
+    // used to bind create form fields
+    function defineCreateFormAttributes(vm)
+    {
+        vm.usernameCreate = '';
+        vm.rolesInCreate = '';
+        vm.firstNameCreate = '';
+        vm.lastNameCreate = '';
+        vm.positionCreate = '';
+        vm.telephoneCreate = '';
+        vm.extensionCreate = '';
+        vm.empDateCreate = '';
+        vm.regDateCreate = '';
+        vm.errorMessageCreate = '';
+    }
+
+    // used to bind create form fields
+    function defineSearchFormAttributes(vm) {
+    }
+
+    // used to bind popup fields
     function definePopupModelAttributes(vm)
     {
         vm.popupTitle = "title";
@@ -36,8 +70,7 @@
         vm.firstname = "first name";
         vm.lastname = "last name";
         vm.telephone = "telephone";
-        vm.extension = "extension";
-        vm.roles = -1; // default selection
+        vm.extension = "extension";        
         vm.employmentDate = "emp date";
         vm.registrationDate = "reg date";
         vm.loginDateTime = "last login DT";
@@ -45,6 +78,7 @@
         vm.invalidLoginAttemptCount = 0;
         vm.invalidLoginDtP = "last invalid DT";
         vm.locked = "not locked";
+        vm.errorMessagePopup = "error message popup";
 
         vm.usernameDisabled = false;
         vm.positionDisabled = false;
@@ -64,6 +98,13 @@
         
     function prepareInitialUI(vm)
     {
+        $('#telephoneN').mask('+99 (9) 9999 9999?999');
+        $('#telephone').mask('+99 (9) 9999 9999?999');
+
+        // date UI masks - 01/03/2016
+        $('#empDate').mask('99/99/9999');
+        $('#regDate').mask('99/99/9999');
+        
         setUpDatePickers();
         drawUsersGrid(vm);
     }
@@ -233,7 +274,7 @@
 
     function userInformation(vm, record)
     {
-        alert("info on username : " + record.userName);
+        //alert("info on username : " + record.userName);
         //vm = defineModelForInfoPopup(vm, record);
         //vm.scope.$evalAsync(); //$apply();
 
@@ -255,8 +296,16 @@
     }
 
     function createUser(vm)
-    {
-        alert("create a new user");
+    {        
+        var isValid = validateCreateForm(vm);
+        alert("create a new user : " + isValid);
+        //alert(vm.usernameCreate + ' ' + vm.rolesInCreate + ' ' + vm.firstNameCreate + ' ' +
+        //vm.lastNameCreate + ' ' +
+        //vm.positionCreate + ' ' +
+        //vm.telephoneCreate + ' ' +
+        //vm.extensionCreate + ' ' +
+        //vm.empDateCreate + ' ' +
+        //vm.regDateCreate);
     }
 
     function resetCreateForm(vm)
@@ -400,6 +449,160 @@
                 $(".ui-datepicker").css('font-size', 12)
             }
         });
+    }
+
+
+    // validate user creation inputs
+    function validateCreateForm(vm)
+    {
+        var isValid = false;
+
+        // username validation
+        vm.usernameCreate = $.trim(vm.usernameCreate);
+        if (isNotEmptyOrSpaces(vm.usernameCreate) && validateEmail(vm.usernameCreate)) {
+            vm.errorMessageCreate = '';
+            vm.usernameCreateClass = '';
+            isValid = true;
+        }
+        else {
+            vm.errorMessageCreate = 'Error - username should be a valid email address';
+            vm.usernameCreateClass = 'errorBorder';
+            isValid = false;
+        }
+
+        // roles
+        //debugger
+        if (isValid)
+        {            
+            if (vm.rolesInCreate != "") {
+                if (vm.rolesInCreate.length == 1 && vm.rolesInCreate[0] == '---- Select Role ----') { // if one role selected and selected role is '---- Select Role ----'
+                    vm.errorMessageCreate = 'Error - user should have atlease a single role';
+                    vm.rolesInCreateClass = 'errorBorder';
+                    isValid = false;
+                }
+                else {
+                    vm.errorMessageCreate = '';
+                    vm.rolesInCreateClass = '';
+                    isValid = true;
+                }                
+            }
+            else {
+                vm.errorMessageCreate = 'Error - user should have atlease a single role';
+                vm.rolesInCreateClass = 'errorBorder';
+                isValid = false;
+            }
+        }
+
+        // first name
+        if (isValid)
+        {
+            vm.firstNameCreate = $.trim(vm.firstNameCreate);
+            if (isNotEmptyOrSpaces(vm.firstNameCreate) && vm.firstNameCreate.length > 1) {
+                if (isaValidName(vm.firstNameCreate)) {
+                    vm.errorMessageCreate = '';
+                    vm.firstNameCreateClass = '';
+                    isValid = true;
+                }
+                else {
+                    vm.errorMessageCreate = 'Error - invalid first name - should only have alphabetical characters';
+                    vm.firstNameCreateClass = 'errorBorder';
+                    isValid = false;
+                }
+            }
+            else {
+                vm.errorMessageCreate = 'Error - invalid first name';
+                vm.firstNameCreateClass = 'errorBorder';
+                isValid = false;
+            }
+        }
+
+        // last name
+        if (isValid) {
+            vm.lastNameCreate = $.trim(vm.lastNameCreate);
+            if (isNotEmptyOrSpaces(vm.lastNameCreate) && vm.lastNameCreate.length > 1) {
+                if (isaValidName(vm.lastNameCreate)) {
+                    vm.errorMessageCreate = '';
+                    vm.lastNameCreateClass = '';
+                    isValid = true;
+                }
+                else {
+                    vm.errorMessageCreate = 'Error - invalid last name - should only have alphabetical characters';
+                    vm.lastNameCreateClass = 'errorBorder';
+                    isValid = false;
+                }
+            }
+            else {
+                vm.errorMessageCreate = 'Error - invalid last name';
+                vm.lastNameCreateClass = 'errorBorder';
+                isValid = false;
+            }
+        }
+
+        // position
+        if (isValid) {
+            vm.positionCreate = $.trim(vm.positionCreate);
+            if (isNotEmptyOrSpaces(vm.positionCreate) && vm.positionCreate.length > 1) {                
+                    vm.errorMessageCreate = '';
+                    vm.positionCreateClass = '';
+                    isValid = true;                
+            }
+            else {
+                vm.errorMessageCreate = 'Error - invalid position';
+                vm.positionCreateClass = 'errorBorder';
+                isValid = false;
+            }
+        }
+
+        // telephone number ui-mask and ext number key press validations
+        if (isValid) {
+            vm.telephoneCreate = $.trim(vm.telephoneCreate);
+            if (isNotEmptyOrSpaces(vm.telephoneCreate)) {
+                vm.errorMessageCreate = '';
+                vm.telephoneCreateClass = '';
+                isValid = true;
+            }
+            else {
+                vm.errorMessageCreate = 'Error - invalid telephone number';
+                vm.telephoneCreateClass = 'errorBorder';
+                isValid = false;
+            }
+        }
+
+        // employment date
+        if (isValid)
+        {
+            vm.empDateCreate = $.trim(vm.empDateCreate);
+            var date = Date.parse(vm.empDateCreate);
+            if (isNotEmptyOrSpaces(vm.empDateCreate) && (!isNaN(date))) {
+                vm.errorMessageCreate = '';
+                vm.empDateCreateClass = '';
+                isValid = true;
+            }
+            else {
+                vm.errorMessageCreate = 'Error - invalid employment date';
+                vm.empDateCreateClass = 'errorBorder';
+                isValid = false;
+            }
+        }
+
+        // registration date
+        if (isValid)
+        {
+            vm.regDateCreate = $.trim(vm.regDateCreate);
+            var date = Date.parse(vm.regDateCreate);
+            if (isNotEmptyOrSpaces(vm.regDateCreate) && (! isNaN(date))) {
+                vm.errorMessageCreate = '';
+                vm.regDateCreateClass = '';
+                isValid = true;
+            }
+            else {
+                vm.errorMessageCreate = 'Error - invalid registration date';
+                vm.regDateCreateClass = 'errorBorder';
+                isValid = false;
+            }
+        }
+
+        return isValid;
     }
 
 }());
