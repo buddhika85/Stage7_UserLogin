@@ -129,5 +129,15 @@ namespace BCMY.WebAPI.Util
             return orderLinesOfOrder;
         }
 
+        /// <summary>
+        /// Generates a temporary password
+        /// </summary>
+        /// <returns></returns>
+        public static string GenerateTempPassword()
+        {
+            string tempPassword = null;
+            tempPassword = System.Web.Security.Membership.GeneratePassword(6, 1);
+            return tempPassword;
+        }
     }
 }

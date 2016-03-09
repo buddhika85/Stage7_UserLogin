@@ -298,7 +298,41 @@
     function createUser(vm)
     {        
         var isValid = validateCreateForm(vm);
-        alert("create a new user : " + isValid);
+        if (isValid)
+        {
+            if(vm.rolesInCreate[0] == '---- Select Role ----' )
+            {
+                vm.rolesInCreate.shift();   // remove if '---- Select Role ----' is selected as a role
+            }
+            var dataForBody = "username=" + vm.usernameCreate + "&rolescsv=" + vm.rolesInCreate + "&firstname=" + vm.firstNameCreate +
+                "&lastname=" + vm.lastNameCreate + "&position=" + vm.positionCreate + "&telephone=" + vm.telephoneCreate + "&extension=" + vm.extensionCreate +
+                "&employmentDate=" + vm.empDateCreate + "&registrationDate=" + vm.regDateCreate;
+
+            var serverUrl = ('https://localhost:44302/api/CreateUserAsync?' + dataForBody);
+            debugger
+            vm.httpService({
+                method: "post",
+                headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + localStorage["access_token"] },
+                url: serverUrl
+            }).success(function (data) {
+                debugger
+                if (data.indexOf('Success') > -1) {
+
+                    drawUsersGrid(vm);      // refersh the grid to display the updated record
+                    alert(data);
+                    toastr.success("Success - user creation successful - an email sent to the user notifying temporary password");                   
+                }
+                else {
+                    vm.errorMessageCreate = data;     // display error message
+                    toastr.warning(vm.errorMessageCreate);
+                }
+            }
+            ).error(function (data) {
+                vm.errorMessage = data;     // display error message
+                toastr.error(data);
+            });
+        }        
+        //alert("create a new user : " + isValid);
         //alert(vm.usernameCreate + ' ' + vm.rolesInCreate + ' ' + vm.firstNameCreate + ' ' +
         //vm.lastNameCreate + ' ' +
         //vm.positionCreate + ' ' +
