@@ -12,12 +12,13 @@ namespace DataAccess_EF.EntityFramework
     using System;
     using System.Collections.Generic;
     
-    public partial class TblProductStock
+    public partial class AspNetUserClaim
     {
-        public int productId { get; set; }
-        public int quantity { get; set; }
-        public string stockCountAmended { get; set; }
-        public Nullable<System.DateTime> lastAmendedDate { get; set; }
-        public Nullable<System.DateTime> lastIncrementDate { get; set; }
+        public int Id { get; set; }
+        public string UserId { get; set; }
+        public string ClaimType { get; set; }
+        public string ClaimValue { get; set; }
+    
+        public virtual AspNetUser AspNetUser { get; set; }
     }
 }

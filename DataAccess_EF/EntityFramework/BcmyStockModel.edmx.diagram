@@ -19,6 +19,14 @@
         <AssociationConnector Association="BCMY_StockModel.FK__TblOrderL__order__7A3223E8" />
         <EntityTypeShape EntityType="BCMY_StockModel.TblCustomerSupplier" Width="1.5" PointX="0.75" PointY="1.875" />
         <AssociationConnector Association="BCMY_StockModel.FK__TblContac__custo__719CDDE7" />
+        <EntityTypeShape EntityType="BCMY_StockModel.C__MigrationHistory" Width="1.5" PointX="10.375" PointY="0.75" />
+        <EntityTypeShape EntityType="BCMY_StockModel.AspNetRole" Width="1.5" PointX="9.375" PointY="12.5" />
+        <EntityTypeShape EntityType="BCMY_StockModel.AspNetUserClaim" Width="1.5" PointX="13.875" PointY="13.75" />
+        <EntityTypeShape EntityType="BCMY_StockModel.AspNetUserLogin" Width="1.5" PointX="13.875" PointY="11.25" />
+        <EntityTypeShape EntityType="BCMY_StockModel.AspNetUser" Width="1.5" PointX="11.625" PointY="10.125" />
+        <AssociationConnector Association="BCMY_StockModel.FK_dbo_AspNetUserClaims_dbo_AspNetUsers_UserId" />
+        <AssociationConnector Association="BCMY_StockModel.FK_dbo_AspNetUserLogins_dbo_AspNetUsers_UserId" />
+        <AssociationConnector Association="BCMY_StockModel.AspNetUserRoles" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

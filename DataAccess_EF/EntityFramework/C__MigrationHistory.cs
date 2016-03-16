@@ -12,12 +12,11 @@ namespace DataAccess_EF.EntityFramework
     using System;
     using System.Collections.Generic;
     
-    public partial class TblProductStock
+    public partial class C__MigrationHistory
     {
-        public int productId { get; set; }
-        public int quantity { get; set; }
-        public string stockCountAmended { get; set; }
-        public Nullable<System.DateTime> lastAmendedDate { get; set; }
-        public Nullable<System.DateTime> lastIncrementDate { get; set; }
+        public string MigrationId { get; set; }
+        public string ContextKey { get; set; }
+        public byte[] Model { get; set; }
+        public string ProductVersion { get; set; }
     }
 }

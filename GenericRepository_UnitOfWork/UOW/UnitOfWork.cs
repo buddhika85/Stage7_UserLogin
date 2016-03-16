@@ -29,7 +29,7 @@ namespace GenericRepository_UnitOfWork.UOW
         private GenericRepository<TblProductStock> productStockRepository;        
         private GenericRepository<TblExchangeRate> exchangeRateRepository;        
         private GenericRepository<TblCurrency> currencyRepository;
-        
+        private GenericRepository<AspNetUser> aspNetUserRepository;     
                 
         // add more repositories below
         // ...
@@ -134,6 +134,17 @@ namespace GenericRepository_UnitOfWork.UOW
                 }
                 return currencyRepository; 
             }            
+        }
+        public GenericRepository<AspNetUser> AspNetUserRepository
+        {
+            get
+            {
+                if (aspNetUserRepository == null)
+                {
+                    aspNetUserRepository = new GenericRepository<AspNetUser>(_context);
+                }
+                return aspNetUserRepository;
+            }        
         }
         // add more repositories below
         // ...

@@ -5,6 +5,82 @@
     <!-- SSDL content -->
     <edmx:StorageModels>
     <Schema Namespace="BCMY_StockModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="__MigrationHistory">
+          <Key>
+            <PropertyRef Name="MigrationId" />
+            <PropertyRef Name="ContextKey" />
+          </Key>
+          <Property Name="MigrationId" Type="nvarchar" MaxLength="150" Nullable="false" />
+          <Property Name="ContextKey" Type="nvarchar" MaxLength="300" Nullable="false" />
+          <Property Name="Model" Type="varbinary(max)" Nullable="false" />
+          <Property Name="ProductVersion" Type="nvarchar" MaxLength="32" Nullable="false" />
+        </EntityType>
+        <EntityType Name="AspNetRoles">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="nvarchar" MaxLength="128" Nullable="false" />
+          <Property Name="Description" Type="nvarchar(max)" />
+          <Property Name="Name" Type="nvarchar" MaxLength="256" Nullable="false" />
+        </EntityType>
+        <EntityType Name="AspNetUserClaims">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="UserId" Type="nvarchar" MaxLength="128" Nullable="false" />
+          <Property Name="ClaimType" Type="nvarchar(max)" />
+          <Property Name="ClaimValue" Type="nvarchar(max)" />
+        </EntityType>
+        <EntityType Name="AspNetUserLogins">
+          <Key>
+            <PropertyRef Name="LoginProvider" />
+            <PropertyRef Name="ProviderKey" />
+            <PropertyRef Name="UserId" />
+          </Key>
+          <Property Name="LoginProvider" Type="nvarchar" MaxLength="128" Nullable="false" />
+          <Property Name="ProviderKey" Type="nvarchar" MaxLength="128" Nullable="false" />
+          <Property Name="UserId" Type="nvarchar" MaxLength="128" Nullable="false" />
+        </EntityType>
+        <EntityType Name="AspNetUserRoles">
+          <Key>
+            <PropertyRef Name="UserId" />
+            <PropertyRef Name="RoleId" />
+          </Key>
+          <Property Name="UserId" Type="nvarchar" MaxLength="128" Nullable="false" />
+          <Property Name="RoleId" Type="nvarchar" MaxLength="128" Nullable="false" />
+        </EntityType>
+        <EntityType Name="AspNetUsers">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="nvarchar" MaxLength="128" Nullable="false" />
+          <Property Name="Title" Type="int" Nullable="false" />
+          <Property Name="FirstName" Type="nvarchar(max)" />
+          <Property Name="LastName" Type="nvarchar(max)" />
+          <Property Name="Position" Type="nvarchar(max)" />
+          <Property Name="DirectDial" Type="nvarchar(max)" />
+          <Property Name="Extension" Type="int" />
+          <Property Name="EmploymentDate" Type="datetime" />
+          <Property Name="RegistrationDate" Type="datetime" />
+          <Property Name="LastLogInTime" Type="datetime" />
+          <Property Name="LastLogoutTime" Type="datetime" />
+          <Property Name="IsLoggedIn" Type="bit" Nullable="false" />
+          <Property Name="InvalidLoginAttemptCount" Type="int" Nullable="false" />
+          <Property Name="LastInvalidLoginAttemptTime" Type="datetime" />
+          <Property Name="Locked" Type="bit" Nullable="false" />
+          <Property Name="Email" Type="nvarchar" MaxLength="256" />
+          <Property Name="EmailConfirmed" Type="bit" Nullable="false" />
+          <Property Name="PasswordHash" Type="nvarchar(max)" />
+          <Property Name="SecurityStamp" Type="nvarchar(max)" />
+          <Property Name="PhoneNumber" Type="nvarchar(max)" />
+          <Property Name="PhoneNumberConfirmed" Type="bit" Nullable="false" />
+          <Property Name="TwoFactorEnabled" Type="bit" Nullable="false" />
+          <Property Name="LockoutEndDateUtc" Type="datetime" />
+          <Property Name="LockoutEnabled" Type="bit" Nullable="false" />
+          <Property Name="AccessFailedCount" Type="int" Nullable="false" />
+          <Property Name="UserName" Type="nvarchar" MaxLength="256" Nullable="false" />
+        </EntityType>
         <EntityType Name="TblBusiness">
           <Key>
             <PropertyRef Name="id" />
@@ -107,6 +183,7 @@
           <Property Name="creationDateTime" Type="datetime" Nullable="false" />
           <Property Name="currencyId" Type="int" />
           <Property Name="vat" Type="varchar" MaxLength="3" />
+          <Property Name="pastOrder" Type="varchar" MaxLength="3" />
         </EntityType>
         <EntityType Name="TblOrderLine">
           <Key>
@@ -128,8 +205,11 @@
           </Key>
           <Property Name="productId" Type="int" Nullable="false" />
           <Property Name="quantity" Type="int" Nullable="false" />
+          <Property Name="stockCountAmended" Type="varchar" MaxLength="3" />
+          <Property Name="lastAmendedDate" Type="datetime" />
+          <Property Name="lastIncrementDate" Type="datetime" />
         </EntityType>
-        <Association Name="FK__TblContac__custo__239E4DCF">
+        <Association Name="FK__TblContac__custo__719CDDE7">
           <End Role="TblCustomerSupplier" Type="Self.TblCustomerSupplier" Multiplicity="0..1" />
           <End Role="TblContact" Type="Self.TblContact" Multiplicity="*" />
           <ReferentialConstraint>
@@ -141,7 +221,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__TblNegoti__order__24927208">
+        <Association Name="FK__TblNegoti__order__7E02B4CC">
           <End Role="TblOrder" Type="Self.TblOrder" Multiplicity="0..1" />
           <End Role="TblNegotiation" Type="Self.TblNegotiation" Multiplicity="*" />
           <ReferentialConstraint>
@@ -153,7 +233,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__TblOrder__contac__25869641">
+        <Association Name="FK__TblOrder__contac__76619304">
           <End Role="TblContact" Type="Self.TblContact" Multiplicity="0..1" />
           <End Role="TblOrder" Type="Self.TblOrder" Multiplicity="*" />
           <ReferentialConstraint>
@@ -165,7 +245,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__TblOrder__curren__267ABA7A">
+        <Association Name="FK__TblOrder__curren__12FDD1B2">
           <End Role="TblCurrencies" Type="Self.TblCurrencies" Multiplicity="0..1" />
           <End Role="TblOrder" Type="Self.TblOrder" Multiplicity="*" />
           <ReferentialConstraint>
@@ -177,7 +257,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__TblOrderL__order__276EDEB3">
+        <Association Name="FK__TblOrderL__order__7A3223E8">
           <End Role="TblOrder" Type="Self.TblOrder" Multiplicity="0..1" />
           <End Role="TblOrderLine" Type="Self.TblOrderLine" Multiplicity="*" />
           <ReferentialConstraint>
@@ -189,6 +269,66 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_dbo_AspNetUserClaims_dbo_AspNetUsers_UserId">
+          <End Role="AspNetUsers" Type="Self.AspNetUsers" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="AspNetUserClaims" Type="Self.AspNetUserClaims" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="AspNetUsers">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="AspNetUserClaims">
+              <PropertyRef Name="UserId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_dbo_AspNetUserLogins_dbo_AspNetUsers_UserId">
+          <End Role="AspNetUsers" Type="Self.AspNetUsers" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="AspNetUserLogins" Type="Self.AspNetUserLogins" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="AspNetUsers">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="AspNetUserLogins">
+              <PropertyRef Name="UserId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_dbo_AspNetUserRoles_dbo_AspNetRoles_RoleId">
+          <End Role="AspNetRoles" Type="Self.AspNetRoles" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="AspNetUserRoles" Type="Self.AspNetUserRoles" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="AspNetRoles">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="AspNetUserRoles">
+              <PropertyRef Name="RoleId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_dbo_AspNetUserRoles_dbo_AspNetUsers_UserId">
+          <End Role="AspNetUsers" Type="Self.AspNetUsers" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="AspNetUserRoles" Type="Self.AspNetUserRoles" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="AspNetUsers">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="AspNetUserRoles">
+              <PropertyRef Name="UserId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Function Name="Func_CompareDateTimeWithDatePart" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="true" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" ReturnType="bit">
+          <Parameter Name="dateOne" Type="datetime" Mode="In" />
+          <Parameter Name="dateTwo" Type="datetime" Mode="In" />
+        </Function>
         <Function Name="Func_GetCurrencyValueByTime" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="true" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" ReturnType="decimal">
           <Parameter Name="orderCurrencyId" Type="int" Mode="In" />
           <Parameter Name="value" Type="decimal" Mode="In" />
@@ -215,6 +355,27 @@
           <Parameter Name="currencyId" Type="int" Mode="In" />
           <Parameter Name="type" Type="varchar" Mode="In" />
         </Function>
+        <Function Name="SP_CreatePastSalesOrder" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="companyId" Type="int" Mode="In" />
+          <Parameter Name="contactFulName" Type="varchar(max)" Mode="In" />
+          <Parameter Name="vat" Type="varchar" Mode="In" />
+          <Parameter Name="currencyId" Type="int" Mode="In" />
+          <Parameter Name="type" Type="varchar" Mode="In" />
+          <Parameter Name="orderDate" Type="datetime" Mode="In" />
+        </Function>
+        <Function Name="SP_DeleteOrder" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="orderId" Type="int" Mode="In" />
+        </Function>
+        <Function Name="SP_DeleteOrRejectOrderline" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="deleteOrReject" Type="varchar" Mode="In" />
+          <Parameter Name="orderlineId" Type="int" Mode="In" />
+          <Parameter Name="orderId" Type="int" Mode="In" />
+        </Function>
+        <Function Name="SP_DeleteOrRejectPastOrderline" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="deleteOrReject" Type="varchar" Mode="In" />
+          <Parameter Name="orderlineId" Type="int" Mode="In" />
+          <Parameter Name="orderId" Type="int" Mode="In" />
+        </Function>
         <Function Name="SP_GetAllCurrencies" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
         <Function Name="SP_GetAllCustomerSuppliers" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
         <Function Name="SP_GetAllOrderViewModels" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
@@ -233,6 +394,12 @@
           <Parameter Name="orderId" Type="int" Mode="In" />
           <Parameter Name="productListId" Type="int" Mode="In" />
         </Function>
+        <Function Name="SP_GetNumOfSuccessNegotiationsByProductId" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="orderId" Type="int" Mode="In" />
+          <Parameter Name="productListId" Type="int" Mode="In" />
+          <Parameter Name="selectedCurrency" Type="varchar" Mode="In" />
+          <Parameter Name="numOfNegotiations" Type="int" Mode="In" />
+        </Function>
         <Function Name="SP_GetOrderlineInfoById" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="orderlineId" Type="int" Mode="In" />
           <Parameter Name="orderCurrency" Type="varchar" Mode="In" />
@@ -243,6 +410,7 @@
         <Function Name="SP_GetOrderVmById" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="orderId" Type="int" Mode="In" />
         </Function>
+        <Function Name="SP_GetProductsWithStockInfo" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
         <Function Name="SP_GetSuccessNegotiationsByProductId" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="orderId" Type="int" Mode="In" />
           <Parameter Name="productListId" Type="int" Mode="In" />
@@ -272,6 +440,26 @@
           <Parameter Name="dateTime" Type="datetime" Mode="In" />
           <Parameter Name="orderIdVal" Type="int" Mode="In" />
         </Function>
+        <Function Name="SP_SavePastOrderLineWithNegotiation" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="productListId" Type="int" Mode="In" />
+          <Parameter Name="quantityVal" Type="decimal" Mode="In" />
+          <Parameter Name="pricePerItem" Type="decimal" Mode="In" />
+          <Parameter Name="totalAmountVal" Type="decimal" Mode="In" />
+          <Parameter Name="status" Type="varchar" Mode="In" />
+          <Parameter Name="orderIdVal" Type="int" Mode="In" />
+          <Parameter Name="orderDate" Type="datetime" Mode="In" />
+        </Function>
+        <Function Name="SP_SearchAspNetUsers" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="username" Type="nvarchar" Mode="In" />
+          <Parameter Name="userRolesCsv" Type="nvarchar(max)" Mode="In" />
+          <Parameter Name="firstname" Type="nvarchar(max)" Mode="In" />
+          <Parameter Name="lastname" Type="nvarchar(max)" Mode="In" />
+          <Parameter Name="position" Type="nvarchar(max)" Mode="In" />
+          <Parameter Name="employmentDate" Type="datetime" Mode="In" />
+          <Parameter Name="registrationDate" Type="datetime" Mode="In" />
+          <Parameter Name="lastLoginDateTime" Type="datetime" Mode="In" />
+          <Parameter Name="lastInvalidLoginDateTime" Type="datetime" Mode="In" />
+        </Function>
         <Function Name="SP_SearchOrders" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="companyId" Type="int" Mode="In" />
           <Parameter Name="contactFulName" Type="varchar" Mode="In" />
@@ -282,13 +470,35 @@
           <Parameter Name="creationDateTo" Type="datetime" Mode="In" />
         </Function>
         <Function Name="SP_SearchOrders_Simple" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <Function Name="SP_TransferConfirmedOLinesToNegotisTbl" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <Function Name="SP_UpdateStockCount" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="productId" Type="int" Mode="In" />
+          <Parameter Name="quantity" Type="int" Mode="In" />
+          <Parameter Name="stockCountAmended" Type="varchar" Mode="In" />
+        </Function>
         <Function Name="SP_ValidateAndSavePastExchangeRates" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="dateStr" Type="varchar" Mode="In" />
           <Parameter Name="euroVal" Type="decimal" Mode="In" />
           <Parameter Name="usdVal" Type="decimal" Mode="In" />
-          <Parameter Name="insertStatus" Type="varchar" Mode="InOut" />
+        </Function>
+        <Function Name="SplitStringsByDelimiter" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="true" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="List" Type="nvarchar(max)" Mode="In" />
+          <Parameter Name="Delimiter" Type="nvarchar" Mode="In" />
+          <ReturnType>
+            <CollectionType>
+              <RowType>
+                <Property Name="Item" Type="nvarchar" MaxLength="4000" />
+              </RowType>
+            </CollectionType>
+          </ReturnType>
         </Function>
         <EntityContainer Name="BCMY_StockModelStoreContainer">
+          <EntitySet Name="__MigrationHistory" EntityType="Self.__MigrationHistory" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="AspNetRoles" EntityType="Self.AspNetRoles" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="AspNetUserClaims" EntityType="Self.AspNetUserClaims" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="AspNetUserLogins" EntityType="Self.AspNetUserLogins" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="AspNetUserRoles" EntityType="Self.AspNetUserRoles" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="AspNetUsers" EntityType="Self.AspNetUsers" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="TblBusiness" EntityType="Self.TblBusiness" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="TblContact" EntityType="Self.TblContact" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="TblCurrencies" EntityType="Self.TblCurrencies" Schema="dbo" store:Type="Tables" />
@@ -298,25 +508,41 @@
           <EntitySet Name="TblOrder" EntityType="Self.TblOrder" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="TblOrderLine" EntityType="Self.TblOrderLine" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="TblProductStock" EntityType="Self.TblProductStock" Schema="dbo" store:Type="Tables" />
-          <AssociationSet Name="FK__TblContac__custo__239E4DCF" Association="Self.FK__TblContac__custo__239E4DCF">
+          <AssociationSet Name="FK__TblContac__custo__719CDDE7" Association="Self.FK__TblContac__custo__719CDDE7">
             <End Role="TblCustomerSupplier" EntitySet="TblCustomerSupplier" />
             <End Role="TblContact" EntitySet="TblContact" />
           </AssociationSet>
-          <AssociationSet Name="FK__TblNegoti__order__24927208" Association="Self.FK__TblNegoti__order__24927208">
+          <AssociationSet Name="FK__TblNegoti__order__7E02B4CC" Association="Self.FK__TblNegoti__order__7E02B4CC">
             <End Role="TblOrder" EntitySet="TblOrder" />
             <End Role="TblNegotiation" EntitySet="TblNegotiation" />
           </AssociationSet>
-          <AssociationSet Name="FK__TblOrder__contac__25869641" Association="Self.FK__TblOrder__contac__25869641">
+          <AssociationSet Name="FK__TblOrder__contac__76619304" Association="Self.FK__TblOrder__contac__76619304">
             <End Role="TblContact" EntitySet="TblContact" />
             <End Role="TblOrder" EntitySet="TblOrder" />
           </AssociationSet>
-          <AssociationSet Name="FK__TblOrder__curren__267ABA7A" Association="Self.FK__TblOrder__curren__267ABA7A">
+          <AssociationSet Name="FK__TblOrder__curren__12FDD1B2" Association="Self.FK__TblOrder__curren__12FDD1B2">
             <End Role="TblCurrencies" EntitySet="TblCurrencies" />
             <End Role="TblOrder" EntitySet="TblOrder" />
           </AssociationSet>
-          <AssociationSet Name="FK__TblOrderL__order__276EDEB3" Association="Self.FK__TblOrderL__order__276EDEB3">
+          <AssociationSet Name="FK__TblOrderL__order__7A3223E8" Association="Self.FK__TblOrderL__order__7A3223E8">
             <End Role="TblOrder" EntitySet="TblOrder" />
             <End Role="TblOrderLine" EntitySet="TblOrderLine" />
+          </AssociationSet>
+          <AssociationSet Name="FK_dbo_AspNetUserClaims_dbo_AspNetUsers_UserId" Association="Self.FK_dbo_AspNetUserClaims_dbo_AspNetUsers_UserId">
+            <End Role="AspNetUsers" EntitySet="AspNetUsers" />
+            <End Role="AspNetUserClaims" EntitySet="AspNetUserClaims" />
+          </AssociationSet>
+          <AssociationSet Name="FK_dbo_AspNetUserLogins_dbo_AspNetUsers_UserId" Association="Self.FK_dbo_AspNetUserLogins_dbo_AspNetUsers_UserId">
+            <End Role="AspNetUsers" EntitySet="AspNetUsers" />
+            <End Role="AspNetUserLogins" EntitySet="AspNetUserLogins" />
+          </AssociationSet>
+          <AssociationSet Name="FK_dbo_AspNetUserRoles_dbo_AspNetRoles_RoleId" Association="Self.FK_dbo_AspNetUserRoles_dbo_AspNetRoles_RoleId">
+            <End Role="AspNetRoles" EntitySet="AspNetRoles" />
+            <End Role="AspNetUserRoles" EntitySet="AspNetUserRoles" />
+          </AssociationSet>
+          <AssociationSet Name="FK_dbo_AspNetUserRoles_dbo_AspNetUsers_UserId" Association="Self.FK_dbo_AspNetUserRoles_dbo_AspNetUsers_UserId">
+            <End Role="AspNetUsers" EntitySet="AspNetUsers" />
+            <End Role="AspNetUserRoles" EntitySet="AspNetUserRoles" />
           </AssociationSet>
         </EntityContainer>
       </Schema></edmx:StorageModels>
@@ -394,6 +620,9 @@
           </Key>
           <Property Name="productId" Type="Int32" Nullable="false" />
           <Property Name="quantity" Type="Int32" Nullable="false" />
+          <Property Name="stockCountAmended" Type="String" MaxLength="3" FixedLength="false" Unicode="false" />
+          <Property Name="lastAmendedDate" Type="DateTime" Precision="3" />
+          <Property Name="lastIncrementDate" Type="DateTime" Precision="3" />
         </EntityType>
         <EntityContainer Name="BCMY_StockEntities" annotation:LazyLoadingEnabled="true">
           <EntitySet Name="TblBusinesses" EntityType="Self.TblBusiness" />
@@ -503,13 +732,87 @@
             <Parameter Name="incrementAmount" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="SP_ConfirmOrderLinesWithOrder" ReturnType="Collection(String)">
-            <Parameter Name="orderId" Mode="In" Type="Int32" />
+          <Parameter Name="orderId" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="SP_ValidateAndSavePastExchangeRates">
             <Parameter Name="dateStr" Mode="In" Type="String" />
             <Parameter Name="euroVal" Mode="In" Type="Decimal" />
             <Parameter Name="usdVal" Mode="In" Type="Decimal" />
-            <Parameter Name="insertStatus" Mode="InOut" Type="String" />
+          </FunctionImport>
+          <EntitySet Name="C__MigrationHistory" EntityType="BCMY_StockModel.C__MigrationHistory" />
+          <EntitySet Name="AspNetRoles" EntityType="BCMY_StockModel.AspNetRole" />
+          <EntitySet Name="AspNetUserClaims" EntityType="BCMY_StockModel.AspNetUserClaim" />
+          <EntitySet Name="AspNetUserLogins" EntityType="BCMY_StockModel.AspNetUserLogin" />
+          <EntitySet Name="AspNetUsers" EntityType="BCMY_StockModel.AspNetUser" />
+          <AssociationSet Name="FK_dbo_AspNetUserClaims_dbo_AspNetUsers_UserId" Association="BCMY_StockModel.FK_dbo_AspNetUserClaims_dbo_AspNetUsers_UserId">
+            <End Role="AspNetUser" EntitySet="AspNetUsers" />
+            <End Role="AspNetUserClaim" EntitySet="AspNetUserClaims" />
+          </AssociationSet>
+          <AssociationSet Name="FK_dbo_AspNetUserLogins_dbo_AspNetUsers_UserId" Association="BCMY_StockModel.FK_dbo_AspNetUserLogins_dbo_AspNetUsers_UserId">
+            <End Role="AspNetUser" EntitySet="AspNetUsers" />
+            <End Role="AspNetUserLogin" EntitySet="AspNetUserLogins" />
+          </AssociationSet>
+          <AssociationSet Name="AspNetUserRoles" Association="BCMY_StockModel.AspNetUserRoles">
+            <End Role="AspNetRole" EntitySet="AspNetRoles" />
+            <End Role="AspNetUser" EntitySet="AspNetUsers" />
+          </AssociationSet>
+          <FunctionImport Name="SP_CreatePastSalesOrder" ReturnType="Collection(String)">
+            <Parameter Name="companyId" Mode="In" Type="Int32" />
+            <Parameter Name="contactFulName" Mode="In" Type="String" />
+            <Parameter Name="vat" Mode="In" Type="String" />
+            <Parameter Name="currencyId" Mode="In" Type="Int32" />
+            <Parameter Name="type" Mode="In" Type="String" />
+            <Parameter Name="orderDate" Mode="In" Type="DateTime" />
+          </FunctionImport>
+          <FunctionImport Name="SP_DeleteOrder">
+            <Parameter Name="orderId" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="SP_DeleteOrRejectOrderline" ReturnType="Collection(String)">
+            <Parameter Name="deleteOrReject" Mode="In" Type="String" />
+            <Parameter Name="orderlineId" Mode="In" Type="Int32" />
+            <Parameter Name="orderId" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="SP_DeleteOrRejectPastOrderline" ReturnType="Collection(String)">
+            <Parameter Name="deleteOrReject" Mode="In" Type="String" />
+            <Parameter Name="orderlineId" Mode="In" Type="Int32" />
+            <Parameter Name="orderId" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="SP_GetNumOfSuccessNegotiationsByProductId" ReturnType="Collection(BCMY_StockModel.SP_GetNumOfSuccessNegotiationsByProductId_Result)">
+            <Parameter Name="orderId" Mode="In" Type="Int32" />
+            <Parameter Name="productListId" Mode="In" Type="Int32" />
+            <Parameter Name="selectedCurrency" Mode="In" Type="String" />
+            <Parameter Name="numOfNegotiations" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="SP_GetProductsWithStockInfo" ReturnType="Collection(BCMY_StockModel.SP_GetProductsWithStockInfo_Result)" />
+          <FunctionImport Name="SP_SavePastOrderLineWithNegotiation" ReturnType="Collection(BCMY_StockModel.SP_SavePastOrderLineWithNegotiation_Result)">
+            <Parameter Name="productListId" Mode="In" Type="Int32" />
+            <Parameter Name="quantityVal" Mode="In" Type="Decimal" />
+            <Parameter Name="pricePerItem" Mode="In" Type="Decimal" />
+            <Parameter Name="totalAmountVal" Mode="In" Type="Decimal" />
+            <Parameter Name="status" Mode="In" Type="String" />
+            <Parameter Name="orderIdVal" Mode="In" Type="Int32" />
+            <Parameter Name="orderDate" Mode="In" Type="DateTime" />
+          </FunctionImport>
+          <FunctionImport Name="SP_SearchAspNetUsers">
+            <Parameter Name="username" Mode="In" Type="String" />
+            <Parameter Name="userRolesCsv" Mode="In" Type="String" />
+            <Parameter Name="firstname" Mode="In" Type="String" />
+            <Parameter Name="lastname" Mode="In" Type="String" />
+            <Parameter Name="position" Mode="In" Type="String" />
+            <Parameter Name="employmentDate" Mode="In" Type="DateTime" />
+            <Parameter Name="registrationDate" Mode="In" Type="DateTime" />
+            <Parameter Name="lastLoginDateTime" Mode="In" Type="DateTime" />
+            <Parameter Name="lastInvalidLoginDateTime" Mode="In" Type="DateTime" />
+          </FunctionImport>
+          <FunctionImport Name="SP_TransferConfirmedOLinesToNegotisTbl" />
+          <FunctionImport Name="SP_UpdateStockCount" ReturnType="Collection(String)">
+            <Parameter Name="productId" Mode="In" Type="Int32" />
+            <Parameter Name="quantity" Mode="In" Type="Int32" />
+            <Parameter Name="stockCountAmended" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="SplitStringsByDelimiter" IsComposable="true" ReturnType="Collection(String)">
+            <Parameter Name="List" Mode="In" Type="String" />
+            <Parameter Name="Delimiter" Mode="In" Type="String" />
           </FunctionImport>
           </EntityContainer>
         <ComplexType Name="SP_GetAllOrderViewModels_Result">
@@ -734,6 +1037,7 @@
           <NavigationProperty Name="TblCurrency" Relationship="BCMY_StockModel.FK__TblOrder__curren__12FDD1B2" FromRole="TblOrder" ToRole="TblCurrency" />
           <NavigationProperty Name="TblNegotiations" Relationship="BCMY_StockModel.FK__TblNegoti__order__7E02B4CC" FromRole="TblOrder" ToRole="TblNegotiation" />
           <NavigationProperty Name="TblOrderLines" Relationship="BCMY_StockModel.FK__TblOrderL__order__7A3223E8" FromRole="TblOrder" ToRole="TblOrderLine" />
+          <Property Name="pastOrder" Type="String" MaxLength="3" FixedLength="false" Unicode="false" />
         </EntityType>
         <Association Name="FK__TblOrder__contac__76619304">
           <End Type="BCMY_StockModel.TblContact" Role="TblContact" Multiplicity="0..1" />
@@ -853,6 +1157,176 @@
           <Property Type="Decimal" Name="Usd" Nullable="false" Precision="10" Scale="4" />
           <Property Type="Decimal" Name="Euro" Nullable="false" Precision="10" Scale="4" />
         </ComplexType>
+        <EntityType Name="C__MigrationHistory">
+          <Key>
+            <PropertyRef Name="MigrationId" />
+            <PropertyRef Name="ContextKey" />
+          </Key>
+          <Property Name="MigrationId" Type="String" Nullable="false" MaxLength="150" FixedLength="false" Unicode="true" />
+          <Property Name="ContextKey" Type="String" Nullable="false" MaxLength="300" FixedLength="false" Unicode="true" />
+          <Property Name="Model" Type="Binary" Nullable="false" MaxLength="Max" FixedLength="false" />
+          <Property Name="ProductVersion" Type="String" Nullable="false" MaxLength="32" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <EntityType Name="AspNetRole">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="true" />
+          <Property Name="Description" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="Name" Type="String" Nullable="false" MaxLength="256" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="AspNetUsers" Relationship="BCMY_StockModel.AspNetUserRoles" FromRole="AspNetRole" ToRole="AspNetUser" />
+        </EntityType>
+        <EntityType Name="AspNetUserClaim">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="UserId" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="true" />
+          <Property Name="ClaimType" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="ClaimValue" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="AspNetUser" Relationship="BCMY_StockModel.FK_dbo_AspNetUserClaims_dbo_AspNetUsers_UserId" FromRole="AspNetUserClaim" ToRole="AspNetUser" />
+        </EntityType>
+        <EntityType Name="AspNetUserLogin">
+          <Key>
+            <PropertyRef Name="LoginProvider" />
+            <PropertyRef Name="ProviderKey" />
+            <PropertyRef Name="UserId" />
+          </Key>
+          <Property Name="LoginProvider" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="true" />
+          <Property Name="ProviderKey" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="true" />
+          <Property Name="UserId" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="AspNetUser" Relationship="BCMY_StockModel.FK_dbo_AspNetUserLogins_dbo_AspNetUsers_UserId" FromRole="AspNetUserLogin" ToRole="AspNetUser" />
+        </EntityType>
+        <EntityType Name="AspNetUser">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="true" />
+          <Property Name="Title" Type="Int32" Nullable="false" />
+          <Property Name="FirstName" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="LastName" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="Position" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="DirectDial" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="Extension" Type="Int32" />
+          <Property Name="EmploymentDate" Type="DateTime" Precision="3" />
+          <Property Name="RegistrationDate" Type="DateTime" Precision="3" />
+          <Property Name="LastLogInTime" Type="DateTime" Precision="3" />
+          <Property Name="LastLogoutTime" Type="DateTime" Precision="3" />
+          <Property Name="IsLoggedIn" Type="Boolean" Nullable="false" />
+          <Property Name="InvalidLoginAttemptCount" Type="Int32" Nullable="false" />
+          <Property Name="LastInvalidLoginAttemptTime" Type="DateTime" Precision="3" />
+          <Property Name="Locked" Type="Boolean" Nullable="false" />
+          <Property Name="Email" Type="String" MaxLength="256" FixedLength="false" Unicode="true" />
+          <Property Name="EmailConfirmed" Type="Boolean" Nullable="false" />
+          <Property Name="PasswordHash" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="SecurityStamp" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="PhoneNumber" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="PhoneNumberConfirmed" Type="Boolean" Nullable="false" />
+          <Property Name="TwoFactorEnabled" Type="Boolean" Nullable="false" />
+          <Property Name="LockoutEndDateUtc" Type="DateTime" Precision="3" />
+          <Property Name="LockoutEnabled" Type="Boolean" Nullable="false" />
+          <Property Name="AccessFailedCount" Type="Int32" Nullable="false" />
+          <Property Name="UserName" Type="String" Nullable="false" MaxLength="256" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="AspNetUserClaims" Relationship="BCMY_StockModel.FK_dbo_AspNetUserClaims_dbo_AspNetUsers_UserId" FromRole="AspNetUser" ToRole="AspNetUserClaim" />
+          <NavigationProperty Name="AspNetUserLogins" Relationship="BCMY_StockModel.FK_dbo_AspNetUserLogins_dbo_AspNetUsers_UserId" FromRole="AspNetUser" ToRole="AspNetUserLogin" />
+          <NavigationProperty Name="AspNetRoles" Relationship="BCMY_StockModel.AspNetUserRoles" FromRole="AspNetUser" ToRole="AspNetRole" />
+        </EntityType>
+        <Association Name="FK_dbo_AspNetUserClaims_dbo_AspNetUsers_UserId">
+          <End Type="BCMY_StockModel.AspNetUser" Role="AspNetUser" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Type="BCMY_StockModel.AspNetUserClaim" Role="AspNetUserClaim" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="AspNetUser">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="AspNetUserClaim">
+              <PropertyRef Name="UserId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_dbo_AspNetUserLogins_dbo_AspNetUsers_UserId">
+          <End Type="BCMY_StockModel.AspNetUser" Role="AspNetUser" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Type="BCMY_StockModel.AspNetUserLogin" Role="AspNetUserLogin" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="AspNetUser">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="AspNetUserLogin">
+              <PropertyRef Name="UserId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="AspNetUserRoles">
+          <End Type="BCMY_StockModel.AspNetRole" Role="AspNetRole" Multiplicity="*" />
+          <End Type="BCMY_StockModel.AspNetUser" Role="AspNetUser" Multiplicity="*" />
+        </Association>
+        <ComplexType Name="SP_GetNumOfSuccessNegotiationsByProductId_Result">
+          <Property Type="Int32" Name="id" Nullable="false" />
+          <Property Type="Int32" Name="productId" Nullable="false" />
+          <Property Type="Decimal" Name="quantity" Nullable="true" Precision="10" Scale="5" />
+          <Property Type="Decimal" Name="negotiatedPricePerItem" Nullable="true" Precision="8" Scale="2" />
+          <Property Type="Decimal" Name="totalAmount" Nullable="true" Precision="8" Scale="2" />
+          <Property Type="String" Name="status" Nullable="false" MaxLength="20" />
+          <Property Type="DateTime" Name="negotiationDateTime" Nullable="false" Precision="23" />
+          <Property Type="Int32" Name="orderId" Nullable="true" />
+          <Property Type="String" Name="date" Nullable="true" MaxLength="30" />
+          <Property Type="String" Name="time" Nullable="true" MaxLength="8" />
+          <Property Type="Int32" Name="customerSupplierId" Nullable="false" />
+          <Property Type="String" Name="cusomerSupplierName" Nullable="false" MaxLength="30" />
+          <Property Type="Int32" Name="contactId" Nullable="false" />
+          <Property Type="String" Name="contactName" Nullable="false" MaxLength="101" />
+        </ComplexType>
+        <ComplexType Name="SP_GetProductsWithStockInfo_Result">
+          <Property Type="Int32" Name="productlistid" Nullable="false" />
+          <Property Type="String" Name="model" Nullable="false" MaxLength="150" />
+          <Property Type="Int32" Name="quantity" Nullable="false" />
+          <Property Type="String" Name="Description" Nullable="true" MaxLength="100" />
+          <Property Type="Int32" Name="weight_grams" Nullable="false" />
+          <Property Type="Int32" Name="volume_cm3" Nullable="false" />
+          <Property Type="String" Name="product_image" Nullable="true" MaxLength="100" />
+          <Property Type="String" Name="abbr" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="model_public" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="description_public" Nullable="true" MaxLength="50" />
+          <Property Type="DateTime" Name="dateUpdated" Nullable="true" Precision="23" />
+          <Property Type="String" Name="status" Nullable="true" MaxLength="10" />
+          <Property Type="Int32" Name="productbrandid" Nullable="false" />
+          <Property Type="String" Name="productbrandname" Nullable="false" MaxLength="40" />
+          <Property Type="Decimal" Name="marketvalue" Nullable="false" Precision="19" />
+          <Property Type="Int32" Name="actionID" Nullable="true" />
+          <Property Type="String" Name="productActionName" Nullable="false" MaxLength="50" />
+          <Property Type="String" Name="producttypeid" Nullable="false" MaxLength="100" />
+          <Property Type="Int32" Name="productcategory" Nullable="true" />
+          <Property Type="String" Name="ProductCatergoryName" Nullable="false" MaxLength="100" />
+          <Property Type="Int32" Name="productcondition" Nullable="true" />
+          <Property Type="String" Name="conditionName" Nullable="false" MaxLength="100" />
+          <Property Type="DateTime" Name="lastAmendedDate" Nullable="true" Precision="23" />
+          <Property Type="DateTime" Name="lastIncrementDate" Nullable="true" Precision="23" />
+          <Property Type="String" Name="lastAmendedDateValue" Nullable="true" MaxLength="30" />
+          <Property Type="String" Name="lastIncrementDateValue" Nullable="true" MaxLength="30" />
+          <Property Type="String" Name="lastAmendedTimeValue" Nullable="true" MaxLength="4000" />
+          <Property Type="String" Name="lastIncrementTimeValue" Nullable="true" MaxLength="4000" />
+          <Property Type="Int32" Name="stockCount" Nullable="false" />
+          <Property Type="String" Name="stockAmended" Nullable="true" MaxLength="3" />
+        </ComplexType>
+        <ComplexType Name="SP_SavePastOrderLineWithNegotiation_Result">
+          <Property Type="Int32" Name="id" Nullable="false" />
+          <Property Type="Int32" Name="productId" Nullable="false" />
+          <Property Type="Decimal" Name="quantity" Nullable="true" Precision="10" Scale="5" />
+          <Property Type="Decimal" Name="negotiatedPricePerItem" Nullable="true" Precision="10" Scale="5" />
+          <Property Type="Decimal" Name="totalAmount" Nullable="true" Precision="10" Scale="5" />
+          <Property Type="String" Name="status" Nullable="false" MaxLength="20" />
+          <Property Type="String" Name="orderLineQuantityStatus" Nullable="false" />
+          <Property Type="DateTime" Name="orderlineDateTime" Nullable="false" Precision="23" />
+          <Property Type="Int32" Name="orderId" Nullable="true" />
+          <Property Type="Int32" Name="brandId" Nullable="false" />
+          <Property Type="String" Name="brand" Nullable="false" MaxLength="40" />
+          <Property Type="Int32" Name="conditionId" Nullable="true" />
+          <Property Type="String" Name="condition" Nullable="false" MaxLength="100" />
+          <Property Type="String" Name="model" Nullable="false" MaxLength="150" />
+        </ComplexType>
         </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -927,6 +1401,9 @@
           <EntitySetMapping Name="TblProductStocks">
             <EntityTypeMapping TypeName="BCMY_StockModel.TblProductStock">
               <MappingFragment StoreEntitySet="TblProductStock">
+                <ScalarProperty Name="lastIncrementDate" ColumnName="lastIncrementDate" />
+                <ScalarProperty Name="lastAmendedDate" ColumnName="lastAmendedDate" />
+                <ScalarProperty Name="stockCountAmended" ColumnName="stockCountAmended" />
                 <ScalarProperty Name="productId" ColumnName="productId" />
                 <ScalarProperty Name="quantity" ColumnName="quantity" />
               </MappingFragment>
@@ -1199,6 +1676,7 @@
           <EntitySetMapping Name="TblOrders">
             <EntityTypeMapping TypeName="BCMY_StockModel.TblOrder">
               <MappingFragment StoreEntitySet="TblOrder">
+                <ScalarProperty Name="pastOrder" ColumnName="pastOrder" />
                 <ScalarProperty Name="vat" ColumnName="vat" />
                 <ScalarProperty Name="currencyId" ColumnName="currencyId" />
                 <ScalarProperty Name="creationDateTime" ColumnName="creationDateTime" />
@@ -1283,6 +1761,168 @@
           <FunctionImportMapping FunctionImportName="SP_IncreaseStockCount" FunctionName="BCMY_StockModel.Store.SP_IncreaseStockCount" />
           <FunctionImportMapping FunctionImportName="SP_ConfirmOrderLinesWithOrder" FunctionName="BCMY_StockModel.Store.SP_ConfirmOrderLinesWithOrder" />
           <FunctionImportMapping FunctionImportName="SP_ValidateAndSavePastExchangeRates" FunctionName="BCMY_StockModel.Store.SP_ValidateAndSavePastExchangeRates" />
+          <EntitySetMapping Name="C__MigrationHistory">
+            <EntityTypeMapping TypeName="BCMY_StockModel.C__MigrationHistory">
+              <MappingFragment StoreEntitySet="__MigrationHistory">
+                <ScalarProperty Name="ProductVersion" ColumnName="ProductVersion" />
+                <ScalarProperty Name="Model" ColumnName="Model" />
+                <ScalarProperty Name="ContextKey" ColumnName="ContextKey" />
+                <ScalarProperty Name="MigrationId" ColumnName="MigrationId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="AspNetRoles">
+            <EntityTypeMapping TypeName="BCMY_StockModel.AspNetRole">
+              <MappingFragment StoreEntitySet="AspNetRoles">
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="Description" ColumnName="Description" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="AspNetUserClaims">
+            <EntityTypeMapping TypeName="BCMY_StockModel.AspNetUserClaim">
+              <MappingFragment StoreEntitySet="AspNetUserClaims">
+                <ScalarProperty Name="ClaimValue" ColumnName="ClaimValue" />
+                <ScalarProperty Name="ClaimType" ColumnName="ClaimType" />
+                <ScalarProperty Name="UserId" ColumnName="UserId" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="AspNetUserLogins">
+            <EntityTypeMapping TypeName="BCMY_StockModel.AspNetUserLogin">
+              <MappingFragment StoreEntitySet="AspNetUserLogins">
+                <ScalarProperty Name="UserId" ColumnName="UserId" />
+                <ScalarProperty Name="ProviderKey" ColumnName="ProviderKey" />
+                <ScalarProperty Name="LoginProvider" ColumnName="LoginProvider" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="AspNetUsers">
+            <EntityTypeMapping TypeName="BCMY_StockModel.AspNetUser">
+              <MappingFragment StoreEntitySet="AspNetUsers">
+                <ScalarProperty Name="UserName" ColumnName="UserName" />
+                <ScalarProperty Name="AccessFailedCount" ColumnName="AccessFailedCount" />
+                <ScalarProperty Name="LockoutEnabled" ColumnName="LockoutEnabled" />
+                <ScalarProperty Name="LockoutEndDateUtc" ColumnName="LockoutEndDateUtc" />
+                <ScalarProperty Name="TwoFactorEnabled" ColumnName="TwoFactorEnabled" />
+                <ScalarProperty Name="PhoneNumberConfirmed" ColumnName="PhoneNumberConfirmed" />
+                <ScalarProperty Name="PhoneNumber" ColumnName="PhoneNumber" />
+                <ScalarProperty Name="SecurityStamp" ColumnName="SecurityStamp" />
+                <ScalarProperty Name="PasswordHash" ColumnName="PasswordHash" />
+                <ScalarProperty Name="EmailConfirmed" ColumnName="EmailConfirmed" />
+                <ScalarProperty Name="Email" ColumnName="Email" />
+                <ScalarProperty Name="Locked" ColumnName="Locked" />
+                <ScalarProperty Name="LastInvalidLoginAttemptTime" ColumnName="LastInvalidLoginAttemptTime" />
+                <ScalarProperty Name="InvalidLoginAttemptCount" ColumnName="InvalidLoginAttemptCount" />
+                <ScalarProperty Name="IsLoggedIn" ColumnName="IsLoggedIn" />
+                <ScalarProperty Name="LastLogoutTime" ColumnName="LastLogoutTime" />
+                <ScalarProperty Name="LastLogInTime" ColumnName="LastLogInTime" />
+                <ScalarProperty Name="RegistrationDate" ColumnName="RegistrationDate" />
+                <ScalarProperty Name="EmploymentDate" ColumnName="EmploymentDate" />
+                <ScalarProperty Name="Extension" ColumnName="Extension" />
+                <ScalarProperty Name="DirectDial" ColumnName="DirectDial" />
+                <ScalarProperty Name="Position" ColumnName="Position" />
+                <ScalarProperty Name="LastName" ColumnName="LastName" />
+                <ScalarProperty Name="FirstName" ColumnName="FirstName" />
+                <ScalarProperty Name="Title" ColumnName="Title" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <AssociationSetMapping Name="AspNetUserRoles" TypeName="BCMY_StockModel.AspNetUserRoles" StoreEntitySet="AspNetUserRoles">
+            <EndProperty Name="AspNetUser">
+              <ScalarProperty Name="Id" ColumnName="UserId" />
+            </EndProperty>
+            <EndProperty Name="AspNetRole">
+              <ScalarProperty Name="Id" ColumnName="RoleId" />
+            </EndProperty>
+          </AssociationSetMapping>
+          <FunctionImportMapping FunctionImportName="SP_CreatePastSalesOrder" FunctionName="BCMY_StockModel.Store.SP_CreatePastSalesOrder" />
+          <FunctionImportMapping FunctionImportName="SP_DeleteOrder" FunctionName="BCMY_StockModel.Store.SP_DeleteOrder" />
+          <FunctionImportMapping FunctionImportName="SP_DeleteOrRejectOrderline" FunctionName="BCMY_StockModel.Store.SP_DeleteOrRejectOrderline" />
+          <FunctionImportMapping FunctionImportName="SP_DeleteOrRejectPastOrderline" FunctionName="BCMY_StockModel.Store.SP_DeleteOrRejectPastOrderline" />
+          <FunctionImportMapping FunctionImportName="SP_GetNumOfSuccessNegotiationsByProductId" FunctionName="BCMY_StockModel.Store.SP_GetNumOfSuccessNegotiationsByProductId">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="BCMY_StockModel.SP_GetNumOfSuccessNegotiationsByProductId_Result">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="productId" ColumnName="productId" />
+                <ScalarProperty Name="quantity" ColumnName="quantity" />
+                <ScalarProperty Name="negotiatedPricePerItem" ColumnName="negotiatedPricePerItem" />
+                <ScalarProperty Name="totalAmount" ColumnName="totalAmount" />
+                <ScalarProperty Name="status" ColumnName="status" />
+                <ScalarProperty Name="negotiationDateTime" ColumnName="negotiationDateTime" />
+                <ScalarProperty Name="orderId" ColumnName="orderId" />
+                <ScalarProperty Name="date" ColumnName="date" />
+                <ScalarProperty Name="time" ColumnName="time" />
+                <ScalarProperty Name="customerSupplierId" ColumnName="customerSupplierId" />
+                <ScalarProperty Name="cusomerSupplierName" ColumnName="cusomerSupplierName" />
+                <ScalarProperty Name="contactId" ColumnName="contactId" />
+                <ScalarProperty Name="contactName" ColumnName="contactName" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="SP_GetProductsWithStockInfo" FunctionName="BCMY_StockModel.Store.SP_GetProductsWithStockInfo">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="BCMY_StockModel.SP_GetProductsWithStockInfo_Result">
+                <ScalarProperty Name="productlistid" ColumnName="productlistid" />
+                <ScalarProperty Name="model" ColumnName="model" />
+                <ScalarProperty Name="quantity" ColumnName="quantity" />
+                <ScalarProperty Name="Description" ColumnName="Description" />
+                <ScalarProperty Name="weight_grams" ColumnName="weight_grams" />
+                <ScalarProperty Name="volume_cm3" ColumnName="volume_cm3" />
+                <ScalarProperty Name="product_image" ColumnName="product_image" />
+                <ScalarProperty Name="abbr" ColumnName="abbr" />
+                <ScalarProperty Name="model_public" ColumnName="model_public" />
+                <ScalarProperty Name="description_public" ColumnName="description_public" />
+                <ScalarProperty Name="dateUpdated" ColumnName="dateUpdated" />
+                <ScalarProperty Name="status" ColumnName="status" />
+                <ScalarProperty Name="productbrandid" ColumnName="productbrandid" />
+                <ScalarProperty Name="productbrandname" ColumnName="productbrandname" />
+                <ScalarProperty Name="marketvalue" ColumnName="marketvalue" />
+                <ScalarProperty Name="actionID" ColumnName="actionID" />
+                <ScalarProperty Name="productActionName" ColumnName="productActionName" />
+                <ScalarProperty Name="producttypeid" ColumnName="producttypeid" />
+                <ScalarProperty Name="productcategory" ColumnName="productcategory" />
+                <ScalarProperty Name="ProductCatergoryName" ColumnName="ProductCatergoryName" />
+                <ScalarProperty Name="productcondition" ColumnName="productcondition" />
+                <ScalarProperty Name="conditionName" ColumnName="conditionName" />
+                <ScalarProperty Name="lastAmendedDate" ColumnName="lastAmendedDate" />
+                <ScalarProperty Name="lastIncrementDate" ColumnName="lastIncrementDate" />
+                <ScalarProperty Name="lastAmendedDateValue" ColumnName="lastAmendedDateValue" />
+                <ScalarProperty Name="lastIncrementDateValue" ColumnName="lastIncrementDateValue" />
+                <ScalarProperty Name="lastAmendedTimeValue" ColumnName="lastAmendedTimeValue" />
+                <ScalarProperty Name="lastIncrementTimeValue" ColumnName="lastIncrementTimeValue" />
+                <ScalarProperty Name="stockCount" ColumnName="stockCount" />
+                <ScalarProperty Name="stockAmended" ColumnName="stockAmended" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="SP_SavePastOrderLineWithNegotiation" FunctionName="BCMY_StockModel.Store.SP_SavePastOrderLineWithNegotiation">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="BCMY_StockModel.SP_SavePastOrderLineWithNegotiation_Result">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="productId" ColumnName="productId" />
+                <ScalarProperty Name="quantity" ColumnName="quantity" />
+                <ScalarProperty Name="negotiatedPricePerItem" ColumnName="negotiatedPricePerItem" />
+                <ScalarProperty Name="totalAmount" ColumnName="totalAmount" />
+                <ScalarProperty Name="status" ColumnName="status" />
+                <ScalarProperty Name="orderLineQuantityStatus" ColumnName="orderLineQuantityStatus" />
+                <ScalarProperty Name="orderlineDateTime" ColumnName="orderlineDateTime" />
+                <ScalarProperty Name="orderId" ColumnName="orderId" />
+                <ScalarProperty Name="brandId" ColumnName="brandId" />
+                <ScalarProperty Name="brand" ColumnName="brand" />
+                <ScalarProperty Name="conditionId" ColumnName="conditionId" />
+                <ScalarProperty Name="condition" ColumnName="condition" />
+                <ScalarProperty Name="model" ColumnName="model" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="SP_SearchAspNetUsers" FunctionName="BCMY_StockModel.Store.SP_SearchAspNetUsers" />
+          <FunctionImportMapping FunctionImportName="SP_TransferConfirmedOLinesToNegotisTbl" FunctionName="BCMY_StockModel.Store.SP_TransferConfirmedOLinesToNegotisTbl" />
+          <FunctionImportMapping FunctionImportName="SP_UpdateStockCount" FunctionName="BCMY_StockModel.Store.SP_UpdateStockCount" />
+          <FunctionImportMapping FunctionImportName="SplitStringsByDelimiter" FunctionName="BCMY_StockModel.Store.SplitStringsByDelimiter" />
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>

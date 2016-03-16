@@ -1,4 +1,4 @@
-﻿// T4 code generation is enabled for model 'E:\KTP Project\Dropbox\Stage 3.1 - Stock Mgmt System - Past Data Sales\bcmy.stock\DataAccess_EF\EntityFramework\BcmyStockModel.edmx'. 
+﻿// T4 code generation is enabled for model 'E:\KTP Project\Dropbox\Stage 7 - User login\bcmy.stock\DataAccess_EF\EntityFramework\BcmyStockModel.edmx'. 
 // To enable legacy code generation, change the value of the 'Code Generation Strategy' designer
 // property to 'Legacy ObjectContext'. This property is available in the Properties Window when the model
 // is open in the designer.

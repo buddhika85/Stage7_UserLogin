@@ -38,6 +38,7 @@
         
         defineCreateFormAttributes(vm);
         definePopupModelAttributes(vm);
+        defineSearchFormAttributes(vm);
 
         return vm;
     }
@@ -45,6 +46,7 @@
     // used to bind create form fields
     function defineCreateFormAttributes(vm)
     {
+        // re initialise create properties
         vm.usernameCreate = '';
         vm.rolesInCreate = '';
         vm.firstNameCreate = '';
@@ -55,10 +57,30 @@
         vm.empDateCreate = '';
         vm.regDateCreate = '';
         vm.errorMessageCreate = '';
+
+        // remove error borders
+        vm.usernameCreateClass = '';
+        vm.rolesInCreateClass = '';
+        vm.firstNameCreateClass = '';
+        vm.lastNameCreateClass = '';
+        vm.positionCreateClass = '';
+        vm.telephoneCreateClass = '';
+        vm.empDateCreateClass = '';
+        vm.regDateCreateClass = '';
     }
 
     // used to bind create form fields
     function defineSearchFormAttributes(vm) {
+        vm.usernameE = '';
+        vm.rolesInSearch = '';
+        vm.firstNameE = '';
+        vm.lastNameE = '';
+        vm.positionE = '';        
+        vm.empDateE = '';
+        vm.regDateE = '';
+        vm.lastLoginDateE = '';
+        vm.lastInvalidDateE = '';
+        vm.errorMessageSearch = '';
     }
 
     // used to bind popup fields
@@ -309,52 +331,95 @@
                 "&employmentDate=" + vm.empDateCreate + "&registrationDate=" + vm.regDateCreate;
 
             var serverUrl = ('https://localhost:44302/api/CreateUserAsync?' + dataForBody);
-            debugger
+            
             vm.httpService({
                 method: "post",
                 headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + localStorage["access_token"] },
                 url: serverUrl
-            }).success(function (data) {
-                debugger
+            }).success(function (data) {                
                 if (data.indexOf('Success') > -1) {
 
-                    drawUsersGrid(vm);      // refersh the grid to display the updated record
-                    alert(data);
-                    toastr.success("Success - user creation successful - an email sent to the user notifying temporary password");                   
+                    // user creation success, now assign roles
+                    dataForBody = "username=" + vm.usernameCreate + "&rolescsv=" + vm.rolesInCreate;
+                    serverUrl = ('https://localhost:44302/api/AssignRolesAsync?' + dataForBody);
+                    vm.httpService({
+                        method: "post",
+                        headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + localStorage["access_token"] },
+                        url: serverUrl
+                    }).success(function (data) {
+                        if (data.indexOf('Success') > -1) {
+                            vm.errorMessageCreate = "Success - user creation and role assignment successful - an email sent to the user notifying temporary password";
+                            drawUsersGrid(vm);              // refersh the grid to display the updated record  
+                            defineCreateFormAttributes(vm); // clear create form
+                            toastr.success("Success - user creation and role assignment successful - an email sent to the user notifying temporary password");
+                        }
+                        else {
+                            vm.errorMessageCreate = "Error - user with username " + vm.usernameCreate + " created, but role assignment unsuccssful, please contact IT support";     
+                            toastr.warning("Error - user with username " + vm.usernameCreate + " created, but role assignment unsuccssful, please contact IT support");
+                        }
+                    }
+                    ).error(function (data) {
+                        vm.errorMessageCreate = data;     // display error message
+                        toastr.error(data);
+                    });            
                 }
                 else {
                     vm.errorMessageCreate = data;     // display error message
-                    toastr.warning(vm.errorMessageCreate);
+                    toastr.warning(data);
                 }
             }
             ).error(function (data) {
-                vm.errorMessage = data;     // display error message
+                vm.errorMessageCreate = data;     // display error message
                 toastr.error(data);
             });
-        }        
-        //alert("create a new user : " + isValid);
-        //alert(vm.usernameCreate + ' ' + vm.rolesInCreate + ' ' + vm.firstNameCreate + ' ' +
-        //vm.lastNameCreate + ' ' +
-        //vm.positionCreate + ' ' +
-        //vm.telephoneCreate + ' ' +
-        //vm.extensionCreate + ' ' +
-        //vm.empDateCreate + ' ' +
-        //vm.regDateCreate);
+        }
     }
 
     function resetCreateForm(vm)
     {
-        alert("reset create form");
+        //alert("reset create form");
+        defineCreateFormAttributes(vm); // clear create form
     }
 
     function searchUsers(vm)
     {
-        alert("search users");
+        // vm.errorMessageSearch
+        //alert("search users - " + vm.usernameE + ' , ' + 
+        //vm.rolesInSearch + ' , ' + 
+        //vm.firstNameE + ' , ' + 
+        //vm.lastNameE + ' , ' + 
+        //vm.positionE + ' , ' +     
+        //vm.empDateE + ' , ' + 
+        //vm.regDateE + ' , ' + 
+        //vm.lastLoginDateE + ' , ' + 
+        //vm.lastInvalidDateE);
+        //debugger
+        if (vm.rolesInSearch[0] == '---- Select Role ----') {
+            vm.rolesInSearch.shift();   // remove if '---- Select Role ----' is selected as a role
+        }
+        var dataForBody = "username=" + vm.usernameE + "&userRolesCsv=" + vm.rolesInSearch + "&firstname=" + vm.firstNameE +
+            "&lastname=" + vm.lastNameE + "&position=" + vm.positionE + "&employmentDate=" + vm.empDateE + "&registrationDate=" + vm.regDateE +
+            "&lastLoginDateTime=" + vm.lastLoginDateE + "&lastInvalidLoginDateTime=" + vm.lastInvalidDateE;
+        var serverUrl = ('https://localhost:44302/api/SearchUsersSQL?' + dataForBody);
+        var users = null;
+        vm.httpService({
+            method: "post",
+            headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + localStorage["access_token"] },
+            url: serverUrl
+        }).success(function (data) {
+            users = data;
+            drawHelper(users, vm);
+        }
+        ).error(function (data) {
+            vm.errorMessageSearch = "Error - Please contact IT support - " + data;     // display error message
+            toastr.error("Error - Please contact IT support - " + data);
+        });
     }
 
     function resetSearchForm(vm)
     {
-        alert("reset search users");
+        //alert("reset search users");
+        defineSearchFormAttributes(vm);
     }
 
     // used to setup datepickers

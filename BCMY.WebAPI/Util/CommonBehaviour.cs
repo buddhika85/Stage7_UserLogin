@@ -136,7 +136,7 @@ namespace BCMY.WebAPI.Util
         public static string GenerateTempPassword()
         {
             string tempPassword = null;
-            tempPassword = System.Web.Security.Membership.GeneratePassword(6, 1);
+            tempPassword = string.Format("{0}fH%1", System.Web.Security.Membership.GeneratePassword(6, 1));
             return tempPassword;
         }
     }

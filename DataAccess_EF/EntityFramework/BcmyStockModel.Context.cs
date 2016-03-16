@@ -36,6 +36,11 @@ namespace DataAccess_EF.EntityFramework
         public virtual DbSet<TblExchangeRate> TblExchangeRates { get; set; }
         public virtual DbSet<TblOrder> TblOrders { get; set; }
         public virtual DbSet<TblCustomerSupplier> TblCustomerSuppliers { get; set; }
+        public virtual DbSet<C__MigrationHistory> C__MigrationHistory { get; set; }
+        public virtual DbSet<AspNetRole> AspNetRoles { get; set; }
+        public virtual DbSet<AspNetUserClaim> AspNetUserClaims { get; set; }
+        public virtual DbSet<AspNetUserLogin> AspNetUserLogins { get; set; }
+        public virtual DbSet<AspNetUser> AspNetUsers { get; set; }
     
         public virtual ObjectResult<string> SP_ConfirmOrder(Nullable<int> orderId)
         {
@@ -312,7 +317,7 @@ namespace DataAccess_EF.EntityFramework
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<string>("SP_ConfirmOrderLinesWithOrder", orderIdParameter);
         }
     
-        public virtual int SP_ValidateAndSavePastExchangeRates(string dateStr, Nullable<decimal> euroVal, Nullable<decimal> usdVal, ObjectParameter insertStatus)
+        public virtual int SP_ValidateAndSavePastExchangeRates(string dateStr, Nullable<decimal> euroVal, Nullable<decimal> usdVal)
         {
             var dateStrParameter = dateStr != null ?
                 new ObjectParameter("dateStr", dateStr) :
@@ -326,7 +331,215 @@ namespace DataAccess_EF.EntityFramework
                 new ObjectParameter("usdVal", usdVal) :
                 new ObjectParameter("usdVal", typeof(decimal));
     
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("SP_ValidateAndSavePastExchangeRates", dateStrParameter, euroValParameter, usdValParameter, insertStatus);
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("SP_ValidateAndSavePastExchangeRates", dateStrParameter, euroValParameter, usdValParameter);
+        }
+    
+        public virtual ObjectResult<string> SP_CreatePastSalesOrder(Nullable<int> companyId, string contactFulName, string vat, Nullable<int> currencyId, string type, Nullable<System.DateTime> orderDate)
+        {
+            var companyIdParameter = companyId.HasValue ?
+                new ObjectParameter("companyId", companyId) :
+                new ObjectParameter("companyId", typeof(int));
+    
+            var contactFulNameParameter = contactFulName != null ?
+                new ObjectParameter("contactFulName", contactFulName) :
+                new ObjectParameter("contactFulName", typeof(string));
+    
+            var vatParameter = vat != null ?
+                new ObjectParameter("vat", vat) :
+                new ObjectParameter("vat", typeof(string));
+    
+            var currencyIdParameter = currencyId.HasValue ?
+                new ObjectParameter("currencyId", currencyId) :
+                new ObjectParameter("currencyId", typeof(int));
+    
+            var typeParameter = type != null ?
+                new ObjectParameter("type", type) :
+                new ObjectParameter("type", typeof(string));
+    
+            var orderDateParameter = orderDate.HasValue ?
+                new ObjectParameter("orderDate", orderDate) :
+                new ObjectParameter("orderDate", typeof(System.DateTime));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<string>("SP_CreatePastSalesOrder", companyIdParameter, contactFulNameParameter, vatParameter, currencyIdParameter, typeParameter, orderDateParameter);
+        }
+    
+        public virtual int SP_DeleteOrder(Nullable<int> orderId)
+        {
+            var orderIdParameter = orderId.HasValue ?
+                new ObjectParameter("orderId", orderId) :
+                new ObjectParameter("orderId", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("SP_DeleteOrder", orderIdParameter);
+        }
+    
+        public virtual ObjectResult<string> SP_DeleteOrRejectOrderline(string deleteOrReject, Nullable<int> orderlineId, Nullable<int> orderId)
+        {
+            var deleteOrRejectParameter = deleteOrReject != null ?
+                new ObjectParameter("deleteOrReject", deleteOrReject) :
+                new ObjectParameter("deleteOrReject", typeof(string));
+    
+            var orderlineIdParameter = orderlineId.HasValue ?
+                new ObjectParameter("orderlineId", orderlineId) :
+                new ObjectParameter("orderlineId", typeof(int));
+    
+            var orderIdParameter = orderId.HasValue ?
+                new ObjectParameter("orderId", orderId) :
+                new ObjectParameter("orderId", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<string>("SP_DeleteOrRejectOrderline", deleteOrRejectParameter, orderlineIdParameter, orderIdParameter);
+        }
+    
+        public virtual ObjectResult<string> SP_DeleteOrRejectPastOrderline(string deleteOrReject, Nullable<int> orderlineId, Nullable<int> orderId)
+        {
+            var deleteOrRejectParameter = deleteOrReject != null ?
+                new ObjectParameter("deleteOrReject", deleteOrReject) :
+                new ObjectParameter("deleteOrReject", typeof(string));
+    
+            var orderlineIdParameter = orderlineId.HasValue ?
+                new ObjectParameter("orderlineId", orderlineId) :
+                new ObjectParameter("orderlineId", typeof(int));
+    
+            var orderIdParameter = orderId.HasValue ?
+                new ObjectParameter("orderId", orderId) :
+                new ObjectParameter("orderId", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<string>("SP_DeleteOrRejectPastOrderline", deleteOrRejectParameter, orderlineIdParameter, orderIdParameter);
+        }
+    
+        public virtual ObjectResult<SP_GetNumOfSuccessNegotiationsByProductId_Result> SP_GetNumOfSuccessNegotiationsByProductId(Nullable<int> orderId, Nullable<int> productListId, string selectedCurrency, Nullable<int> numOfNegotiations)
+        {
+            var orderIdParameter = orderId.HasValue ?
+                new ObjectParameter("orderId", orderId) :
+                new ObjectParameter("orderId", typeof(int));
+    
+            var productListIdParameter = productListId.HasValue ?
+                new ObjectParameter("productListId", productListId) :
+                new ObjectParameter("productListId", typeof(int));
+    
+            var selectedCurrencyParameter = selectedCurrency != null ?
+                new ObjectParameter("selectedCurrency", selectedCurrency) :
+                new ObjectParameter("selectedCurrency", typeof(string));
+    
+            var numOfNegotiationsParameter = numOfNegotiations.HasValue ?
+                new ObjectParameter("numOfNegotiations", numOfNegotiations) :
+                new ObjectParameter("numOfNegotiations", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<SP_GetNumOfSuccessNegotiationsByProductId_Result>("SP_GetNumOfSuccessNegotiationsByProductId", orderIdParameter, productListIdParameter, selectedCurrencyParameter, numOfNegotiationsParameter);
+        }
+    
+        public virtual ObjectResult<SP_GetProductsWithStockInfo_Result> SP_GetProductsWithStockInfo()
+        {
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<SP_GetProductsWithStockInfo_Result>("SP_GetProductsWithStockInfo");
+        }
+    
+        public virtual ObjectResult<SP_SavePastOrderLineWithNegotiation_Result> SP_SavePastOrderLineWithNegotiation(Nullable<int> productListId, Nullable<decimal> quantityVal, Nullable<decimal> pricePerItem, Nullable<decimal> totalAmountVal, string status, Nullable<int> orderIdVal, Nullable<System.DateTime> orderDate)
+        {
+            var productListIdParameter = productListId.HasValue ?
+                new ObjectParameter("productListId", productListId) :
+                new ObjectParameter("productListId", typeof(int));
+    
+            var quantityValParameter = quantityVal.HasValue ?
+                new ObjectParameter("quantityVal", quantityVal) :
+                new ObjectParameter("quantityVal", typeof(decimal));
+    
+            var pricePerItemParameter = pricePerItem.HasValue ?
+                new ObjectParameter("pricePerItem", pricePerItem) :
+                new ObjectParameter("pricePerItem", typeof(decimal));
+    
+            var totalAmountValParameter = totalAmountVal.HasValue ?
+                new ObjectParameter("totalAmountVal", totalAmountVal) :
+                new ObjectParameter("totalAmountVal", typeof(decimal));
+    
+            var statusParameter = status != null ?
+                new ObjectParameter("status", status) :
+                new ObjectParameter("status", typeof(string));
+    
+            var orderIdValParameter = orderIdVal.HasValue ?
+                new ObjectParameter("orderIdVal", orderIdVal) :
+                new ObjectParameter("orderIdVal", typeof(int));
+    
+            var orderDateParameter = orderDate.HasValue ?
+                new ObjectParameter("orderDate", orderDate) :
+                new ObjectParameter("orderDate", typeof(System.DateTime));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<SP_SavePastOrderLineWithNegotiation_Result>("SP_SavePastOrderLineWithNegotiation", productListIdParameter, quantityValParameter, pricePerItemParameter, totalAmountValParameter, statusParameter, orderIdValParameter, orderDateParameter);
+        }
+    
+        public virtual int SP_SearchAspNetUsers(string username, string userRolesCsv, string firstname, string lastname, string position, Nullable<System.DateTime> employmentDate, Nullable<System.DateTime> registrationDate, Nullable<System.DateTime> lastLoginDateTime, Nullable<System.DateTime> lastInvalidLoginDateTime)
+        {
+            var usernameParameter = username != null ?
+                new ObjectParameter("username", username) :
+                new ObjectParameter("username", typeof(string));
+    
+            var userRolesCsvParameter = userRolesCsv != null ?
+                new ObjectParameter("userRolesCsv", userRolesCsv) :
+                new ObjectParameter("userRolesCsv", typeof(string));
+    
+            var firstnameParameter = firstname != null ?
+                new ObjectParameter("firstname", firstname) :
+                new ObjectParameter("firstname", typeof(string));
+    
+            var lastnameParameter = lastname != null ?
+                new ObjectParameter("lastname", lastname) :
+                new ObjectParameter("lastname", typeof(string));
+    
+            var positionParameter = position != null ?
+                new ObjectParameter("position", position) :
+                new ObjectParameter("position", typeof(string));
+    
+            var employmentDateParameter = employmentDate.HasValue ?
+                new ObjectParameter("employmentDate", employmentDate) :
+                new ObjectParameter("employmentDate", typeof(System.DateTime));
+    
+            var registrationDateParameter = registrationDate.HasValue ?
+                new ObjectParameter("registrationDate", registrationDate) :
+                new ObjectParameter("registrationDate", typeof(System.DateTime));
+    
+            var lastLoginDateTimeParameter = lastLoginDateTime.HasValue ?
+                new ObjectParameter("lastLoginDateTime", lastLoginDateTime) :
+                new ObjectParameter("lastLoginDateTime", typeof(System.DateTime));
+    
+            var lastInvalidLoginDateTimeParameter = lastInvalidLoginDateTime.HasValue ?
+                new ObjectParameter("lastInvalidLoginDateTime", lastInvalidLoginDateTime) :
+                new ObjectParameter("lastInvalidLoginDateTime", typeof(System.DateTime));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("SP_SearchAspNetUsers", usernameParameter, userRolesCsvParameter, firstnameParameter, lastnameParameter, positionParameter, employmentDateParameter, registrationDateParameter, lastLoginDateTimeParameter, lastInvalidLoginDateTimeParameter);
+        }
+    
+        public virtual int SP_TransferConfirmedOLinesToNegotisTbl()
+        {
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("SP_TransferConfirmedOLinesToNegotisTbl");
+        }
+    
+        public virtual ObjectResult<string> SP_UpdateStockCount(Nullable<int> productId, Nullable<int> quantity, string stockCountAmended)
+        {
+            var productIdParameter = productId.HasValue ?
+                new ObjectParameter("productId", productId) :
+                new ObjectParameter("productId", typeof(int));
+    
+            var quantityParameter = quantity.HasValue ?
+                new ObjectParameter("quantity", quantity) :
+                new ObjectParameter("quantity", typeof(int));
+    
+            var stockCountAmendedParameter = stockCountAmended != null ?
+                new ObjectParameter("stockCountAmended", stockCountAmended) :
+                new ObjectParameter("stockCountAmended", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<string>("SP_UpdateStockCount", productIdParameter, quantityParameter, stockCountAmendedParameter);
+        }
+    
+        [DbFunction("BCMY_StockEntities", "SplitStringsByDelimiter")]
+        public virtual IQueryable<string> SplitStringsByDelimiter(string list, string delimiter)
+        {
+            var listParameter = list != null ?
+                new ObjectParameter("List", list) :
+                new ObjectParameter("List", typeof(string));
+    
+            var delimiterParameter = delimiter != null ?
+                new ObjectParameter("Delimiter", delimiter) :
+                new ObjectParameter("Delimiter", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.CreateQuery<string>("[BCMY_StockEntities].[SplitStringsByDelimiter](@List, @Delimiter)", listParameter, delimiterParameter);
         }
     }
 }

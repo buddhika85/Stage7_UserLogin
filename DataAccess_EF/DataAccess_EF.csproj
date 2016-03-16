@@ -50,6 +50,18 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="EntityFramework\AspNetRole.cs">
+      <DependentUpon>BcmyStockModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EntityFramework\AspNetUser.cs">
+      <DependentUpon>BcmyStockModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EntityFramework\AspNetUserClaim.cs">
+      <DependentUpon>BcmyStockModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EntityFramework\AspNetUserLogin.cs">
+      <DependentUpon>BcmyStockModel.tt</DependentUpon>
+    </Compile>
     <Compile Include="EntityFramework\BcmyModel.Context.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -79,6 +91,9 @@
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>BcmyStockModel.edmx</DependentUpon>
+    </Compile>
+    <Compile Include="EntityFramework\C__MigrationHistory.cs">
+      <DependentUpon>BcmyStockModel.tt</DependentUpon>
     </Compile>
     <Compile Include="EntityFramework\productbrand.cs">
       <DependentUpon>BcmyModel.tt</DependentUpon>
@@ -119,6 +134,9 @@
     <Compile Include="EntityFramework\SP_GetNegotiationsByOrderProductIds_Result.cs">
       <DependentUpon>BcmyStockModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="EntityFramework\SP_GetNumOfSuccessNegotiationsByProductId_Result.cs">
+      <DependentUpon>BcmyStockModel.tt</DependentUpon>
+    </Compile>
     <Compile Include="EntityFramework\SP_GetOrderlineInfoById_Result.cs">
       <DependentUpon>BcmyStockModel.tt</DependentUpon>
     </Compile>
@@ -128,6 +146,9 @@
     <Compile Include="EntityFramework\SP_GetOrderVmById_Result.cs">
       <DependentUpon>BcmyStockModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="EntityFramework\SP_GetProductsWithStockInfo_Result.cs">
+      <DependentUpon>BcmyStockModel.tt</DependentUpon>
+    </Compile>
     <Compile Include="EntityFramework\SP_GetSuccessNegotiationsByProductId_Result.cs">
       <DependentUpon>BcmyStockModel.tt</DependentUpon>
     </Compile>
@@ -135,6 +156,9 @@
       <DependentUpon>BcmyStockModel.tt</DependentUpon>
     </Compile>
     <Compile Include="EntityFramework\SP_SaveOrderLineWithNegotiation_Result.cs">
+      <DependentUpon>BcmyStockModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EntityFramework\SP_SavePastOrderLineWithNegotiation_Result.cs">
       <DependentUpon>BcmyStockModel.tt</DependentUpon>
     </Compile>
     <Compile Include="EntityFramework\SP_SearchOrders_Result.cs">

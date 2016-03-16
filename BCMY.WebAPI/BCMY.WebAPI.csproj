@@ -251,6 +251,7 @@
     <Compile Include="Results\ChallengeResult.cs" />
     <Compile Include="Startup.cs" />
     <Compile Include="Util\CommonBehaviour.cs" />
+    <Compile Include="Util\Emailer.cs" />
     <Compile Include="Util\Enums.cs" />
     <Compile Include="Util\GeneralValidator.cs" />
     <Compile Include="Util\OrderLineNegotiationValidator.cs" />

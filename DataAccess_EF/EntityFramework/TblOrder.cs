@@ -28,6 +28,7 @@ namespace DataAccess_EF.EntityFramework
         public System.DateTime creationDateTime { get; set; }
         public Nullable<int> currencyId { get; set; }
         public string vat { get; set; }
+        public string pastOrder { get; set; }
     
         public virtual TblContact TblContact { get; set; }
         public virtual TblCurrency TblCurrency { get; set; }
