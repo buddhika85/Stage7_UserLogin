@@ -115,7 +115,7 @@ namespace BCMY.WebAPI.Controllers.admin
                                 }
                                 else
                                 {
-                                    vm.UserRoles += string.Format(", {0}", userRole.Name);
+                                    vm.UserRoles += string.Format(",{0}", userRole.Name);
                                 }
                             }
                         }
@@ -341,7 +341,7 @@ namespace BCMY.WebAPI.Controllers.admin
                                 }
                                 else
                                 {
-                                    vm.UserRoles += string.Format(", {0}", userRole.Name);
+                                    vm.UserRoles += string.Format(",{0}", userRole.Name);
                                 }
                             }
                         }

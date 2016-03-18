@@ -86,36 +86,9 @@
     // used to bind popup fields
     function definePopupModelAttributes(vm)
     {
-        vm.popupTitle = "title";
-        vm.username = "username";
-        vm.position = "position";
-        vm.firstname = "first name";
-        vm.lastname = "last name";
-        vm.telephone = "telephone";
-        vm.extension = "extension";        
-        vm.employmentDate = "emp date";
-        vm.registrationDate = "reg date";
-        vm.loginDateTime = "last login DT";
-        vm.logoutDateTime = "last logout DT";
-        vm.invalidLoginAttemptCount = 0;
-        vm.invalidLoginDtP = "last invalid DT";
-        vm.locked = "not locked";
-        vm.errorMessagePopup = "error message popup";
-
-        vm.usernameDisabled = false;
-        vm.positionDisabled = false;
-        vm.firstNameDisabled = false;
-        vm.lastNameDisabled = false;
-        vm.telephoneDisabled = false;
-        vm.extensionDisabled = false;
-        vm.rolesDisabled = false;
-        vm.regDateDisabled = false;
-        vm.empDateDisabled = false;
-        vm.loginDtPDisabled = false;
-        vm.logoutDtPeDisabled = false;
-        vm.invalidLoginAttCountDisabled = false;
-        vm.invalidLoginDtPDisabled = false;
-        vm.lockedDisabled = false;
+        emptyPopupFields(vm);
+        disablePopupFields(vm, true);
+        vm.scope.$evalAsync();
     }
         
     function prepareInitialUI(vm)
@@ -148,6 +121,11 @@
             resetSearchForm(vm);
         };
 
+        // insert/update  popup
+        vm.saveRole = function () {
+            saveRole(vm);
+        };
+
         // collapse panels
         $('#newUserHeaderPanel').click(function () {
             $('#newUserInputSection').toggleClass('is-hidden');
@@ -158,6 +136,12 @@
         $('#searchResultHeaderPanel').click(function () {
             $('#searchResultsSection').toggleClass('is-hidden');
         });
+    }
+
+    // save - insert/update popup
+    function saveRole(vm)
+    {
+        alert("save - popup");
     }
 
     // used to get available role info and used to create the roles grid
@@ -217,7 +201,6 @@
                     //    },
                     //    "aTargets": [0]
                     //},
-                    { "mData": "position", "sTitle": "Position", "bVisible": true },
                     { "mData": "employmentDate", "sTitle": "Employment Date", "bVisible": true },
                     { "mData": "registrationDate", "sTitle": "Registration Date", "bVisible": true },
                     { "mData": "lastLogInTime", "sTitle": "Last LogIn Time", "bVisible": true },
@@ -291,20 +274,116 @@
 
     function editUser(vm, record)
     {
-        alert("edit username : " + record.userName);
-    }
-
-    function userInformation(vm, record)
-    {
-        //alert("info on username : " + record.userName);
-        //vm = defineModelForInfoPopup(vm, record);
-        //vm.scope.$evalAsync(); //$apply();
-
+        //alert("edit username : " + record.userName);
+        //alert("info on username : " + record.userName);         
+        defineUserEditPopupAttributes(vm, record);
+        vm.scope.$evalAsync();
         $('#myModal').modal({
             show: true,
             keyboard: true,
             backdrop: true
         });
+    }
+
+    function userInformation(vm, record)
+    {
+        //alert("info on username : " + record.userName);         
+        defineUserInfoPopupAttributes(vm, record);
+        vm.scope.$evalAsync();
+        $('#myModal').modal({
+            show: true,
+            keyboard: true,
+            backdrop: true
+        });
+    }
+
+    function defineUserEditPopupAttributes(vm, record)
+    {
+        // enable popup fields
+        disablePopupFields(vm, false);
+
+        // populate with selected record data
+        var popupTitle = "Edit user - " + record.userName;
+        populatePopupFields(vm, record, popupTitle);
+    }
+
+    function defineUserInfoPopupAttributes(vm, record)
+    {
+        // disable popup fields
+        disablePopupFields(vm, true);
+
+        // populate with selected record data
+        var popupTitle = "Info on user - " + record.userName;
+        populatePopupFields(vm, record, popupTitle);
+    }
+
+    // used to populate popup fields based on available vm
+    function populatePopupFields(vm, record, popupTitle)
+    {
+        emptyPopupFields(vm);
+        if (record != null)
+        {
+            vm.popupTitle = popupTitle;
+            vm.username = record.userName;
+            vm.position = record.position;
+            vm.firstname = record.firstName;
+            vm.lastname = record.lastName;
+            vm.telephone = record.directDial;
+            vm.extension = record.extension;                        
+            vm.rolesInPopup = GetStringArrayFromDelimitedString(record.userRoles, ",");//["Executive", "Director"];
+            vm.employmentDate = record.employmentDate;
+            vm.registrationDate = record.registrationDate;
+            vm.loginDateTime = record.lastLogInTime;
+            vm.logoutDateTime = record.lastLogoutTime;
+            vm.invalidLoginAttemptCount = record.invalidLoginAttemptCount;
+            vm.invalidLoginDtP = record.lastInvalidLoginAttemptTime;
+            vm.locked = record.locked == true ? 'Yes' : 'No';
+        }        
+    }
+        
+
+    // remove popup fields data
+    function emptyPopupFields(vm)
+    {
+        vm.popupTitle = "";
+        vm.username = "";
+        vm.position = "";
+        vm.firstname = "";
+        vm.lastname = "";
+        vm.telephone = "";
+        vm.rolesInPopup = [];
+        vm.extension = "";
+        vm.employmentDate = "";
+        vm.registrationDate = "";
+        vm.loginDateTime = "";
+        vm.logoutDateTime = "";
+        vm.invalidLoginAttemptCount = "";
+        vm.invalidLoginDtP = "";
+        vm.locked = "";
+        vm.errorMessagePopup = "";
+    }
+
+    // disable popup fields for user info popup
+    function disablePopupFields(vm, isDisabled)
+    {
+        vm.usernameDisabled = isDisabled;
+        vm.positionDisabled = isDisabled;
+        vm.firstNameDisabled = isDisabled;
+        vm.lastNameDisabled = isDisabled;
+        vm.telephoneDisabled = isDisabled;
+        vm.extensionDisabled = isDisabled;
+        vm.rolesDisabled = isDisabled;
+        vm.lockedDisabled = isDisabled;
+        vm.empDateDisabled = isDisabled;
+        vm.regDateDisabled = isDisabled;
+
+        // below are always disabled
+        vm.loginDtPDisabled = true;
+        vm.logoutDtPeDisabled = true;
+        vm.invalidLoginAttCountDisabled = true;
+        vm.invalidLoginDtPDisabled = true;
+        
+        vm.saveBtnPopupDisabled = isDisabled;           // save button
     }
     
     function lockUser(vm, record)
@@ -509,7 +588,7 @@
                 $("#regDateP").datepicker("option", "minDate", selectedDate);
             }
         });
-        $("#regDateP").datepicker({
+        $("#regDateP").datetimepicker({
             defaultDate: "+1w",
             changeMonth: true,
             numberOfMonths: 1,

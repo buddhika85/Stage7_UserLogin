@@ -259,4 +259,11 @@
         var re = /^([0-9]{2})\/([0-9]{2})\/([0-9]{4})$/;
         return re.test(date);
     }
+
+    // generates and returns a string array from specific character/delimiter/seperated long string
+    function GetStringArrayFromDelimitedString(delimitedString, delimiter)
+    {
+        var array = delimitedString.split(delimiter);
+        return array;
+    }
 //}());
