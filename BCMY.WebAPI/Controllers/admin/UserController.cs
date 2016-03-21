@@ -169,6 +169,39 @@ namespace BCMY.WebAPI.Controllers.admin
         }
 
 
+        // Updates a user asynchronously    //,    
+        [HttpPost, Route("api/LockUnlockUserAsync")]
+        public async Task<string> LockUnlockUserAsync(string username, string lockUnlock)
+        {
+            string message = string.Empty;
+            try
+            {
+                ApplicationUser userToUpdate = userManager.FindByEmail(username);
+                userToUpdate.Locked = lockUnlock == "lock" ? true : false;
+                IdentityResult result = await userManager.UpdateAsync(userToUpdate);
+                if (result != null && result.Succeeded == true)
+                {
+                    message = string.Format("Success - user update ({0}) successful", lockUnlock);
+                }
+                else
+                {
+                    string errors = string.Empty;
+                    foreach (string error in result.Errors)
+                    {
+                        errors += error + " ";
+                    }
+                    message = string.Format("Error : {0}", errors);
+                }
+            }
+            catch (Exception)
+            {
+                message = "Error - user update unsuccessful - Contact IT support";
+            }
+            return message;
+        }
+        
+
+
         // Creates a user asynchronously    //,    
         [HttpPost, Route("api/CreateUserAsync")]
         public async Task<string> CreateUserAsync(string username, string firstname, string lastname, string position, string telephone, int? extension, string employmentDate, string registrationDate)

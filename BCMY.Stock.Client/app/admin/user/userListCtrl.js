@@ -139,8 +139,7 @@
     }
 
     // used to get available role info and used to create the roles grid
-    function drawUsersGrid(vm) {
-        debugger
+    function drawUsersGrid(vm) {        
         var users = null;
         vm.httpService({
             method: "get",
@@ -198,8 +197,8 @@
                     //},
                     { "mData": "employmentDate", "sTitle": "Employment Date", "bVisible": true },
                     { "mData": "registrationDate", "sTitle": "Registration Date", "bVisible": true },
-                    { "mData": "lastLogInTime", "sTitle": "Last LogIn Time", "bVisible": true },
-                    { "mData": "lastLogoutTime", "sTitle": "lastLogoutTime", "bVisible": true },
+                    { "mData": "lastLogInTime", "sTitle": "Last LogIn", "bVisible": true },
+                    { "mData": "lastLogoutTime", "sTitle": "Last Logout", "bVisible": true },
                     {
                         "mData": "isLoggedIn", "sTitle": "Logged in?", "sClass": "right", "mRender": function (data, type, row) {
                             if (data == true) {
@@ -211,15 +210,15 @@
                         },
                         "aTargets": [0]
                     },
-                    { "mData": "invalidLoginAttemptCount", "sTitle": "invalidLoginAttemptCount", "bVisible": true },
-                    { "mData": "lastInvalidLoginAttemptTime", "sTitle": "lastInvalidLoginAttemptTime", "bVisible": true },
+                    { "mData": "invalidLoginAttemptCount", "sTitle": "Invalid Login Attempts", "bVisible": true },
+                    { "mData": "lastInvalidLoginAttemptTime", "sTitle": "Last Invalid Login Time", "bVisible": true },
                     {
                         "mData": "locked", "sTitle": "Locked?", "sClass": "right", "mRender": function (data, type, row) {
                             if (data == false) {
-                                return '<div style="background-color:lightblue; text-align:center">NO</div> ';
+                                return '<div style="background-color:#668cff; text-align:center">NO</div> ';
                             }
                             else {
-                                return '<div style="background-color:red; text-align:center">LOCKED</div> ';
+                                return '<div style="background-color:#ff4d4d; text-align:center">LOCKED</div> ';
                             }
                         },
                         "aTargets": [0]
@@ -231,15 +230,14 @@
                     {
                         "mData": "locked", "sTitle": "Lock/Unlock", "sClass": "right", "mRender": function (data, type, row) {
                             if (data == false) {
-                                return "<button class='userLock'><span class='glyphicon glyphicon-lock'>LOCK</span></button>";
+                                return "<button class='userLock' class='btn-sm btn-danger' style='width:75%;background-color: #ff4d4d;'> Lock </button>";
                             }
                             else {
-                                return "<button class='userLockUnlock'><span class='glyphicon glyphicon-lock'>UNLOCK</span></button>";
+                                return "<button class='userLockUnlock' class='btn-sm btn-info' style='width:75%;background-color: #668cff;'>Unlock</button>";
                             }
                         },
                         "aTargets": [0]
-                    },
-                    { "sTitle": "Delete", "defaultContent": "<button class='userDelete'><span class='glyphicon glyphicon-remove'></span></button>" }
+                    }
             ],
             "bDestroy": true,
             "aLengthMenu": [[15, 50, 100, 200, 500, 700, 1000, -1], [15, 50, 100, 200, 500, 700, 1000, "All"]],
@@ -287,8 +285,76 @@
 
     function unlockUser(vm, record)
     {
-        alert("unlock username : " + record.userName); 
+        //alert("unlock username : " + record.userName);
+        bootbox.dialog({
+            message: "Are you sure that you want to unlock the user : " + record.userName + " ?",
+            title: "Confirm User Unlock",
+            buttons: {
+                danger: {
+                    label: "No",
+                    className: "btn-danger",
+                    callback: function () {
+                        toastr.warning("User not unlocked");
+                    }
+                },
+                main: {
+                    label: "Yes",
+                    className: "btn-primary",
+                    callback: function () {
+                        lockUnlockUser(vm, record.userName, 'unlock');
+                    }
+                }
+            }
+        });              
     }
+
+    function lockUser(vm, record) {
+        //alert("lock : " + record.userName);
+        bootbox.dialog({
+            message: "Are you sure that you want to lock the user : " + record.userName + " ?",
+            title: "Confirm User Unlock",
+            buttons: {
+                danger: {
+                    label: "No",
+                    className: "btn-danger",
+                    callback: function () {
+                        toastr.warning("User not locked");
+                    }
+                },
+                main: {
+                    label: "Yes",
+                    className: "btn-primary",
+                    callback: function () {
+                        lockUnlockUser(vm, record.userName, 'lock');
+                    }
+                }
+            }
+        });        
+    }
+
+    function lockUnlockUser(vm, username, lockUnlock)
+    {
+        //debugger
+        var dataForBody = "username=" + username + "&lockUnlock=" + lockUnlock;
+        var serverUrl = ('https://localhost:44302/api/LockUnlockUserAsync?' + dataForBody);
+        vm.httpService({
+            method: "post",
+            headers: { 'Content-Type': 'application/json' },
+            url: serverUrl,
+        }).success(function (data) {
+            //alert(data);
+            drawUsersGrid(vm);              // refersh the grid to display the updated record
+            toastr.success(data);
+        }
+        ).error(function (data) {
+            alert('error - web service access')     // display error message            
+        });
+    }
+
+    function deleteUser(vm, record) {
+        alert("delete : " + record.userName);
+    }
+
 
     function editUser(vm, record)
     {
@@ -302,8 +368,6 @@
             backdrop: true
         });
     }
-
-
 
     // save - insert/update popup
     function saveUserEdit(vm) {
@@ -410,8 +474,8 @@
             vm.telephone = record.directDial;
             vm.extension = record.extension;                        
             vm.rolesInPopup = GetStringArrayFromDelimitedString(record.userRoles, ",");//["Executive", "Director"];
-            vm.employmentDate = record.employmentDate;
-            vm.registrationDate = record.registrationDate;
+            vm.employmentDate = record.employmentDate.replace(' -', '');
+            vm.registrationDate = record.registrationDate.replace('- ', '');
             vm.loginDateTime = record.lastLogInTime;
             vm.logoutDateTime = record.lastLogoutTime;
             vm.invalidLoginAttemptCount = record.invalidLoginAttemptCount;
@@ -473,16 +537,6 @@
         vm.invalidLoginDtPDisabled = true;
         
         vm.saveBtnPopupDisabled = isDisabled;           // save button
-    }
-    
-    function lockUser(vm, record)
-    {
-        alert("lock : " + record.userName);
-    }
-
-    function deleteUser(vm, record)
-    {
-        alert("delete : " + record.userName);
     }
 
     function createUser(vm)
