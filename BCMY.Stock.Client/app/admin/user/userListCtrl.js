@@ -309,7 +309,7 @@
     }
 
     function lockUser(vm, record) {
-        //alert("lock : " + record.userName);
+        //alert("lock : " + record.userName);//
         bootbox.dialog({
             message: "Are you sure that you want to lock the user : " + record.userName + " ?",
             title: "Confirm User Unlock",
