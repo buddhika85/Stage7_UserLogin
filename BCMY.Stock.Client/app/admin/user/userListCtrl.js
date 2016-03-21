@@ -121,9 +121,9 @@
             resetSearchForm(vm);
         };
 
-        // insert/update  popup
-        vm.saveRole = function () {
-            saveRole(vm);
+        // update popup
+        vm.saveUserEdit = function () {
+            saveUserEdit(vm);
         };
 
         // collapse panels
@@ -138,14 +138,9 @@
         });
     }
 
-    // save - insert/update popup
-    function saveRole(vm)
-    {
-        alert("save - popup");
-    }
-
     // used to get available role info and used to create the roles grid
     function drawUsersGrid(vm) {
+        debugger
         var users = null;
         vm.httpService({
             method: "get",
@@ -232,7 +227,18 @@
 
                     { "sTitle": "More info", "defaultContent": "<button class='userInfo'><span class='glyphicon glyphicon-search'></span></button>" },
                     { "sTitle": "Edit", "defaultContent": "<button class='editUser'><span class='glyphicon glyphicon-edit'></span></button>" },
-                    { "sTitle": "Lock/Unlock", "defaultContent": "<button class='userLock'><span class='glyphicon glyphicon-lock'></span></button>" },
+                    //{ "sTitle": "Lock/Unlock", "defaultContent": "<button class='userLock'><span class='glyphicon glyphicon-lock'></span></button>" },
+                    {
+                        "mData": "locked", "sTitle": "Lock/Unlock", "sClass": "right", "mRender": function (data, type, row) {
+                            if (data == false) {
+                                return "<button class='userLock'><span class='glyphicon glyphicon-lock'>LOCK</span></button>";
+                            }
+                            else {
+                                return "<button class='userLockUnlock'><span class='glyphicon glyphicon-lock'>UNLOCK</span></button>";
+                            }
+                        },
+                        "aTargets": [0]
+                    },
                     { "sTitle": "Delete", "defaultContent": "<button class='userDelete'><span class='glyphicon glyphicon-remove'></span></button>" }
             ],
             "bDestroy": true,
@@ -263,6 +269,13 @@
             lockUser(vm, data);
         });
 
+        // on unlock button clicks 
+        $('#usersGrid tbody').on('click', 'button.userLockUnlock', function () {
+
+            var data = table.row($(this).parents('tr')).data();
+            unlockUser(vm, data);
+        });
+
         // on delete button clicks
         $('#usersGrid tbody').on('click', 'button.userDelete', function () {
             
@@ -270,6 +283,11 @@
             deleteUser(vm, data);
         });
 
+    }
+
+    function unlockUser(vm, record)
+    {
+        alert("unlock username : " + record.userName); 
     }
 
     function editUser(vm, record)
@@ -283,6 +301,67 @@
             keyboard: true,
             backdrop: true
         });
+    }
+
+
+
+    // save - insert/update popup
+    function saveUserEdit(vm) {
+        //alert('save edit - popup ' + vm.username + ' , ' + vm.position + ' , ' + vm.firstname  + ' , ' + vm.lastname  + ' , ' + vm.telephone  + ' , ' + vm.extension  + ' , ' + 
+        //    vm.rolesInPopup + ' , ' + vm.employmentDate + ' , ' + vm.registrationDate + ' , ' + vm.locked);
+        var isValid = validateEditPopup(vm);
+        //alert('save edit - popup ' + isValid);
+        if (isValid) {
+            if (vm.rolesInPopup[0] == '---- Select Role ----') {
+                vm.rolesInPopup.shift();   // remove if '---- Select Role ----' is selected as a role
+            }
+            var dataForBody = "username=" + vm.username + "&rolescsv=" + vm.rolesInPopup + "&firstname=" + vm.firstname +
+                "&lastname=" + vm.lastname + "&position=" + vm.position + "&telephone=" + vm.telephone + "&extension=" + vm.extension +
+                "&employmentDate=" + vm.employmentDate + "&registrationDate=" + vm.registrationDate + "&locked=" + vm.locked;
+
+            var serverUrl = ('https://localhost:44302/api/UpdateUserAsync?' + dataForBody);
+
+            vm.httpService({
+                method: "post",
+                headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + localStorage["access_token"] },
+                url: serverUrl
+            }).success(function (data) {
+                if (data.indexOf('Success') > -1) {
+
+                    // user creation success, now assign roles
+                    dataForBody = "username=" + vm.username + "&rolescsv=" + vm.rolesInPopup;
+                    serverUrl = ('https://localhost:44302/api/AssignRolesAsync?' + dataForBody);
+                    vm.httpService({
+                        method: "post",
+                        headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + localStorage["access_token"] },
+                        url: serverUrl
+                    }).success(function (data) {
+                        if (data.indexOf('Success') > -1) {
+                            vm.errorMessagePopup = "Success - user update and role assignment successful";
+                            drawUsersGrid(vm);              // refersh the grid to display the updated record  
+                            disablePopupFields(vm, true);   // disable popup fields
+                            toastr.success("Success - user update and role assignment successful");
+                        }
+                        else {
+                            vm.errorMessagePopup = "Error - user with username " + vm.username + " updated, but role assignment unsuccssful, please contact IT support";
+                            toastr.warning("Error - user with username " + vm.username + " updated, but role assignment unsuccssful, please contact IT support");
+                        }
+                    }
+                    ).error(function (data) {
+                        vm.errorMessagePopup = data;     // display error message
+                        toastr.error(data);
+                    });
+                }
+                else {
+                    vm.errorMessagePopup = data;     // display error message
+                    toastr.warning(data);
+                }
+            }
+            ).error(function (data) {
+                vm.errorMessagePopup = data;     // display error message
+                toastr.error(data);
+            });
+        }
     }
 
     function userInformation(vm, record)
@@ -345,6 +424,7 @@
     // remove popup fields data
     function emptyPopupFields(vm)
     {
+        // empty input fields
         vm.popupTitle = "";
         vm.username = "";
         vm.position = "";
@@ -361,12 +441,21 @@
         vm.invalidLoginDtP = "";
         vm.locked = "";
         vm.errorMessagePopup = "";
+
+        // remove error borders
+        vm.positionClass = '';
+        vm.rolesClass = '';
+        vm.firstNameClass = '';
+        vm.lastNameClass = '';
+        vm.telephoneClass = '';
+        vm.empDateClass = '';
+        vm.regDateClass = '';
     }
 
     // disable popup fields for user info popup
     function disablePopupFields(vm, isDisabled)
     {
-        vm.usernameDisabled = isDisabled;
+        vm.usernameDisabled = true;
         vm.positionDisabled = isDisabled;
         vm.firstNameDisabled = isDisabled;
         vm.lastNameDisabled = isDisabled;
@@ -627,6 +716,156 @@
                 $(".ui-datepicker").css('font-size', 12)
             }
         });
+    }
+
+    // validate user edit popup inputs
+    function validateEditPopup(vm)
+    {
+        var isValid = false;
+
+        // username validation
+        //if (isNotEmptyOrSpaces(vm.username) && validateEmail(vm.username)) {
+        //    vm.errorMessagePopup = '';
+        //    vm.userNameClass = '';
+        //    isValid = true;
+        //}
+        //else {
+        //    vm.errorMessagePopup = 'Error - username should be a valid email address';
+        //    vm.userNameClass = 'errorBorder';
+        //    isValid = false;
+        //}
+
+        // position
+        //if (isValid) {
+        vm.position = $.trim(vm.position);
+        if (isNotEmptyOrSpaces(vm.position) && vm.position.length > 1) {
+            vm.errorMessagePopup = '';
+            vm.positionClass = '';
+            isValid = true;
+        }
+        else {
+            vm.errorMessagePopup = 'Error - invalid position';
+            vm.positionClass = 'errorBorder';
+            isValid = false;
+        }
+        //}
+
+        // roles
+        if (isValid) {
+            if (vm.rolesInPopup != "") {
+                if (vm.rolesInPopup.length == 1 && vm.rolesInPopup[0] == '---- Select Role ----') { // if one role selected and selected role is '---- Select Role ----'
+                    vm.errorMessagePopup = 'Error - user should have atlease a single role';
+                    vm.rolesClass = 'errorBorder';
+                    isValid = false;
+                }
+                else {
+                    vm.errorMessagePopup = '';
+                    vm.rolesClass = '';
+                    isValid = true;
+                }
+            }
+            else {
+                vm.errorMessagePopup = 'Error - user should have atlease a single role';
+                vm.rolesClass = 'errorBorder';
+                isValid = false;
+            }
+        }
+
+
+
+        // first name
+        if (isValid) {
+            vm.firstname = $.trim(vm.firstname);
+            if (isNotEmptyOrSpaces(vm.firstname) && vm.firstname.length > 1) {
+                if (isaValidName(vm.firstname)) {
+                    vm.errorMessagePopup = '';
+                    vm.firstNameClass = '';
+                    isValid = true;
+                }
+                else {
+                    vm.errorMessagePopup = 'Error - invalid first name - should only have alphabetical characters';
+                    vm.firstNameClass = 'errorBorder';
+                    isValid = false;
+                }
+            }
+            else {
+                vm.errorMessagePopup = 'Error - invalid first name';
+                vm.firstNameClass = 'errorBorder';
+                isValid = false;
+            }
+        }
+
+        // last name
+        if (isValid) {
+            vm.lastname = $.trim(vm.lastname);
+            if (isNotEmptyOrSpaces(vm.lastname) && vm.lastname.length > 1) {
+                if (isaValidName(vm.lastname)) {
+                    vm.errorMessagePopup = '';
+                    vm.lastNameClass = '';
+                    isValid = true;
+                }
+                else {
+                    vm.errorMessagePopup = 'Error - invalid last name - should only have alphabetical characters';
+                    vm.lastNameClass = 'errorBorder';
+                    isValid = false;
+                }
+            }
+            else {
+                vm.errorMessagePopup = 'Error - invalid last name';
+                vm.lastNameClass = 'errorBorder';
+                isValid = false;
+            }
+        }             
+        
+        // telephone number ui-mask and ext number key press validations
+        if (isValid) {
+            vm.telephone = $.trim(vm.telephone);
+            if (vm.telephone != '-' && isNotEmptyOrSpaces(vm.telephone)) {
+                vm.errorMessagePopup = '';
+                vm.telephoneClass = '';
+                isValid = true;
+            }
+            else {
+                vm.errorMessagePopup = 'Error - invalid telephone number';
+                vm.telephoneClass = 'errorBorder';
+                isValid = false;
+            }
+        }
+
+        // employment date
+        if (isValid) {
+            vm.employmentDate = $.trim(vm.employmentDate);
+            var date = Date.parse(vm.employmentDate);
+            if (isNotEmptyOrSpaces(vm.employmentDate) && (!isNaN(date))) {
+                vm.errorMessagePopup = '';
+                vm.empDateClass = '';
+                isValid = true;
+            }
+            else {
+                vm.errorMessagePopup = 'Error - invalid employment date';
+                vm.empDateClass = 'errorBorder';
+                isValid = false;
+            }
+        }
+
+        // registration date
+        if (isValid) {
+            vm.registrationDate = $.trim(vm.registrationDate);
+            var date = Date.parse(vm.registrationDate);
+            if (isNotEmptyOrSpaces(vm.registrationDate) && (!isNaN(date))) {
+                vm.errorMessagePopup = '';
+                vm.regDateClass = '';
+                isValid = true;
+            }
+            else {
+                vm.errorMessagePopup = 'Error - invalid registration date';
+                vm.regDateClass = 'errorBorder';
+                isValid = false;
+            }
+        }
+
+
+        return isValid;
     }
 
 

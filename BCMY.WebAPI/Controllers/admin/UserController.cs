@@ -130,6 +130,44 @@ namespace BCMY.WebAPI.Controllers.admin
             return userVms;
         }
 
+        // Updates a user asynchronously    //,    
+        [HttpPost, Route("api/UpdateUserAsync")]
+        public async Task<string> UpdateUserAsync(string username, string firstname, string lastname, string position, string telephone, int? extension, string employmentDate, string registrationDate, string locked)
+        {
+            string message = string.Empty;
+            try
+            {
+                ApplicationUser userToUpdate = userManager.FindByEmail(username);                                             
+                userToUpdate.FirstName = firstname;
+                userToUpdate.LastName = lastname;
+                userToUpdate.Position = position;
+                userToUpdate.DirectDial = telephone;
+                userToUpdate.Extension = extension;
+                userToUpdate.EmploymentDate = CommonBehaviour.ConvertStrToDateTime(employmentDate);
+                userToUpdate.RegistrationDate = CommonBehaviour.ConvertStrToDateTime(registrationDate);                  
+                userToUpdate.Locked = locked == "Yes" ? true:false;                               
+                IdentityResult result = await userManager.UpdateAsync(userToUpdate);                  
+                if (result != null && result.Succeeded == true)
+                {                   
+                    message = "Success - user update successful";
+                }
+                else
+                {
+                    string errors = string.Empty;
+                    foreach (string error in result.Errors)
+                    {
+                        errors += error + " ";
+                    }
+                    message = string.Format("Error : {0}", errors);
+                }
+            }
+            catch (Exception)
+            {
+                message = "Error - user update unsuccessful - Contact IT support";
+            }
+            return message;
+        }
+
 
         // Creates a user asynchronously    //,    
         [HttpPost, Route("api/CreateUserAsync")]
@@ -208,8 +246,19 @@ namespace BCMY.WebAPI.Controllers.admin
             string message = string.Empty;
             try
             {
-                string[] roles = rolescsv.Split(',');
+                string[] roles = rolescsv.Split(',');                
                 ApplicationUser user = await userManager.FindByNameAsync(username);
+                foreach (ApplicationUserRole aur in user.Roles)
+                {
+                    foreach (string role in roles)
+                    {
+                        ApplicationRole applicationRole = roleManager.FindByName(role);
+                        if (applicationRole != null && applicationRole.Id == aur.RoleId)
+                        {
+                            roles = roles.Where(r => r != role).ToArray<string>();
+                        }
+                    }
+                }
                 IdentityResult result = await userManager.AddToRolesAsync(user.Id, roles);
                 message = "Success - Role assignment successful";
             }
