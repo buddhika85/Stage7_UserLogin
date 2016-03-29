@@ -11,11 +11,20 @@
     // controller
     function addPastSalesOrdersCtrl($http, contactResource, blockUI, customerSupplierResource, currencyResource, loginValidatorService) {
         var vm = this;
-        vm.title = "Add Past Sales Order";
-        vm.totalValue = "Total : £ 0.00";
-        prepareInitialUI($http, customerSupplierResource, contactResource, currencyResource, vm);        // initial UI
+        if (loginValidatorService.loginValidator()) {
+            $("#loggedInUserWithTime").text(localStorage["userName"]);
+            vm.title = "Add Past Sales Order";
+            vm.totalValue = "Total : £ 0.00";
+            prepareInitialUI($http, customerSupplierResource, contactResource, currencyResource, vm);        // initial UI
 
-        wireCommands(vm, $http, contactResource, customerSupplierResource);
+            wireCommands(vm, $http, contactResource, customerSupplierResource);
+        }
+        else {
+            localStorage["userName"] = null;
+            window.location = window.location.protocol + "//" + window.location.host + "/#/login";
+            window.location.reload();
+        }
+        
     };
 
     // used to bind drop down list selection change commands for cascading ddls

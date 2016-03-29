@@ -11,18 +11,27 @@
     function editSalesOrderCtrl($http, contactResource, blockUI, customerSupplierResource, $location, currencyResource, loginValidatorService)
     {
         var vm = this;
-        vm.totalValue = "Total : £ 0.00";
-        var searchObject = $location.search();                                                      // get order Id, that passed as query string
-        var salesOrderId = searchObject.orderId;
+        if (loginValidatorService.loginValidator()) {
+            $("#loggedInUserWithTime").text(localStorage["userName"]);
+            vm.totalValue = "Total : £ 0.00";
+            var searchObject = $location.search();                                                      // get order Id, that passed as query string
+            var salesOrderId = searchObject.orderId;
 
-        vm.title = "Edit Sales Order : Id = " + salesOrderId;
-        
-        $('#orderId').val(salesOrderId);     
-        // set sales order Id
-        prepareInitialUI($http, customerSupplierResource, contactResource, salesOrderId, currencyResource, vm);           // initial UI
-        
+            vm.title = "Edit Sales Order : Id = " + salesOrderId;
 
-        wireCommands(vm, $http, contactResource, customerSupplierResource, $location);
+            $('#orderId').val(salesOrderId);
+            // set sales order Id
+            prepareInitialUI($http, customerSupplierResource, contactResource, salesOrderId, currencyResource, vm);           // initial UI
+
+
+            wireCommands(vm, $http, contactResource, customerSupplierResource, $location);
+        }
+        else {
+            localStorage["userName"] = null;
+            window.location = window.location.protocol + "//" + window.location.host + "/#/login";
+            window.location.reload();
+        }
+       
     };
 
     // used to bind drop down list selection change commands for cascading ddls

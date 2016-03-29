@@ -5,13 +5,21 @@
 
     // controller function
     function addPastExchangeRatesCtrl($http, blockUI, loginValidatorService)
-    {
-        blockUI.start();
-        var vm = this;        
-        vm = defineModel(vm, $http);
-        prepareInitialUI(vm);
-        wireCommands(vm);
-        blockUI.stop();
+    {        
+        var vm = this;
+        if (loginValidatorService.loginValidator()) {
+            blockUI.start();
+            $("#loggedInUserWithTime").text(localStorage["userName"]);
+            vm = defineModel(vm, $http);
+            prepareInitialUI(vm);
+            wireCommands(vm);
+            blockUI.stop();
+        }
+        else {
+            localStorage["userName"] = null;
+            window.location = window.location.protocol + "//" + window.location.host + "/#/login";
+            window.location.reload();
+        }        
     };
 
     // used to define and assign initial values to the model properties

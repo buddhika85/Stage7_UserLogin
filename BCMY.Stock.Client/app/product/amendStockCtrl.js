@@ -8,9 +8,18 @@
     function amendStockCtrl($http, blockUI, loginValidatorService)                   // controller funcion
     {        
         var vm = this;
-        vm = defineModel(vm, $http, blockUI);
-        prepareInitialUI(vm);
-        wireCommands(vm);
+        if (loginValidatorService.loginValidator()) {
+            $("#loggedInUserWithTime").text(localStorage["userName"]);
+            vm = defineModel(vm, $http, blockUI);
+            prepareInitialUI(vm);
+            wireCommands(vm);
+        }
+        else {
+            localStorage["userName"] = null;
+            window.location = window.location.protocol + "//" + window.location.host + "/#/login";
+            window.location.reload();
+        }
+        
     }
 
     // used to define and assign initial values to the model properties

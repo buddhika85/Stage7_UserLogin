@@ -11,147 +11,156 @@
     function customerSupplierListCtrl($http, customerSupplierResource, Upload, blockUI, loginValidatorService)
     {        
         var vm = this;
-        vm.apiUrl = 'https://localhost:44302/api/customerSupplier/';         // web API url for update and insert
-        vm.newCustomerSupplier = {};
-        vm.title = "Manage Customers/Suppliers";        
-        
-        blockUI.start();
-        customerSupplierResource.query(function (data) {                    // REST API call to get all the customerSuppliers 
-            vm.customerSuppliers = data;
-            createPopulateDataGrid(vm, customerSupplierResource);           // populate the data grid
-            blockUI.stop();
-        });
-        
-        //$scope.$watch('files', function () {
-        //    vm.onFileSelect(this.files);
-        //});
-        //vm.onFileSelect = function ($files) {                                // image upload to the server
-        //    alert("image upload : ");
-        //};
+        if (loginValidatorService.loginValidator()) {
+            $("#loggedInUserWithTime").text(localStorage["userName"]);
+            vm.apiUrl = 'https://localhost:44302/api/customerSupplier/';         // web API url for update and insert
+            vm.newCustomerSupplier = {};
+            vm.title = "Manage Customers/Suppliers";
 
-        vm.insertBusiness = function ()                                     // insert new customer/supplier
-        {
-            OnInsertBtnClick();
-        };
+            blockUI.start();
+            customerSupplierResource.query(function (data) {                    // REST API call to get all the customerSuppliers 
+                vm.customerSuppliers = data;
+                createPopulateDataGrid(vm, customerSupplierResource);           // populate the data grid
+                blockUI.stop();
+            });
 
-        vm.saveBusiness = function ()                                       // on save button click
-        {            
-            var isValid = ValidateInputs();     // validation
-            if (isValid)                        // save to DB if the changes are valid
+            //$scope.$watch('files', function () {
+            //    vm.onFileSelect(this.files);
+            //});
+            //vm.onFileSelect = function ($files) {                                // image upload to the server
+            //    alert("image upload : ");
+            //};
+
+            vm.insertBusiness = function ()                                     // insert new customer/supplier
             {
-                EnableDisableFeilds(true);          // disable all fields once save button clicked
-                // fliter POST or PUT request based on Insert or Update, that is customer Id hidden field value 
-                var custId = $('#custId').val();                
-                
-                if (custId == -1) {
-                    // insert                    
-                    var newCustomerSupplier = getCustomerSupplierJsonObject(custId);    // creation of the json object                    
-                    //var jsonStr = JSON.stringify(newCustomerSupplier);                  // covert to json string to pass to web service
-                    var serverUrl = 'https://localhost:44302/api/customerSupplier?idVal=' + newCustomerSupplier.id + '&name=' + newCustomerSupplier.name + '&logo=""' +
-                         '&addressLine1=' + newCustomerSupplier.addressLine1 + '&addressLine2=' + newCustomerSupplier.addressLine2 + '&addressLine3=' + newCustomerSupplier.addressLine3 +
-                         '&postcode=' + newCustomerSupplier.postcode + '&country=' + newCustomerSupplier.country + '&telephone=' + newCustomerSupplier.telephone +
-                         '&bank=' + newCustomerSupplier.bank + '&vatNumber=' + newCustomerSupplier.vatNumber + '&accountNumber=' + newCustomerSupplier.accountNumber +
-                         '&sortcode=' + newCustomerSupplier.sortcode + '&iban=' + newCustomerSupplier.iban + '&swift=' + newCustomerSupplier.swift + '&active=' + newCustomerSupplier.active +
-                         '&town=' + newCustomerSupplier.town + '&county=' + newCustomerSupplier.county;
-                   
-                    // save data via angular
-                    $http({
-                        method: "get",
-                        headers: { 'Content-Type': 'application/json' },
-                        url: serverUrl, //'https://localhost:44302/api/customerSupplier/',
-                        //data: JSON.stringify(jsonStr)
-                    })
-                    .success(function (data) {
-                        if (data == "success") {
-                            // enable cancel button to escape from the popup
-                            $('#btnCancel').attr("disabled", false);
+                OnInsertBtnClick();
+            };
 
-                            // display success message
-                            $('#lblErrorMessage').removeClass("errorLabel");
-                            $('#lblErrorMessage').addClass("successLabel");                            
-                            $('#lblErrorMessage').text("Save successful");
-                                                        
-                            // refersh the grid to display the new record
-                            var table = $('#example').DataTable();
-                            table.destroy();
-                            customerSupplierResource.query(function (data) {                    // REST API call to get all the customerSuppliers 
-                                vm.customerSuppliers = data;
-                                createPopulateDataGrid(vm, customerSupplierResource);           // populate the data grid
-                            });                            
-                        }
-                        else {
-                            EnableDisableFeilds(false);          // enable all fields to re-enter/correct inputs
+            vm.saveBusiness = function ()                                       // on save button click
+            {
+                var isValid = ValidateInputs();     // validation
+                if (isValid)                        // save to DB if the changes are valid
+                {
+                    EnableDisableFeilds(true);          // disable all fields once save button clicked
+                    // fliter POST or PUT request based on Insert or Update, that is customer Id hidden field value 
+                    var custId = $('#custId').val();
 
-                            // display error message
-                            $('#lblErrorMessage').removeClass("successLabel");
-                            $('#lblErrorMessage').addClass("errorLabel");                            
-                            $('#lblErrorMessage').text(data);
-                        }
-                    }).error(function (data) {
-                        // display error message
-                        $('#lblErrorMessage').removeClass("successLabel");
-                        $('#lblErrorMessage').addClass("errorLabel");
-                        $('#lblErrorMessage').text("Error - Angular - Contact IT support - Info :" + data);
-                    });
-                }
-                else {
-                    
-                    // update 
-                    var newCustomerSupplier = getCustomerSupplierJsonObject(custId);    // creation of the json object                    
-                    //var jsonStr = JSON.stringify(updatedCustomerSupplier);                  // covert to json string to pass to web service
-                    
-                    var serverUrl = 'https://localhost:44302/api/customerSupplier?idVal=' + newCustomerSupplier.id + '&name=' + newCustomerSupplier.name + '&logo=""' +
-                        '&addressLine1=' + newCustomerSupplier.addressLine1 + '&addressLine2=' + newCustomerSupplier.addressLine2 + '&addressLine3=' + newCustomerSupplier.addressLine3 +
-                        '&postcode=' + newCustomerSupplier.postcode + '&country=' + newCustomerSupplier.country + '&telephone=' + newCustomerSupplier.telephone +
-                        '&bank=' + newCustomerSupplier.bank + '&vatNumber=' + newCustomerSupplier.vatNumber + '&accountNumber=' + newCustomerSupplier.accountNumber +
-                        '&sortcode=' + newCustomerSupplier.sortcode + '&iban=' + newCustomerSupplier.iban + '&swift=' + newCustomerSupplier.swift + '&active=' + newCustomerSupplier.active + 
-                        '&town=' + newCustomerSupplier.town + '&county=' + newCustomerSupplier.county;
-                                        
-                    $http({
-                        method: "get",
-                        headers: { 'Content-Type': 'application/json' },
-                        url: serverUrl, 
-                    })
-                    .success(function (data) {
-                        if (data == "success") {
-                            // enable cancel button to escape from the popup
-                            $('#btnCancel').attr("disabled", false);
+                    if (custId == -1) {
+                        // insert                    
+                        var newCustomerSupplier = getCustomerSupplierJsonObject(custId);    // creation of the json object                    
+                        //var jsonStr = JSON.stringify(newCustomerSupplier);                  // covert to json string to pass to web service
+                        var serverUrl = 'https://localhost:44302/api/customerSupplier?idVal=' + newCustomerSupplier.id + '&name=' + newCustomerSupplier.name + '&logo=""' +
+                             '&addressLine1=' + newCustomerSupplier.addressLine1 + '&addressLine2=' + newCustomerSupplier.addressLine2 + '&addressLine3=' + newCustomerSupplier.addressLine3 +
+                             '&postcode=' + newCustomerSupplier.postcode + '&country=' + newCustomerSupplier.country + '&telephone=' + newCustomerSupplier.telephone +
+                             '&bank=' + newCustomerSupplier.bank + '&vatNumber=' + newCustomerSupplier.vatNumber + '&accountNumber=' + newCustomerSupplier.accountNumber +
+                             '&sortcode=' + newCustomerSupplier.sortcode + '&iban=' + newCustomerSupplier.iban + '&swift=' + newCustomerSupplier.swift + '&active=' + newCustomerSupplier.active +
+                             '&town=' + newCustomerSupplier.town + '&county=' + newCustomerSupplier.county;
 
-                            // display success message
-                            $('#lblErrorMessage').removeClass("errorLabel");
-                            $('#lblErrorMessage').addClass("successLabel");
-                            $('#lblErrorMessage').text("Update successful");
+                        // save data via angular
+                        $http({
+                            method: "get",
+                            headers: { 'Content-Type': 'application/json' },
+                            url: serverUrl, //'https://localhost:44302/api/customerSupplier/',
+                            //data: JSON.stringify(jsonStr)
+                        })
+                        .success(function (data) {
+                            if (data == "success") {
+                                // enable cancel button to escape from the popup
+                                $('#btnCancel').attr("disabled", false);
 
-                            // refersh the grid to display the updated record
-                            var table = $('#example').DataTable();
-                            table.destroy();
-                            customerSupplierResource.query(function (data) {                    // REST API call to get all the customerSuppliers 
-                                vm.customerSuppliers = data;
-                                createPopulateDataGrid(vm, customerSupplierResource);           // populate the data grid
-                            });
-                        }
-                        else {
-                            EnableDisableFeilds(false);          // enable all fields to re-enter/correct inputs
+                                // display success message
+                                $('#lblErrorMessage').removeClass("errorLabel");
+                                $('#lblErrorMessage').addClass("successLabel");
+                                $('#lblErrorMessage').text("Save successful");
 
+                                // refersh the grid to display the new record
+                                var table = $('#example').DataTable();
+                                table.destroy();
+                                customerSupplierResource.query(function (data) {                    // REST API call to get all the customerSuppliers 
+                                    vm.customerSuppliers = data;
+                                    createPopulateDataGrid(vm, customerSupplierResource);           // populate the data grid
+                                });
+                            }
+                            else {
+                                EnableDisableFeilds(false);          // enable all fields to re-enter/correct inputs
+
+                                // display error message
+                                $('#lblErrorMessage').removeClass("successLabel");
+                                $('#lblErrorMessage').addClass("errorLabel");
+                                $('#lblErrorMessage').text(data);
+                            }
+                        }).error(function (data) {
                             // display error message
                             $('#lblErrorMessage').removeClass("successLabel");
                             $('#lblErrorMessage').addClass("errorLabel");
-                            $('#lblErrorMessage').text(data);
-                        }
-                    }).error(function (data) {
-                        // display error message
-                        $('#lblErrorMessage').removeClass("successLabel");
-                        $('#lblErrorMessage').addClass("errorLabel");
-                        $('#lblErrorMessage').text("Error - Angular - Contact IT support - Info :" + data);
-                    });
-                }
-            }
-            //else {
-            //    // Invalid user inputs
-            //}
-        }
+                            $('#lblErrorMessage').text("Error - Angular - Contact IT support - Info :" + data);
+                        });
+                    }
+                    else {
 
-        ApplyUiMasks();                                                     // jquery input mask formatters
+                        // update 
+                        var newCustomerSupplier = getCustomerSupplierJsonObject(custId);    // creation of the json object                    
+                        //var jsonStr = JSON.stringify(updatedCustomerSupplier);                  // covert to json string to pass to web service
+
+                        var serverUrl = 'https://localhost:44302/api/customerSupplier?idVal=' + newCustomerSupplier.id + '&name=' + newCustomerSupplier.name + '&logo=""' +
+                            '&addressLine1=' + newCustomerSupplier.addressLine1 + '&addressLine2=' + newCustomerSupplier.addressLine2 + '&addressLine3=' + newCustomerSupplier.addressLine3 +
+                            '&postcode=' + newCustomerSupplier.postcode + '&country=' + newCustomerSupplier.country + '&telephone=' + newCustomerSupplier.telephone +
+                            '&bank=' + newCustomerSupplier.bank + '&vatNumber=' + newCustomerSupplier.vatNumber + '&accountNumber=' + newCustomerSupplier.accountNumber +
+                            '&sortcode=' + newCustomerSupplier.sortcode + '&iban=' + newCustomerSupplier.iban + '&swift=' + newCustomerSupplier.swift + '&active=' + newCustomerSupplier.active +
+                            '&town=' + newCustomerSupplier.town + '&county=' + newCustomerSupplier.county;
+
+                        $http({
+                            method: "get",
+                            headers: { 'Content-Type': 'application/json' },
+                            url: serverUrl,
+                        })
+                        .success(function (data) {
+                            if (data == "success") {
+                                // enable cancel button to escape from the popup
+                                $('#btnCancel').attr("disabled", false);
+
+                                // display success message
+                                $('#lblErrorMessage').removeClass("errorLabel");
+                                $('#lblErrorMessage').addClass("successLabel");
+                                $('#lblErrorMessage').text("Update successful");
+
+                                // refersh the grid to display the updated record
+                                var table = $('#example').DataTable();
+                                table.destroy();
+                                customerSupplierResource.query(function (data) {                    // REST API call to get all the customerSuppliers 
+                                    vm.customerSuppliers = data;
+                                    createPopulateDataGrid(vm, customerSupplierResource);           // populate the data grid
+                                });
+                            }
+                            else {
+                                EnableDisableFeilds(false);          // enable all fields to re-enter/correct inputs
+
+                                // display error message
+                                $('#lblErrorMessage').removeClass("successLabel");
+                                $('#lblErrorMessage').addClass("errorLabel");
+                                $('#lblErrorMessage').text(data);
+                            }
+                        }).error(function (data) {
+                            // display error message
+                            $('#lblErrorMessage').removeClass("successLabel");
+                            $('#lblErrorMessage').addClass("errorLabel");
+                            $('#lblErrorMessage').text("Error - Angular - Contact IT support - Info :" + data);
+                        });
+                    }
+                }
+                //else {
+                //    // Invalid user inputs
+                //}
+            }
+
+            ApplyUiMasks();                                                     // jquery input mask formatters
+        }
+        else {
+            localStorage["userName"] = null;
+            window.location = window.location.protocol + "//" + window.location.host + "/#/login";
+            window.location.reload();
+        }
+        
     };
 
     // jquery UI masks to format user inputs

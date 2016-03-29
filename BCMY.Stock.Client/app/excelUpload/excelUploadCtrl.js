@@ -7,10 +7,18 @@
     function excelUploadCtrl($http, blockUI, loginValidatorService)                   // controller funcion
     {
         var vm = this;
-        alert("Inside excel controller");
-        vm = defineModel(vm, $http, blockUI);
-        //prepareInitialUI(vm);
-        wireCommands(vm);
+        if (loginValidatorService.loginValidator()) {
+            $("#loggedInUserWithTime").text(localStorage["userName"]);
+            alert("Inside excel controller");
+            vm = defineModel(vm, $http, blockUI);
+            //prepareInitialUI(vm);
+            wireCommands(vm);
+        }
+        else {
+            localStorage["userName"] = null;
+            window.location = window.location.protocol + "//" + window.location.host + "/#/login";
+            window.location.reload();
+        }        
     }
 
 

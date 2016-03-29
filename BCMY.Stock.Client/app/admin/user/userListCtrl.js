@@ -8,9 +8,17 @@
     function userListCtrl($http, blockUI, $scope, loginValidatorService)                   // controller funcion
     {
         var vm = this;
-        vm = defineModel(vm, $http, $scope, blockUI);
-        prepareInitialUI(vm);
-        wireCommands(vm);
+        if (loginValidatorService.loginValidator()) {
+            $("#loggedInUserWithTime").text(localStorage["userName"]);
+            vm = defineModel(vm, $http, $scope, blockUI);
+            prepareInitialUI(vm);
+            wireCommands(vm);
+        }
+        else {
+            localStorage["userName"] = null;
+            window.location = window.location.protocol + "//" + window.location.host + "/#/login";
+            window.location.reload();
+        }        
     }
 
     function defineModel(vm, $http, $scope, blockUI)

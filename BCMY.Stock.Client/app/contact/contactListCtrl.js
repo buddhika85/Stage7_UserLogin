@@ -12,132 +12,141 @@
     function contactListCtrl($http, contactResource, blockUI, customerSupplierResource, loginValidatorService)
     {
         var vm = this;
-        vm.title = "Manage Contacts of the Customers/Suppliers";
-        vm.apiUrl = 'https://localhost:44302/api/contact/';          // web API url for update and insert
+        if (loginValidatorService.loginValidator()) {
+            $("#loggedInUserWithTime").text(localStorage["userName"]);
+            vm.title = "Manage Contacts of the Customers/Suppliers";
+            vm.apiUrl = 'https://localhost:44302/api/contact/';          // web API url for update and insert
 
-        blockUI.start();
-        contactResource.query(function (data) {                     // REST API call to get all the contacts with company names 
-            vm.contacts = data;
-            createPopulateDataGrid(vm, contactResource);            // populate the data grid
-            blockUI.stop();
-        });
+            blockUI.start();
+            contactResource.query(function (data) {                     // REST API call to get all the contacts with company names 
+                vm.contacts = data;
+                createPopulateDataGrid(vm, contactResource);            // populate the data grid
+                blockUI.stop();
+            });
 
-        populateCompanyDropDown(customerSupplierResource);          // used to populate company ddl for the popups
+            populateCompanyDropDown(customerSupplierResource);          // used to populate company ddl for the popups
 
-        vm.insertContact = function ()                              // insert new contact person
-        {
-            OnInsertBtnClick();
-        };
-
-        vm.saveContact = function ()                                // on save button click of the popup
-        {            
-            var isValid = ValidateInputs();     // validation
-            if (isValid)                        // save to DB if the changes are valid
+            vm.insertContact = function ()                              // insert new contact person
             {
-                EnableDisableFeilds(true);          // disable all fields once save button clicked
+                OnInsertBtnClick();
+            };
 
-                // fliter POST or PUT request based on Insert or Update, that is contact Id hidden field value 
-                var contactId = $('#contactId').val();
-                                
-                if (contactId == -1) {
-                    // insert                    
-                    var newContact = getContactJsonObject(contactId);                   // creation of the json object                    
-                    //var jsonStr = JSON.stringify(newContact);                           // covert to json string to pass to web service
-                    var serverUrl = 'https://localhost:44302/api/contact?id=' + newContact.id + '&title=' + newContact.title + '&firstName=' + newContact.firstName + '&lastName=' + newContact.lastName
-                        + '&position=' + newContact.position + '&directDial=' + newContact.directDial + '&email=' + newContact.email + '&status=' + newContact.status + '&notes=' + newContact.notes
-                        + '&customerSupplierId=' + newContact.customerSupplierId + '&extension=' + newContact.extension;
+            vm.saveContact = function ()                                // on save button click of the popup
+            {
+                var isValid = ValidateInputs();     // validation
+                if (isValid)                        // save to DB if the changes are valid
+                {
+                    EnableDisableFeilds(true);          // disable all fields once save button clicked
 
-                    // save data via angular
-                    $http({
-                        method: "get",
-                        headers: { 'Content-Type': 'application/json' },
-                        url: serverUrl
-                        //data: JSON.stringify(jsonStr)
-                    })
-                    .success(function (data) {
-                        if (data == "success") {
-                            // enable cancel button to escape from the popup
-                            $('#btnCancel').attr("disabled", false);
+                    // fliter POST or PUT request based on Insert or Update, that is contact Id hidden field value 
+                    var contactId = $('#contactId').val();
 
-                            // display success message
-                            $('#lblErrorMessage').removeClass("errorLabel");
-                            $('#lblErrorMessage').addClass("successLabel");
-                            $('#lblErrorMessage').text("Save successful");
+                    if (contactId == -1) {
+                        // insert                    
+                        var newContact = getContactJsonObject(contactId);                   // creation of the json object                    
+                        //var jsonStr = JSON.stringify(newContact);                           // covert to json string to pass to web service
+                        var serverUrl = 'https://localhost:44302/api/contact?id=' + newContact.id + '&title=' + newContact.title + '&firstName=' + newContact.firstName + '&lastName=' + newContact.lastName
+                            + '&position=' + newContact.position + '&directDial=' + newContact.directDial + '&email=' + newContact.email + '&status=' + newContact.status + '&notes=' + newContact.notes
+                            + '&customerSupplierId=' + newContact.customerSupplierId + '&extension=' + newContact.extension;
 
-                            // refersh the grid to display the new record
-                            var table = $('#example').DataTable();
-                            table.destroy();
-                            contactResource.query(function (data) {                    // REST API call to get all the contacts 
-                                vm.contacts = data;
-                                createPopulateDataGrid(vm, contactResource);           // populate the data grid
-                            });
-                        }
-                        else {
-                            EnableDisableFeilds(false);          // enable all fields to re-enter/correct inputs
+                        // save data via angular
+                        $http({
+                            method: "get",
+                            headers: { 'Content-Type': 'application/json' },
+                            url: serverUrl
+                            //data: JSON.stringify(jsonStr)
+                        })
+                        .success(function (data) {
+                            if (data == "success") {
+                                // enable cancel button to escape from the popup
+                                $('#btnCancel').attr("disabled", false);
 
+                                // display success message
+                                $('#lblErrorMessage').removeClass("errorLabel");
+                                $('#lblErrorMessage').addClass("successLabel");
+                                $('#lblErrorMessage').text("Save successful");
+
+                                // refersh the grid to display the new record
+                                var table = $('#example').DataTable();
+                                table.destroy();
+                                contactResource.query(function (data) {                    // REST API call to get all the contacts 
+                                    vm.contacts = data;
+                                    createPopulateDataGrid(vm, contactResource);           // populate the data grid
+                                });
+                            }
+                            else {
+                                EnableDisableFeilds(false);          // enable all fields to re-enter/correct inputs
+
+                                // display error message
+                                $('#lblErrorMessage').removeClass("successLabel");
+                                $('#lblErrorMessage').addClass("errorLabel");
+                                $('#lblErrorMessage').text(data);
+                            }
+                        }).error(function (data) {
                             // display error message
                             $('#lblErrorMessage').removeClass("successLabel");
                             $('#lblErrorMessage').addClass("errorLabel");
-                            $('#lblErrorMessage').text(data);
-                        }
-                    }).error(function (data) {
-                        // display error message
-                        $('#lblErrorMessage').removeClass("successLabel");
-                        $('#lblErrorMessage').addClass("errorLabel");
-                        $('#lblErrorMessage').text("Error - Angular - Contact IT support - Info :" + data);
-                    });
-                }
-                else {
-                    // update 
-                    var newContact = getContactJsonObject(contactId);          // creation of the json object                    
-                    //var jsonStr = JSON.stringify(newContact);                  // covert to json string to pass to web service
-                    var serverUrl = 'https://localhost:44302/api/contact?id=' + newContact.id + '&title=' + newContact.title + '&firstName=' + newContact.firstName + '&lastName=' + newContact.lastName
-                        + '&position=' + newContact.position + '&directDial=' + newContact.directDial + '&email=' + newContact.email + '&status=' + newContact.status + '&notes=' + newContact.notes
-                        + '&customerSupplierId=' + newContact.customerSupplierId + '&extension=' + newContact.extension;
+                            $('#lblErrorMessage').text("Error - Angular - Contact IT support - Info :" + data);
+                        });
+                    }
+                    else {
+                        // update 
+                        var newContact = getContactJsonObject(contactId);          // creation of the json object                    
+                        //var jsonStr = JSON.stringify(newContact);                  // covert to json string to pass to web service
+                        var serverUrl = 'https://localhost:44302/api/contact?id=' + newContact.id + '&title=' + newContact.title + '&firstName=' + newContact.firstName + '&lastName=' + newContact.lastName
+                            + '&position=' + newContact.position + '&directDial=' + newContact.directDial + '&email=' + newContact.email + '&status=' + newContact.status + '&notes=' + newContact.notes
+                            + '&customerSupplierId=' + newContact.customerSupplierId + '&extension=' + newContact.extension;
 
-                    $http({
-                        method: "get",
-                        headers: { 'Content-Type': 'application/json' },
-                        url: serverUrl
-                        //data: JSON.stringify(jsonStr)
-                    })
-                    .success(function (data) {
-                        if (data == "success") {
-                            // enable cancel button to escape from the popup
-                            $('#btnCancel').attr("disabled", false);
+                        $http({
+                            method: "get",
+                            headers: { 'Content-Type': 'application/json' },
+                            url: serverUrl
+                            //data: JSON.stringify(jsonStr)
+                        })
+                        .success(function (data) {
+                            if (data == "success") {
+                                // enable cancel button to escape from the popup
+                                $('#btnCancel').attr("disabled", false);
 
-                            // display success message
-                            $('#lblErrorMessage').removeClass("errorLabel");
-                            $('#lblErrorMessage').addClass("successLabel");
-                            $('#lblErrorMessage').text("Update successful");
+                                // display success message
+                                $('#lblErrorMessage').removeClass("errorLabel");
+                                $('#lblErrorMessage').addClass("successLabel");
+                                $('#lblErrorMessage').text("Update successful");
 
-                            // refersh the grid to display the updated record
-                            var table = $('#example').DataTable();
-                            table.destroy();
-                            contactResource.query(function (data) {                    // REST API call to get all the contacts 
-                                vm.contacts = data;
-                                createPopulateDataGrid(vm, contactResource);           // populate the data grid
-                            });
-                        }
-                        else {
-                            EnableDisableFeilds(false);          // enable all fields to re-enter/correct inputs
+                                // refersh the grid to display the updated record
+                                var table = $('#example').DataTable();
+                                table.destroy();
+                                contactResource.query(function (data) {                    // REST API call to get all the contacts 
+                                    vm.contacts = data;
+                                    createPopulateDataGrid(vm, contactResource);           // populate the data grid
+                                });
+                            }
+                            else {
+                                EnableDisableFeilds(false);          // enable all fields to re-enter/correct inputs
 
+                                // display error message
+                                $('#lblErrorMessage').removeClass("successLabel");
+                                $('#lblErrorMessage').addClass("errorLabel");
+                                $('#lblErrorMessage').text(data);
+                            }
+                        }).error(function (data) {
                             // display error message
                             $('#lblErrorMessage').removeClass("successLabel");
                             $('#lblErrorMessage').addClass("errorLabel");
-                            $('#lblErrorMessage').text(data);
-                        }
-                    }).error(function (data) {
-                        // display error message
-                        $('#lblErrorMessage').removeClass("successLabel");
-                        $('#lblErrorMessage').addClass("errorLabel");
-                        $('#lblErrorMessage').text("Error - Angular - Contact IT support - Info :" + data);
-                    });
+                            $('#lblErrorMessage').text("Error - Angular - Contact IT support - Info :" + data);
+                        });
+                    }
                 }
-            }
-        };
+            };
 
-        ApplyUiMasks();                                                     // jquery input mask formatters
+            ApplyUiMasks();                                                     // jquery input mask formatters
+        }
+        else {
+            localStorage["userName"] = null;
+            window.location = window.location.protocol + "//" + window.location.host + "/#/login";
+            window.location.reload();
+        }
+
     };
 
     // jquery UI masks to format user inputs

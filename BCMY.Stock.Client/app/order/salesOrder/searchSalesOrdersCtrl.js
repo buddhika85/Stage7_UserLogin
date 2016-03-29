@@ -9,10 +9,19 @@
     function searchSalesOrdersCtrl($http, contactResource, blockUI, customerSupplierResource, $location, $rootScope) {
         
         var vm = this;
-        vm.title = "Search sales orders";
+        if (loginValidatorService.loginValidator()) {
+            $("#loggedInUserWithTime").text(localStorage["userName"]);
+            vm.title = "Search sales orders";
 
-        prepareInitialUI($http, customerSupplierResource, contactResource);                                     // initial UI
-        wireCommands(vm, $http, contactResource, customerSupplierResource, $location, $rootScope);                  // all the commands are bound here
+            prepareInitialUI($http, customerSupplierResource, contactResource);                                     // initial UI
+            wireCommands(vm, $http, contactResource, customerSupplierResource, $location, $rootScope);                  // all the commands are bound here
+        }
+        else {
+            localStorage["userName"] = null;
+            window.location = window.location.protocol + "//" + window.location.host + "/#/login";
+            window.location.reload();
+        }
+        
     };
 
 
