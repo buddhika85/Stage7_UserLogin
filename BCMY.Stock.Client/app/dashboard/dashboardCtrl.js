@@ -2,15 +2,24 @@
 (function () {
     "use strict";
     var module = angular.module("stockManagement");         // get module
-    module.controller("DashboardCtrl", ["$http", "$location", dashboardCtrl]);    // attach controller to the module
+    module.controller("DashboardCtrl", ["$http", "$location", "$scope", "loginValidatorService", dashboardCtrl]);    // attach controller to the module
 
 
-    function dashboardCtrl($http, $location)                   // controller function
+    function dashboardCtrl($http, $location, $scope, loginValidatorService)                   // controller function
     {        
-        var vm = this;  
-        vm.title = "Main Dashboard";
-        vm.exchangeRatesDateJson = null;
-        DrawExchangeRatesChart($http);
+        var vm = this;
+        vm.scope = $scope;
+        if (loginValidatorService.loginValidator()) {
+            vm.title = "Main Dashboard";
+            $("#loggedInUserWithTime").text(localStorage["userName"]);
+            vm.exchangeRatesDateJson = null;
+            DrawExchangeRatesChart($http);
+        }
+        else {
+            localStorage["userName"] = null;
+            window.location = window.location.protocol + "//" + window.location.host + "/#/login";
+            window.location.reload();
+        }        
     };
 
 

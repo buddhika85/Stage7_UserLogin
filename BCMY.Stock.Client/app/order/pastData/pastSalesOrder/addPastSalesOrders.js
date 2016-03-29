@@ -6,10 +6,10 @@
     var module = angular.module("stockManagement");
 
     module.controller("AddPastSalesOrdersCtrl",
-        ["$http", "contactResource", "blockUI", "customerSupplierResource", "currencyResource", addPastSalesOrdersCtrl]);
+        ["$http", "contactResource", "blockUI", "customerSupplierResource", "currencyResource", "loginValidatorService", addPastSalesOrdersCtrl]);
 
     // controller
-    function addPastSalesOrdersCtrl($http, contactResource, blockUI, customerSupplierResource, currencyResource) {
+    function addPastSalesOrdersCtrl($http, contactResource, blockUI, customerSupplierResource, currencyResource, loginValidatorService) {
         var vm = this;
         vm.title = "Add Past Sales Order";
         vm.totalValue = "Total : £ 0.00";

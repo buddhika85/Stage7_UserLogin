@@ -1,10 +1,10 @@
 ﻿(function () {
     "use strict";
     var module = angular.module("stockManagement");         // get module
-    module.controller("AddPastExchangeRatesCtrl", ["$http", "blockUI", addPastExchangeRatesCtrl]);    // attach controller to the module
+    module.controller("AddPastExchangeRatesCtrl", ["$http", "blockUI", "loginValidatorService", addPastExchangeRatesCtrl]);    // attach controller to the module
 
     // controller function
-    function addPastExchangeRatesCtrl($http, blockUI)                   
+    function addPastExchangeRatesCtrl($http, blockUI, loginValidatorService)
     {
         blockUI.start();
         var vm = this;        

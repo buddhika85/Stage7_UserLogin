@@ -2,10 +2,10 @@
 
     "use strict";
     var module = angular.module("stockManagement");         // get module
-    module.controller("RoleListCtrl", ["$http", "blockUI", "$scope", roleListCtrl]);    // attach controller to the module
+    module.controller("RoleListCtrl", ["$http", "blockUI", "$scope", "loginValidatorService", roleListCtrl]);    // attach controller to the module
 
 
-    function roleListCtrl($http, blockUI, $scope)                   // controller funcion
+    function roleListCtrl($http, blockUI, $scope, loginValidatorService)                   // controller funcion
     {
         var vm = this;
         vm.scope = $scope;

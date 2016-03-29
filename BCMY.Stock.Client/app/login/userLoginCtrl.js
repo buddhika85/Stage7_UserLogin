@@ -97,6 +97,7 @@
                 // if login success - show top navigation bar   
                 EnableTopNavigationBar();
                 
+                                
                 // write credential cookie
                 if (vm.rememberMe)
                 {
@@ -119,7 +120,7 @@
                 //});
 
                 // navigate to dashboard view               
-                window.location = window.location.protocol + "//" + window.location.host + "/#/dashboard";;
+                window.location = window.location.protocol + "//" + window.location.host + "/#/dashboard";
                 window.location.reload();
 
             })

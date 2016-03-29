@@ -5,10 +5,10 @@
     var module = angular.module("stockManagement");
 
     module.controller("EditPastSalesOrderCtrl",
-        ["$http", "contactResource", "blockUI", "customerSupplierResource", '$location', 'currencyResource', editPastSalesOrderCtrl]);
+        ["$http", "contactResource", "blockUI", "customerSupplierResource", '$location', 'currencyResource', "loginValidatorService", editPastSalesOrderCtrl]);
 
     // controller
-    function editPastSalesOrderCtrl($http, contactResource, blockUI, customerSupplierResource, $location, currencyResource) {
+    function editPastSalesOrderCtrl($http, contactResource, blockUI, customerSupplierResource, $location, currencyResource, loginValidatorService) {
         var vm = this;
         vm.totalValue = "Total : £ 0.00";
         var searchObject = $location.search();                                                      // get order Id, that passed as query string

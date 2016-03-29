@@ -50,3 +50,5 @@
 /// <reference path="../app/admin/role/roleListCtrl.js" />
 /// <reference path="../app/admin/user/userListCtrl.js" />
 /// <reference path="jquery-ui-timepicker-addon.js" />
+/// <reference path="../app/login/userLogoutCtrl.js" />
+/// <reference path="../common/loginValidatorService.js" />

@@ -117,7 +117,8 @@
                             <li><a href="#">Change Password</a></li>
                         </ul>
                     </li>
-                    <li><a href="#">Logout</a></li>
+                    <li><label id="loggedInUserWithTime">{{vm.loggedInUserWithTime}}</label></li>  <!--{{vm.loggedInUserWithTime}}-->
+                    <li><a ui-sref="userLogout">Logout</a></li>
                 </ul>
             </div><!-- /.navbar-collapse -->
         </div><!-- /.container-fluid -->
@@ -173,6 +174,7 @@
     <script src="common/customerSupplierResource.js"></script>          <!--customerSupplier REST API calls-->
     <script src="common/contactResource.js"></script>                   <!--contact REST API calls-->
     <script src="common/currencyResource.js"></script>                  <!--currency REST API calls-->
+    <script src="common/loginValidatorService.js"></script>
     
     <!-- Controllers -->
     <script src="app/dashboard/dashBoardCtrl.js"></script>
@@ -189,9 +191,9 @@
 
     <script src="app/excelUpload/excelUploadCtrl.js"></script>                              <!--excel uploads-->
     <script src="app/login/userLoginCtrl.js"></script>                                      <!--user login-->
+    <script src="app/login/userLogoutCtrl.js"></script>                                     <!--user logout-->
     <script src="app/admin/role/roleListCtrl.js"></script>                                  <!--role management-->
-    <script src="app/admin/user/userListCtrl.js"></script>                                  <!--user management-->
-       
+    <script src="app/admin/user/userListCtrl.js"></script>                                  <!--user management-->       
 
     <!--Utilities-->
     <script src="common/util.js"></script>

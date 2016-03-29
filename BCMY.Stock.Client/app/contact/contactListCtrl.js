@@ -6,10 +6,10 @@
     var module = angular.module("stockManagement");                 // get module
 
     // attach controller to the module
-    module.controller("ContactListCtrl", ["$http", "contactResource", "blockUI", "customerSupplierResource", contactListCtrl]);
+    module.controller("ContactListCtrl", ["$http", "contactResource", "blockUI", "customerSupplierResource", "loginValidatorService", contactListCtrl]);
 
     // controller funcion
-    function contactListCtrl($http, contactResource, blockUI, customerSupplierResource)
+    function contactListCtrl($http, contactResource, blockUI, customerSupplierResource, loginValidatorService)
     {
         var vm = this;
         vm.title = "Manage Contacts of the Customers/Suppliers";

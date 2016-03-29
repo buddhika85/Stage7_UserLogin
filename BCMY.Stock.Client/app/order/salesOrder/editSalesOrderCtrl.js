@@ -5,10 +5,10 @@
     var module = angular.module("stockManagement");
 
     module.controller("EditSalesOrderCtrl",
-        ["$http", "contactResource", "blockUI", "customerSupplierResource", '$location', 'currencyResource', editSalesOrderCtrl]);
+        ["$http", "contactResource", "blockUI", "customerSupplierResource", '$location', 'currencyResource', "loginValidatorService", editSalesOrderCtrl]);
 
     // controller
-    function editSalesOrderCtrl($http, contactResource, blockUI, customerSupplierResource, $location, currencyResource)
+    function editSalesOrderCtrl($http, contactResource, blockUI, customerSupplierResource, $location, currencyResource, loginValidatorService)
     {
         var vm = this;
         vm.totalValue = "Total : £ 0.00";

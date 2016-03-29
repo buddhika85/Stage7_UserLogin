@@ -1,10 +1,10 @@
 ﻿(function () {
     "use strict";
     var module = angular.module("stockManagement");         // get module
-    module.controller("ExcelUploadCtrl", ["$http", "blockUI", excelUploadCtrl]);    // attach controller to the module
+    module.controller("ExcelUploadCtrl", ["$http", "blockUI", "loginValidatorService", excelUploadCtrl]);    // attach controller to the module
 
 
-    function excelUploadCtrl($http, blockUI)                   // controller funcion
+    function excelUploadCtrl($http, blockUI, loginValidatorService)                   // controller funcion
     {
         var vm = this;
         alert("Inside excel controller");

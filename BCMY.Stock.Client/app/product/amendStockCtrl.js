@@ -2,10 +2,10 @@
 (function () {
     "use strict";
     var module = angular.module("stockManagement");         // get module
-    module.controller("AmendStockCtrl", ["$http", "blockUI", amendStockCtrl]);    // attach controller to the module
+    module.controller("AmendStockCtrl", ["$http", "blockUI", "loginValidatorService", amendStockCtrl]);    // attach controller to the module
 
 
-    function amendStockCtrl($http, blockUI)                   // controller funcion
+    function amendStockCtrl($http, blockUI, loginValidatorService)                   // controller funcion
     {        
         var vm = this;
         vm = defineModel(vm, $http, blockUI);

@@ -5,10 +5,10 @@
 
     // attach controller to the module
     module.controller("CustomerSupplierListCtrl",
-        ["$http", "customerSupplierResource", "Upload", "blockUI", customerSupplierListCtrl]);
+        ["$http", "customerSupplierResource", "Upload", "blockUI", "loginValidatorService", customerSupplierListCtrl]);
 
     // controller function
-    function customerSupplierListCtrl($http, customerSupplierResource, Upload, blockUI)
+    function customerSupplierListCtrl($http, customerSupplierResource, Upload, blockUI, loginValidatorService)
     {        
         var vm = this;
         vm.apiUrl = 'https://localhost:44302/api/customerSupplier/';         // web API url for update and insert

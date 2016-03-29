@@ -84,8 +84,34 @@ namespace BCMY.WebAPI.Controllers
         [Route("Logout")]
         public IHttpActionResult Logout()
         {
-            Authentication.SignOut(CookieAuthenticationDefaults.AuthenticationType);
-            return Ok();
+            try
+            {
+                ApplicationUser user = UserManager.FindById(User.Identity.GetUserId());
+                if (user != null)
+                {
+                    if (user.IsLoggedIn)
+                    {
+                        user.IsLoggedIn = false;
+                        user.LastLogoutTime = DateTime.Now;
+                        Authentication.SignOut(CookieAuthenticationDefaults.AuthenticationType);
+                        return Ok();
+                    }
+                    else
+                    {
+                        return NotFound();
+                    }                    
+                }
+                else
+                {
+                    return Conflict();
+                }
+            }
+            catch (Exception)
+            {
+                return BadRequest();
+                
+            }
+
         }
 
         // GET api/Account/ManageInfo?returnUrl=%2F&generateState=true

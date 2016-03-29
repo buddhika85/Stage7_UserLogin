@@ -108,6 +108,12 @@
                             controller: "UserListCtrl as vm"
                         })
 
+                        // logout 
+                        .state("userLogout", {
+                            url: "/logout",
+                            controller: "UserLogoutCtrl as vm"
+                        })
+
                         // landing page
                         $urlRouterProvider.otherwise("/login");
                     }

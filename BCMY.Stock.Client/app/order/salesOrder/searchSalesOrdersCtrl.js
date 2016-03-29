@@ -4,7 +4,7 @@
 
     var module = angular.module("stockManagement");
 
-    module.controller("SearchSalesOrdersCtrl", ["$http", "contactResource", "blockUI", "customerSupplierResource", '$location', '$rootScope', searchSalesOrdersCtrl]);
+    module.controller("SearchSalesOrdersCtrl", ["$http", "contactResource", "blockUI", "customerSupplierResource", '$location', '$rootScope', "loginValidatorService", searchSalesOrdersCtrl]);
 
     function searchSalesOrdersCtrl($http, contactResource, blockUI, customerSupplierResource, $location, $rootScope) {
         

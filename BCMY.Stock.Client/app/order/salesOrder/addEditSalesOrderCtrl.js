@@ -5,10 +5,10 @@
     var module = angular.module("stockManagement");
 
     module.controller("AddEditSalesOrderCtrl",
-        ["$http", "contactResource", "blockUI", "customerSupplierResource", "currencyResource", addEditSalesOrderCtrl]);
+        ["$http", "contactResource", "blockUI", "customerSupplierResource", "currencyResource", "loginValidatorService", addEditSalesOrderCtrl]);
 
     // controller
-    function addEditSalesOrderCtrl($http, contactResource, blockUI, customerSupplierResource, currencyResource)
+    function addEditSalesOrderCtrl($http, contactResource, blockUI, customerSupplierResource, currencyResource, loginValidatorService)
     {
         var vm = this;
         vm.title = "Add Sales Order";
