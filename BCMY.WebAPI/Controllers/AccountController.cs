@@ -19,7 +19,7 @@ using BCMY.WebAPI.Results;
 
 namespace BCMY.WebAPI.Controllers
 {
-    [Authorize(Roles = "Admin")]
+    //[Authorize(Roles = "Admin")]
     [RoutePrefix("api/Account")]
     public class AccountController : ApiController
     {
@@ -81,11 +81,13 @@ namespace BCMY.WebAPI.Controllers
         }
 
         // POST api/Account/Logout
-        [Route("Logout")]
-        public IHttpActionResult Logout()
+        //[Route("Logout")]
+        [HttpPost, Route("Logout")]
+        public async Task<string> Logout(string userName)
         {
+            string message = string.Empty;
             try
-            {
+            {                
                 ApplicationUser user = UserManager.FindById(User.Identity.GetUserId());
                 if (user != null)
                 {
@@ -93,25 +95,39 @@ namespace BCMY.WebAPI.Controllers
                     {
                         user.IsLoggedIn = false;
                         user.LastLogoutTime = DateTime.Now;
-                        Authentication.SignOut(CookieAuthenticationDefaults.AuthenticationType);
-                        return Ok();
+                        IdentityResult result = await UserManager.UpdateAsync(user);
+                        if (result != null && result.Succeeded == true)
+                        {
+                            Authentication.SignOut(CookieAuthenticationDefaults.AuthenticationType);
+                            message = "Success - user logout successful";
+                        }
+                        else
+                        {
+                            string errors = string.Empty;
+                            foreach (string error in result.Errors)
+                            {
+                                errors += error + " ";
+                            }
+                            message = string.Format("Error : {0}", errors);
+                        }                        
+                        
                     }
                     else
                     {
-                        return NotFound();
+                        message = "Error - user not logged in";
                     }                    
                 }
                 else
                 {
-                    return Conflict();
+                    message = "Error - user not found";
                 }
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                return BadRequest();
-                
+                message = string.Format("Error - please contact IT support - {0}", ex.Message);                
             }
 
+            return message;
         }
 
         // GET api/Account/ManageInfo?returnUrl=%2F&generateState=true

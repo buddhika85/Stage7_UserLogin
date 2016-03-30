@@ -110,14 +110,16 @@
 
 
                 <ul class="nav navbar-nav navbar-right">
+                    <!--<li><label id="loggedInUserWithTime" style="color:orangered">{{vm.loggedInUserWithTime}}</label></li>-->
+                    <!--<label id="loggedInUserWithTime" style="color:orange"></label>-->
+                    <li><label id="loggedInUserWithTime" style="color:orange"></label></li>  
                     <li class="dropdown">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Options <span class="caret"></span></a>
                         <ul class="dropdown-menu" role="menu">
-                            <li><a href="#">Edit Profile</a></li>
+                            <li><a ui-sref="editProfile">Edit Profile</a></li>
                             <li><a href="#">Change Password</a></li>
                         </ul>
-                    </li>
-                    <li><label id="loggedInUserWithTime">{{vm.loggedInUserWithTime}}</label></li>  <!--{{vm.loggedInUserWithTime}}-->
+                    </li>                    
                     <li><a ui-sref="userLogout">Logout</a></li>
                 </ul>
             </div><!-- /.navbar-collapse -->
@@ -194,6 +196,7 @@
     <script src="app/login/userLogoutCtrl.js"></script>                                     <!--user logout-->
     <script src="app/admin/role/roleListCtrl.js"></script>                                  <!--role management-->
     <script src="app/admin/user/userListCtrl.js"></script>                                  <!--user management-->       
+    <script src="app/profile/editProfileCtrl.js"></script>                                  <!--edit profile-->
 
     <!--Utilities-->
     <script src="common/util.js"></script>

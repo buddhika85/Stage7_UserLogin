@@ -52,3 +52,4 @@
 /// <reference path="jquery-ui-timepicker-addon.js" />
 /// <reference path="../app/login/userLogoutCtrl.js" />
 /// <reference path="../common/loginValidatorService.js" />
+/// <reference path="../app/profile/editProfileCtrl.js" />

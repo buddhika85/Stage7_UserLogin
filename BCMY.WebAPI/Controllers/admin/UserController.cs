@@ -19,6 +19,7 @@ using DataAccess_EF.EntityFramework;
 using BCMY.WebAPI.Models.UnityDI;
 using System.Data.SqlClient;
 using System.Data;
+using BCMY.WebAPI.Util.Encryption;
 
 namespace BCMY.WebAPI.Controllers.admin
 {
@@ -436,6 +437,49 @@ namespace BCMY.WebAPI.Controllers.admin
                 userVms = null;
             }
             return userVms;
+        }
+
+        // used to encrypt a string
+        //[HttpGet, Route("api/EncryptValue")]
+        //[Authorize]
+        [HttpPost, Route("api/EncryptValue")]        
+        public string Encrypt(string value)
+        {
+            try
+            {  
+                //byte[] key = { 251, 9, 67, 117, 237, 158, 138, 150, 255, 97, 103, 128, 183, 65, 76, 161, 7, 79, 244, 225, 146, 180, 51, 123, 118, 167, 45, 10, 184, 181, 202, 190 };
+                //byte[] vector = { 214, 11, 221, 108, 210, 71, 14, 15, 151, 57, 241, 174, 177, 142, 115, 137 };
+
+                //using (var rijndaelHelper = new RijndaelHelper(key, vector))
+                //{
+                //    var encrypt = rijndaelHelper.Encrypt(value);
+                //    string encryptedValue = ByteArryStrConvertor.GetString(encrypt);
+                //    return encryptedValue;
+                //}
+                string encrypt = CustomEncryptDecrypt.CustomEncrypt(value);
+                return encrypt;
+            }
+            catch (Exception)
+            {
+                return null;
+            }
+        }
+
+        // used to decrypt a string
+        //[Authorize]
+        //[HttpGet, Route("api/DecryptValue")]
+        [HttpPost, Route("api/DecryptValue")]        
+        public string Decrypt(string value)
+        {
+            try
+            {                
+                string decryptedValue = CustomEncryptDecrypt.CustomDecrypt(value);
+                return decryptedValue;
+            }
+            catch (Exception)
+            {
+                return null;
+            }
         }
 
         // A helper method to do the user search 

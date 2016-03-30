@@ -22,21 +22,23 @@
 
 
     function defineModel(vm, $http, blockUI)
-    {
-        vm = readRememberMeCookie(vm);                      // assign remember me values to username and password
+    {        
+        vm.httpService = $http;
         vm.error = '';
         return vm;
     }
 
     function prepareInitialUI(vm)
     {        
-        DisableTopNavigationBar();    // disable the top navigation bar - before login
+        DisableTopNavigationBar();                          // disable the top navigation bar - before login
         vm.title = "BCMY Stock Management";
+        vm = readRememberMeCookie(vm);                      // assign remember me values to username and password
         vm.rememberMe = false;
 
         // for testing
-        vm.username = 'buddhika@bcmy.co.uk';
-        vm.password = 'Test123$';
+        //readRememberMeCookie(vm);
+        //vm.username = 'buddhika@bcmy.co.uk';
+        //vm.password = 'Test123$';
         return vm;
     }
 
@@ -96,13 +98,48 @@
 
                 // if login success - show top navigation bar   
                 EnableTopNavigationBar();
-                
-                                
-                // write credential cookie
-                if (vm.rememberMe)
-                {
-                    writeRememberMeCookie(vm);
+
+                // write credential cookie                
+                if (vm.rememberMe) { 
+                    var dataForBody = "value=" + vm.password;
+                    var serverUrl = ('https://localhost:44302/api/EncryptValue?' + dataForBody);
+                    var messageHeadersForEnc = {
+                        'Content-Type': 'application/x-www-form-urlencoded', 'Authorization': 'Bearer ' + localStorage["access_token"]
+                    };
+                    vm.httpService({
+                        method: "post",
+                        headers: messageHeadersForEnc ,
+                        url: serverUrl
+                    }).success(function (data) {                        
+                        if (data != null) {
+                            vm.encryptedPassword = data;
+                            writeRememberMeCookie(vm);
+                            // navigate to dashboard view               
+                            window.location = window.location.protocol + "//" + window.location.host + "/#/dashboard";
+                            window.location.reload();
+                        }
+                        else {
+                            debugger
+                            toastr.warning("Error - remember me option is not working, please contact IT");
+                            // navigate to dashboard view               
+                            //window.location = window.location.protocol + "//" + window.location.host + "/#/dashboard";
+                            //window.location.reload();
+                        }
+                    }
+                    ).error(function (data) {
+                        debugger
+                        toastr.error("Error - remember me option is not working, please contact IT");
+                        // navigate to dashboard view               
+                        //window.location = window.location.protocol + "//" + window.location.host + "/#/dashboard";
+                        //window.location.reload();
+                    }); 
                 }
+                else {
+                    // navigate to dashboard view               
+                    window.location = window.location.protocol + "//" + window.location.host + "/#/dashboard";
+                    window.location.reload();
+                }
+
                 //alert(data.access_token);
                     
                 //// test with user roles
@@ -119,10 +156,6 @@
                 //    alert('Error - ' + data.message);    // Authorization has been denied for this request.
                 //});
 
-                // navigate to dashboard view               
-                window.location = window.location.protocol + "//" + window.location.host + "/#/dashboard";
-                window.location.reload();
-
             })
             .error(function (data)
             {
@@ -134,6 +167,64 @@
             vm.error = 'Error - The username or password is incorrect.';
         }
         return vm;
+    }
+        
+    // manage reading cookie to remember username and password
+    function readRememberMeCookie(vm)
+    {
+        //debugger
+        var cookiearray = document.cookie.split(';');        
+        // cookies as key value pairs
+        for (var i = 0; i < cookiearray.length; i++) {
+            var key = cookiearray[i].split('=')[0];
+            var value = cookiearray[i].split('=')[1];
+            if (key != null && key != null && value != '' && value != null)
+            { 
+                if ($.trim(key) == 'username')
+                {                    
+                    vm.username = $.trim(value);
+                }
+                else if ($.trim(key) == 'password')
+                {                    
+                    var dataForBody = "value=" + value;
+                    var serverUrl = ('https://localhost:44302/api/DecryptValue?' + dataForBody);
+                    vm.httpService({
+                        method: "post",
+                        headers: { 'Content-Type': 'application/json' },
+                        url: serverUrl
+                    }).success(function (data) {
+                        if (data != null) {
+                            //debugger
+                            vm.password = data;                      
+                        }
+                        else {
+                            toastr.warning("Error - remember me option is not working, please contact IT");                            
+                        }
+                    }
+                    ).error(function (data) {
+                        toastr.error("Error - remember me option is not working- error data ciphering, please contact IT");                       
+                    });
+                    
+                }
+            }
+        }
+
+        return vm;
+    }
+
+    // manage writing cookie to remember username and password
+    function writeRememberMeCookie(vm) {
+        //debugger
+        var now = new Date();
+        var expiry = new Date();
+        expiry.setMonth(expiry.getMonth() + 1); 
+                
+        //alert(vm.username + ' , ' + vm.encryptedPassword + ' , ' + now + ' , ' + expiry);
+        
+        document.cookie = "cookie creation date time=" + now + ";";
+        document.cookie = "username=" + vm.username + ";";
+        document.cookie = "password=" + vm.encryptedPassword + ";";
+        document.cookie = "expires=" + expiry.toUTCString() + ";";        
     }
     
 
@@ -161,25 +252,7 @@
     function fogotPassword(vm, $http, $rootScope) {
         alert("fogot password - under construction");
     }
-
-    // manage writing cookie to remember username and password
-    function writeRememberMeCookie(vm)
-    {
-        alert("Remember me option - cookie writing - under construction");
-        // https://docs.angularjs.org/api/ngCookies/service/$cookies
-        // http://stackoverflow.com/questions/10961963/how-to-access-cookies-in-angularjs
-        // https://docs.angularjs.org/api/ngCookies
-    }
-
-    // manage reading cookie to remember username and password
-    function readRememberMeCookie(vm)
-    {
-        alert("Remember me option - cookie reading - under construction");
-        vm.username = '';
-        vm.password = '';
-        return vm;
-    }
-        
+     
     
     // used to disable the top navigation bar - before login
     // Ref - http://stackoverflow.com/questions/6961678/disable-enable-all-elements-in-div

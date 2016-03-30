@@ -94,18 +94,25 @@
                             controller: "ExcelUploadCtrl as vm"
                         })
 
-                        // role mangement
+                        // role management
                         .state("roleManagement", {
                             url: "/admin/roles",
                             templateUrl: "app/admin/role/roleListView.html",
                             controller: "RoleListCtrl as vm"
                         })
 
-                        // user mangement
+                        // user management
                         .state("userManagement", {
                             url: "/admin/users",
                             templateUrl: "app/admin/user/userListView.html",
                             controller: "UserListCtrl as vm"
+                        })
+
+                        // edit profile
+                        .state("editProfile", {
+                            url: "/profile/editProfile",
+                            templateUrl: "app/profile/editProfile.html",
+                            controller: "EditProfileCtrl as vm"
                         })
 
                         // logout 
