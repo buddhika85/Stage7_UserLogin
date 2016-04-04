@@ -97,7 +97,6 @@ namespace BCMY.WebAPI.Models
                         user.IsLoggedIn = true;
                         user.Locked = false;
                         user.LastLogInTime = DateTime.Now;
-                        user.LastLogoutTime = null;
                         user.InvalidLoginAttemptCount = 0;  // clear out invalid user login attempts, as this login attempt is successful
                         userManager.Update(user);                        
                     }

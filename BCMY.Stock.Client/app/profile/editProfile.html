@@ -2,105 +2,188 @@
     <h4>{{vm.title}}</h4>
     <br />
 
+    <!--manage the profile-->
+    <div class="panel panel-">
 
-    <!--username and position-->
-    <div class="row formRawPaddingCustom">
-        <label for="username" class="control-label col-md-2 fontWeightNormal">Username</label>
-        <div class="col-md-4">
-            <input type="text" id="username" ng-model="vm.username" placeholder="unique role name" ng-class="vm.userNameClass" ng-disabled="vm.usernameDisabled" />
-        </div>
-        <label for="position" class="control-label col-md-2 fontWeightNormal">Position</label>
-        <div class="col-md-4">
-            <input type="text" id="position" ng-model="vm.position" placeholder="user position" ng-class="vm.positionClass" ng-disabled="vm.positionDisabled" />
+        <div class="panel-body">
+            <div class="row" style="padding-left:5%">
+                <div class="col-md-11">
+                    <fieldset>
+                        <legend style=" font-size:medium;" class="panel-heading" id="newUserHeaderPanel">
+                            Edit Profile
+                        </legend>
+
+                        <!--username and position-->
+                        <div class="row formRawPaddingCustom">
+                            <label for="username" class="control-label col-md-2 fontWeightNormal">Username</label>
+                            <div class="col-md-4">
+                                <input type="text" id="username" ng-model="vm.username" placeholder="unique role name" ng-class="vm.userNameClass" ng-disabled="vm.usernameDisabled" />
+                            </div>
+                            <label for="position" class="control-label col-md-2 fontWeightNormal">Position</label>
+                            <div class="col-md-4">
+                                <input type="text" id="position" ng-model="vm.position" placeholder="user position" ng-class="vm.positionClass" ng-disabled="vm.positionDisabled" />
+                            </div>
+                        </div>
+
+                        <!--first name and lastname-->
+                        <div class="row formRawPaddingCustom">
+                            <label for="firstname" class="control-label col-md-2 fontWeightNormal">First name</label>
+                            <div class="col-md-4">
+                                <input type="text" id="firstname" ng-model="vm.firstname" placeholder="first name of the user" ng-class="vm.firstNameClass" ng-disabled="vm.firstNameDisabled" />
+                            </div>
+                            <label for="lastName" class="control-label col-md-2 fontWeightNormal">Last name</label>
+                            <div class="col-md-4">
+                                <input type="text" id="lastName" ng-model="vm.lastname" placeholder="surname of the user" ng-class="vm.lastNameClass" ng-disabled="vm.lastNameDisabled" />
+                            </div>
+                        </div>
+
+                        <!--telephone and extension-->
+                        <div class="row formRawPaddingCustom">
+                            <label for="telephone" class="control-label col-md-2 fontWeightNormal">Telephone</label>
+                            <div class="col-md-4">
+                                <input type="text" id="telephone" ng-model="vm.telephone" placeholder="telephone number" ng-class="vm.telephoneClass" ng-disabled="vm.telephoneDisabled" />
+                            </div>
+                            <label for="ext" class="control-label col-md-2 fontWeightNormal">Extension</label>
+                            <div class="col-md-4">
+                                <input type="text" id="ext" ng-model="vm.extension" placeholder="telephone extension" ng-class="vm.extensionClass" ng-disabled="vm.extensionDisabled" onkeypress="return isNumberKey(event)" maxlength="5" />
+                            </div>
+                        </div>
+
+                        <!--roles of the user and locked or not-->
+                        <div class="row formRawPaddingCustom">
+                            <label for="roles" class="control-label col-md-2 fontWeightNormal">User roles</label>
+                            <div class="col-md-4">
+                                <select id="roles" ng-class="vm.rolesClass" ng-disabled="vm.rolesDisabled" multiple ng-model="vm.rolesOfUser">
+                                    <option ng-repeat="role in vm.roles" value="{{role.name}}">{{role.name}}</option>
+                                </select>
+                            </div>
+                            <label for="locked" class="control-label col-md-2 fontWeightNormal">Locked</label>
+                            <div class="col-md-4">
+                                <select id="locked" ng-model="vm.locked" ng-class="vm.lockedClass" ng-disabled="vm.lockedDisabled">
+                                    <option value='No'>No</option>
+                                    <option value='Yes'>Yes</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <!--employment date and registration date-->
+                        <div class="row formRawPaddingCustom">
+                            <label for="empDateP" class="control-label col-md-2 fontWeightNormal">Employment date</label>
+                            <div class="col-md-4">
+                                <input type="text" id="empDate" ng-model="vm.employmentDate" placeholder="employment date" ng-class="vm.empDateClass" ng-disabled="vm.empDateDisabled" />
+                            </div>
+                            <label for="regDateP" class="control-label col-md-2 fontWeightNormal">Registration date</label>
+                            <div class="col-md-4">
+                                <input type="text" id="regDate" ng-model="vm.registrationDate" placeholder="registration date" ng-class="vm.regDateClass" ng-disabled="vm.regDateDisabled" />
+                            </div>
+                        </div>
+
+                        <!--last login time and last logout time-->
+                        <div class="row formRawPaddingCustom">
+                            <label for="loginDtP" class="control-label col-md-2 fontWeightNormal">Last login date/time</label>
+                            <div class="col-md-4">
+                                <input type="text" id="loginDtP" ng-model="vm.loginDateTime" placeholder="last login date time" ng-class="vm.loginDtP" ng-disabled="vm.loginDtPDisabled" />
+                            </div>
+                            <label for="logoutDtP" class="control-label col-md-2 fontWeightNormal">Last logout date/time</label>
+                            <div class="col-md-4">
+                                <input type="text" id="logoutDtP" ng-model="vm.logoutDateTime" placeholder="last logout date time" ng-class="vm.logoutDtPClass" ng-disabled="vm.logoutDtPeDisabled" />
+                            </div>
+                        </div>
+
+                        <!--invalid login attempt count and last invalid login attempt datetime-->
+                        <div class="row formRawPaddingCustom">
+                            <label for="invalidLoginAttCount" class="control-label col-md-2 fontWeightNormal">Invalid login count</label>
+                            <div class="col-md-4">
+                                <input type="text" id="invalidLoginAttCount" ng-model="vm.invalidLoginAttemptCount" placeholder="invalid login attempt count" ng-class="vm.invalidLoginAttCount" ng-disabled="vm.invalidLoginAttCountDisabled" />
+                            </div>
+                            <label for="invalidLoginDtP" class="control-label col-md-2 fontWeightNormal">Last invalid login date/time</label>
+                            <div class="col-md-4">
+                                <input type="text" id="invalidLoginDtP" ng-model="vm.invalidLoginDtP" placeholder="last invalid login date time" ng-class="vm.invalidLoginDtPClass" ng-disabled="vm.invalidLoginDtPDisabled" />
+                            </div>
+                        </div>
+
+                        <!-- error message section -->
+                        <div class="row">
+                            <div class="col-md-12">
+                                <label class="control-label fontWeightNormal" style="color:red"> {{vm.errorMessage}}</label>
+                            </div>
+                        </div>
+
+
+                        <div class="row">
+                            <div class="col-md-8"></div>
+                            <div class="col-md-1">
+                                <button id="btnSave" type="button" class="btn-sm btn-primary" ng-click='vm.saveUser()' ng-disabled="vm.saveBtnDisabled" style="float:right;width:150%">Save</button>
+                            </div>
+                            <div class="col-md-1">
+                                <button id="btnReset" type="button" class="btn-sm" ng-click='vm.resetUser()' style="float:left;width:150%">Reset</button>
+                            </div>
+                            <div class="col-md-2"></div>
+                        </div>
+
+                    </fieldset>
+                </div>
+                <div class="col-md-1">
+                </div>
+            </div>
         </div>
     </div>
 
-    <!--first name and lastname-->
-    <div class="row formRawPaddingCustom">
-        <label for="firstname" class="control-label col-md-2 fontWeightNormal">First name</label>
-        <div class="col-md-4">
-            <input type="text" id="firstname" ng-model="vm.firstname" placeholder="first name of the user" ng-class="vm.firstNameClass" ng-disabled="vm.firstNameDisabled" />
-        </div>
-        <label for="lastName" class="control-label col-md-2 fontWeightNormal">Last name</label>
-        <div class="col-md-4">
-            <input type="text" id="lastName" ng-model="vm.lastname" placeholder="surname of the user" ng-class="vm.lastNameClass" ng-disabled="vm.lastNameDisabled" />
+    <!--change profile-->
+    <div class="panel panel-collapse">
+
+        <div class="panel-body">
+            <div class="row" style="padding-left:5%">
+                <div class="col-md-11">
+                    <fieldset>
+                        <legend style=" font-size:medium;" class="panel-heading" id="newUserHeaderPanel">
+                            Change Password
+                        </legend>
+
+
+                        <div class="row formRawPaddingCustom">
+                            <label for="username" class="control-label col-md-2 fontWeightNormal">Username</label>
+                            <div class="col-md-4">
+                                <input type="text" id="username" ng-model="vm.username" placeholder="unique role name" ng-class="vm.userNameClass" ng-disabled="vm.usernameDisabled" />
+                            </div>
+                            <label for="currentPassword" class="control-label col-md-2 fontWeightNormal">Current Password</label>
+                            <div class="col-md-4">
+                                <input type="password" id="currentPassword" ng-model="vm.currentPassword" placeholder="current password" ng-class="vm.currentPasswordClass" ng-disabled="vm.currentPasswordDisabled" />
+                            </div>
+                        </div>
+
+                        <div class="row formRawPaddingCustom">
+                            <label for="newPassword" class="control-label col-md-2 fontWeightNormal">New Password</label>
+                            <div class="col-md-4">
+                                <input type="password" id="newPassword" ng-model="vm.newPassword" placeholder="new password" ng-class="vm.newPasswordClass" ng-disabled="vm.newPasswordDisabled" />
+                            </div>
+                            <label for="confirmNewPassword" class="control-label col-md-2 fontWeightNormal">Confirm New Password</label>
+                            <div class="col-md-4">
+                                <input type="password" id="confirmNewPassword" ng-model="vm.confirmNewPassword" placeholder="confirm new password" ng-class="vm.confirmNewPasswordClass" ng-disabled="vm.confirmNewPasswordDisabled" />
+                            </div>
+                        </div>
+
+                        <!-- error message section -->
+                        <div class="row">
+                            <div class="col-md-12">
+                                <label class="control-label fontWeightNormal" style="color:red"> {{vm.errorMessageChangePassword}}</label>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-8"></div>
+                            <div class="col-md-1"></div>
+                            <div class="col-md-1">
+                                <button id="btnSave" type="button" class="btn-sm" ng-click='vm.changePassword()' ng-disabled="vm.saveBtnDisabled" style="float:left;width:150%">Change Password</button>
+                            </div>
+                            <div class="col-md-2"></div>
+                        </div>
+                    </fieldset>
+                </div>
+                <div class="col-md-1">
+                </div>
+            </div>
         </div>
     </div>
 
-    <!--telephone and extension-->
-    <div class="row formRawPaddingCustom">
-        <label for="telephone" class="control-label col-md-2 fontWeightNormal">Telephone</label>
-        <div class="col-md-4">
-            <input type="text" id="telephone" ng-model="vm.telephone" placeholder="telephone number" ng-class="vm.telephoneClass" ng-disabled="vm.telephoneDisabled" />
-        </div>
-        <label for="ext" class="control-label col-md-2 fontWeightNormal">Extension</label>
-        <div class="col-md-4">
-            <input type="text" id="ext" ng-model="vm.extension" placeholder="telephone extension" ng-class="vm.extensionClass" ng-disabled="vm.extensionDisabled" onkeypress="return isNumberKey(event)" maxlength="5" />
-        </div>
-    </div>
-
-    <!--roles of the user and locked or not-->
-    <div class="row formRawPaddingCustom">
-        <label for="roles" class="control-label col-md-2 fontWeightNormal">User roles</label>
-        <div class="col-md-4">
-            <select id="roles" ng-class="vm.rolesClass" ng-disabled="vm.rolesDisabled" multiple ng-model="vm.rolesInPopup">
-                <option ng-repeat="role in vm.roles" value="{{role.name}}">{{role.name}}</option>
-            </select>
-        </div>
-        <label for="locked" class="control-label col-md-2 fontWeightNormal">Locked</label>
-        <div class="col-md-4">
-            <select id="locked" ng-model="vm.locked" ng-class="vm.lockedClass" ng-disabled="vm.lockedDisabled">
-                <option value='No'>No</option>
-                <option value='Yes'>Yes</option>
-            </select>
-        </div>
-    </div>
-
-    <!--employment date and registration date-->
-    <div class="row formRawPaddingCustom">
-        <label for="empDateP" class="control-label col-md-2 fontWeightNormal">Employment date</label>
-        <div class="col-md-4">
-            <input type="text" id="empDateP" ng-model="vm.employmentDate" placeholder="employment date" ng-class="vm.empDateClass" ng-disabled="vm.empDateDisabled" />
-        </div>
-        <label for="regDateP" class="control-label col-md-2 fontWeightNormal">Registration date</label>
-        <div class="col-md-4">
-            <input type="text" id="regDateP" ng-model="vm.registrationDate" placeholder="registration date" ng-class="vm.regDateClass" ng-disabled="vm.regDateDisabled" />
-        </div>
-    </div>
-
-    <!--last login time and last logout time-->
-    <div class="row formRawPaddingCustom">
-        <label for="loginDtP" class="control-label col-md-2 fontWeightNormal">Last login date/time</label>
-        <div class="col-md-4">
-            <input type="text" id="loginDtP" ng-model="vm.loginDateTime" placeholder="last login date time" ng-class="vm.loginDtP" ng-disabled="vm.loginDtPDisabled" />
-        </div>
-        <label for="logoutDtP" class="control-label col-md-2 fontWeightNormal">Last logout date/time</label>
-        <div class="col-md-4">
-            <input type="text" id="logoutDtP" ng-model="vm.logoutDateTime" placeholder="last logout date time" ng-class="vm.logoutDtPClass" ng-disabled="vm.logoutDtPeDisabled" />
-        </div>
-    </div>
-
-    <!--invalid login attempt count and last invalid login attempt datetime-->
-    <div class="row formRawPaddingCustom">
-        <label for="invalidLoginAttCount" class="control-label col-md-2 fontWeightNormal">Invalid login count</label>
-        <div class="col-md-4">
-            <input type="text" id="invalidLoginAttCount" ng-model="vm.invalidLoginAttemptCount" placeholder="invalid login attempt count" ng-class="vm.invalidLoginAttCount" ng-disabled="vm.invalidLoginAttCountDisabled" />
-        </div>
-        <label for="invalidLoginDtP" class="control-label col-md-2 fontWeightNormal">Last invalid login date/time</label>
-        <div class="col-md-4">
-            <input type="text" id="invalidLoginDtP" ng-model="vm.invalidLoginDtP" placeholder="last invalid login date time" ng-class="vm.invalidLoginDtPClass" ng-disabled="vm.invalidLoginDtPDisabled" />
-        </div>
-    </div>
-
-    <!-- error message section -->
-    <div class="row">
-        <div class="col-md-12">
-            <label class="control-label fontWeightNormal" style="color:red"> {{vm.errorMessagePopup}}</label>
-        </div>
-    </div>
-
-
-
-    <button id="btnSave" type="button" class="btn-sm btn-primary" ng-click='vm.saveUserEdit()' ng-disabled="vm.saveBtnPopupDisabled">Save</button>
-    <button id="btnCancel" type="button" class="btn-sm btn-default" data-dismiss="modal">Cancel</button>
 </div>

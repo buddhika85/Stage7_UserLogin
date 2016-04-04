@@ -24,7 +24,7 @@ using BCMY.WebAPI.Util.Encryption;
 namespace BCMY.WebAPI.Controllers.admin
 {
     /// <summary>
-    /// Used to expose chart related data
+    /// Used to expose user related data
     /// </summary>
     [EnableCors(origins: "https://localhost:44301", headers: "*", methods: "*")]
     //[Authorize]
@@ -72,6 +72,30 @@ namespace BCMY.WebAPI.Controllers.admin
             return userVms;
         }
 
+        [Authorize]
+        [HttpPost, Route("api/GetUserByEmail")]
+        public ApplicationUserViewModel GetUser(string username)
+        {
+            try
+            {                
+                ApplicationUser user = userManager.FindByEmail(username);
+                if (user != null)
+                {
+                    IList<ApplicationRole> roles = roleManager.Roles.ToList<ApplicationRole>();
+                    ApplicationUserViewModel applicationUserViewModel = ConvertToApplicationUserViewModel(user, roles);
+                    return applicationUserViewModel;
+                }
+                else
+                {
+                    return null;
+                }
+            }
+            catch (Exception ex)
+            {                
+                return null;
+            }
+        }
+
         // Returns a list of ApplicationUserViewModels 
         private IList<ApplicationUserViewModel> ConvertToApplicationUserViewModels(IList<ApplicationRole> roles, IList<ApplicationUser> users)
         {
@@ -80,47 +104,7 @@ namespace BCMY.WebAPI.Controllers.admin
             {
                 foreach (ApplicationUser user in users)
                 {
-                    ApplicationUserViewModel vm = new ApplicationUserViewModel();
-                    vm.Title = user.Title;
-                    vm.FirstName = user.FirstName;
-                    vm.LastName = user.LastName;
-                    vm.Position = user.Position;
-                    vm.DirectDial = (user.DirectDial == null || user.DirectDial == "") ? "-" : user.DirectDial;
-                    vm.Extension = (user.Extension == null || user.Extension.ToString() == "") ? "-" : user.Extension.ToString();
-                    vm.EmploymentDate = (user.EmploymentDate == null) ? "never" : user.EmploymentDate.Value.ToShortDateString();
-                    vm.RegistrationDate = (user.RegistrationDate == null) ? "never" : string.Format("{0} - {1}", user.RegistrationDate.Value.ToShortDateString(), user.RegistrationDate.Value.ToShortTimeString());
-                    vm.LastLogInTime = (user.LastLogInTime == null) ? "never" : string.Format("{0} - {1}", user.LastLogInTime.Value.ToShortDateString(), user.LastLogInTime.Value.ToShortTimeString());
-                    vm.LastLogoutTime = (user.LastLogoutTime == null) ? "never" : string.Format("{0} - {1}", user.LastLogoutTime.Value.ToShortDateString(), user.LastLogoutTime.Value.ToShortTimeString());
-                    vm.IsLoggedIn = user.IsLoggedIn;
-                    vm.InvalidLoginAttemptCount = user.InvalidLoginAttemptCount;
-                    vm.LastInvalidLoginAttemptTime = (user.LastInvalidLoginAttemptTime == null) ? "never" : string.Format("{0} - {1}", user.LastInvalidLoginAttemptTime.Value.ToShortDateString(), user.LastInvalidLoginAttemptTime.Value.ToShortTimeString());
-                    vm.Locked = user.Locked;
-                    vm.Id = user.Id;
-                    vm.UserName = user.UserName;
-                    vm.Roles = new List<ApplicationRole>();
-                    foreach (ApplicationUserRole role in user.Roles)
-                    {
-                        foreach (ApplicationRole applicationRole in roles)
-                        {
-                            if (applicationRole.Id == role.RoleId)
-                            {
-                                ApplicationRole userRole = new ApplicationRole();
-                                userRole.Id = applicationRole.Id;
-                                userRole.Name = applicationRole.Name;
-                                userRole.Description = applicationRole.Description;
-                                vm.Roles.Add(userRole);
-
-                                if (vm.UserRoles == null || vm.UserRoles == string.Empty)
-                                {
-                                    vm.UserRoles = userRole.Name;
-                                }
-                                else
-                                {
-                                    vm.UserRoles += string.Format(",{0}", userRole.Name);
-                                }
-                            }
-                        }
-                    }
+                    ApplicationUserViewModel vm = ConvertToApplicationUserViewModel(user, roles);
                     userVms.Add(vm);
                 }
             }
@@ -129,6 +113,53 @@ namespace BCMY.WebAPI.Controllers.admin
                 throw ex;
             }
             return userVms;
+        }
+
+        // Used to convert an ApplicationUser to ApplicationUserViewModel
+        private static ApplicationUserViewModel ConvertToApplicationUserViewModel(ApplicationUser user, IList<ApplicationRole> roles)
+        {
+            ApplicationUserViewModel vm = new ApplicationUserViewModel();
+            vm.Title = user.Title;
+            vm.FirstName = user.FirstName;
+            vm.LastName = user.LastName;
+            vm.Position = user.Position;
+            vm.DirectDial = (user.DirectDial == null || user.DirectDial == "") ? "-" : user.DirectDial;
+            vm.Extension = (user.Extension == null || user.Extension.ToString() == "") ? "-" : user.Extension.ToString();
+            vm.EmploymentDate = (user.EmploymentDate == null) ? "never" : user.EmploymentDate.Value.ToShortDateString();
+            vm.RegistrationDate = (user.RegistrationDate == null) ? "never" : string.Format("{0} - {1}", user.RegistrationDate.Value.ToShortDateString(), user.RegistrationDate.Value.ToShortTimeString());
+            vm.LastLogInTime = (user.LastLogInTime == null) ? "never" : string.Format("{0} - {1}", user.LastLogInTime.Value.ToShortDateString(), user.LastLogInTime.Value.ToShortTimeString());
+            vm.LastLogoutTime = (user.LastLogoutTime == null) ? "never" : string.Format("{0} - {1}", user.LastLogoutTime.Value.ToShortDateString(), user.LastLogoutTime.Value.ToShortTimeString());
+            vm.IsLoggedIn = user.IsLoggedIn;
+            vm.InvalidLoginAttemptCount = user.InvalidLoginAttemptCount;
+            vm.LastInvalidLoginAttemptTime = (user.LastInvalidLoginAttemptTime == null) ? "never" : string.Format("{0} - {1}", user.LastInvalidLoginAttemptTime.Value.ToShortDateString(), user.LastInvalidLoginAttemptTime.Value.ToShortTimeString());
+            vm.Locked = user.Locked;
+            vm.Id = user.Id;
+            vm.UserName = user.UserName;
+            vm.Roles = new List<ApplicationRole>();
+            foreach (ApplicationUserRole role in user.Roles)
+            {
+                foreach (ApplicationRole applicationRole in roles)
+                {
+                    if (applicationRole.Id == role.RoleId)
+                    {
+                        ApplicationRole userRole = new ApplicationRole();
+                        userRole.Id = applicationRole.Id;
+                        userRole.Name = applicationRole.Name;
+                        userRole.Description = applicationRole.Description;
+                        vm.Roles.Add(userRole);
+
+                        if (vm.UserRoles == null || vm.UserRoles == string.Empty)
+                        {
+                            vm.UserRoles = userRole.Name;
+                        }
+                        else
+                        {
+                            vm.UserRoles += string.Format(",{0}", userRole.Name);
+                        }
+                    }
+                }
+            }
+            return vm;
         }
 
         // Updates a user asynchronously    //,    
@@ -168,7 +199,7 @@ namespace BCMY.WebAPI.Controllers.admin
             }
             return message;
         }
-
+                        
 
         // Updates a user asynchronously    //,    
         [HttpPost, Route("api/LockUnlockUserAsync")]
