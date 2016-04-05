@@ -53,3 +53,4 @@
 /// <reference path="../app/login/userLogoutCtrl.js" />
 /// <reference path="../common/loginValidatorService.js" />
 /// <reference path="../app/profile/editProfileCtrl.js" />
+/// <reference path="angular-recaptcha.min.js" />
