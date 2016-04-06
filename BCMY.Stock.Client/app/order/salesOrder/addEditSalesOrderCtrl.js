@@ -12,6 +12,7 @@
     {
         var vm = this;
         if (loginValidatorService.loginValidator()) {
+            EnableTopNavigationBar();
             $("#loggedInUserWithTime").text(localStorage["userName"]);
             vm.title = "Add Sales Order";
             vm.totalValue = "Total : £ 0.00";

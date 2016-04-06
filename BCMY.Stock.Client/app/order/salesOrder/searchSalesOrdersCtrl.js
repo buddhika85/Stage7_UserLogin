@@ -6,10 +6,11 @@
 
     module.controller("SearchSalesOrdersCtrl", ["$http", "contactResource", "blockUI", "customerSupplierResource", '$location', '$rootScope', "loginValidatorService", searchSalesOrdersCtrl]);
 
-    function searchSalesOrdersCtrl($http, contactResource, blockUI, customerSupplierResource, $location, $rootScope) {
+    function searchSalesOrdersCtrl($http, contactResource, blockUI, customerSupplierResource, $location, $rootScope, loginValidatorService) {
         
         var vm = this;
         if (loginValidatorService.loginValidator()) {
+            EnableTopNavigationBar();
             $("#loggedInUserWithTime").text(localStorage["userName"]);
             vm.title = "Search sales orders";
 

@@ -11,6 +11,7 @@
     function editPastSalesOrderCtrl($http, contactResource, blockUI, customerSupplierResource, $location, currencyResource, loginValidatorService) {
         var vm = this;
         if (loginValidatorService.loginValidator()) {
+            EnableTopNavigationBar();
             $("#loggedInUserWithTime").text(localStorage["userName"]);
             vm.totalValue = "Total : £ 0.00";
             var searchObject = $location.search();                                                      // get order Id, that passed as query string

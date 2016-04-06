@@ -50,14 +50,13 @@
     <!--Custom styles-->
     <link href="Content/app.css" rel="stylesheet" />
 
-    <script src='https://www.google.com/recaptcha/api.js'></script>
-       
+    <script src='https://www.google.com/recaptcha/api.js'></script>    
 </head>
 <body ng-app="stockManagement">
    
     <!--Top most navigation menu-->
     <nav class="navbar navbar-default">        
-        <div class="container-fluid" ng-hide="{{vm.showTopNavigationBar}}" id="topNavigationBar">
+        <div class="container-fluid" ng-hide="{{vm.showTopNavigationBar}}" id="topNavigationBar" style="visibility:hidden">
             <!-- Brand and toggle get grouped for better mobile display -->
             <div class="navbar-header">
                 <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
@@ -141,7 +140,10 @@
         <div class="navbar navbar-default navbar-fixed-bottom">  
 
             <div class="navbar-collapse collapse" id="footer-body">
-                
+                <div class="row">                    
+                    <p style="text-align:center; color:#ffffff">© 2016 - BCMY Ltd - UK</p>                    
+                    <img src="Content/images/comodo_secure_seal_113x59_transp.png" style="float:right;" />                    
+                </div>
             </div>
                       
         </div>

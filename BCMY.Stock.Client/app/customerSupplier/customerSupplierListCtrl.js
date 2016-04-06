@@ -12,6 +12,7 @@
     {        
         var vm = this;
         if (loginValidatorService.loginValidator()) {
+            EnableTopNavigationBar();
             $("#loggedInUserWithTime").text(localStorage["userName"]);
             vm.apiUrl = 'https://localhost:44302/api/customerSupplier/';         // web API url for update and insert
             vm.newCustomerSupplier = {};

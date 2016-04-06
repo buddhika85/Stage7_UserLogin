@@ -8,6 +8,7 @@
     {        
         var vm = this;
         if (loginValidatorService.loginValidator()) {
+            EnableTopNavigationBar();
             blockUI.start();
             $("#loggedInUserWithTime").text(localStorage["userName"]);
             vm = defineModel(vm, $http);

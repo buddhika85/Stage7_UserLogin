@@ -13,6 +13,7 @@
     {
         var vm = this;
         if (loginValidatorService.loginValidator()) {
+            EnableTopNavigationBar();
             $("#loggedInUserWithTime").text(localStorage["userName"]);
             vm.title = "Manage Contacts of the Customers/Suppliers";
             vm.apiUrl = 'https://localhost:44302/api/contact/';          // web API url for update and insert

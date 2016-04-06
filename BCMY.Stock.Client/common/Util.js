@@ -266,5 +266,13 @@
         var array = delimitedString.split(delimiter);
         return array;
     }
+
+    // used to enable the top navigation bar - after logged in
+    function EnableTopNavigationBar() {
+        //$('#topNavigationBar').find('a').prop('disabled', false);
+        //$('#topNavigationBar a').unbind("click");
+        //$('#topNavigationBar').css("visibility", "visible");
+        $('#topNavigationBar').css("visibility", "visible");
+    }
    
 //}());

@@ -12,7 +12,7 @@
         //$('#topNavigationBar').hide();
 
         var vm = this;
-        DisableTopNavigationBar();
+        //DisableTopNavigationBar();
         //vm.showTopNavigationBar = true;
         
         vm = defineModel(vm, $http, blockUI);
@@ -95,9 +95,6 @@
                 //localStorage[".issued"] = data.issued;
                 localStorage["access_token"] = data.access_token;
                 localStorage["expires_in"] = data.expires_in;
-
-                // if login success - show top navigation bar   
-                EnableTopNavigationBar();
 
                 // write credential cookie                
                 if (vm.rememberMe) { 
@@ -252,6 +249,7 @@
     function fogotPassword(vm, $http, $rootScope, $window) {
         //alert("fogot my password");
         window.location = window.location.protocol + "//" + window.location.host + "/#/login/fogotPassword";
+        window.location.reload();
     }
      
     
@@ -265,11 +263,12 @@
         $('#topNavigationBar').css("visibility", "hidden");
     }
 
-    // used to enable the top navigation bar - after logged in
-    function EnableTopNavigationBar() {
-        $('#topNavigationBar').find('a').prop('disabled', false);
-        $('#topNavigationBar a').unbind("click");
-        $('#topNavigationBar').css("visibility", "visible");
-    }
+    //// used to enable the top navigation bar - after logged in
+    //function EnableTopNavigationBar() {
+    //    //$('#topNavigationBar').find('a').prop('disabled', false);
+    //    //$('#topNavigationBar a').unbind("click");
+    //    //$('#topNavigationBar').css("visibility", "visible");
+    //    $('#topNavigationBar').css("visibility", "visible");
+    //}
 
 }());

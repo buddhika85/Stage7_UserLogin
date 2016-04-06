@@ -8,6 +8,7 @@
     {
         var vm = this;
         if (loginValidatorService.loginValidator()) {
+            EnableTopNavigationBar();
             $("#loggedInUserWithTime").text(localStorage["userName"]);
             alert("Inside excel controller");
             vm = defineModel(vm, $http, blockUI);

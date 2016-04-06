@@ -10,6 +10,7 @@
         var vm = this;
         vm.scope = $scope;
         if (loginValidatorService.loginValidator()) {
+            EnableTopNavigationBar();
             vm.title = "Main Dashboard";
             $("#loggedInUserWithTime").text(localStorage["userName"]);
             vm.exchangeRatesDateJson = null;

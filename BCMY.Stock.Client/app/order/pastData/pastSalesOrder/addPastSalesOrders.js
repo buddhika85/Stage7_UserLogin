@@ -12,6 +12,7 @@
     function addPastSalesOrdersCtrl($http, contactResource, blockUI, customerSupplierResource, currencyResource, loginValidatorService) {
         var vm = this;
         if (loginValidatorService.loginValidator()) {
+            EnableTopNavigationBar();
             $("#loggedInUserWithTime").text(localStorage["userName"]);
             vm.title = "Add Past Sales Order";
             vm.totalValue = "Total : £ 0.00";
