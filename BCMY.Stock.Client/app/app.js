@@ -4,7 +4,7 @@
 
     "use strict";
     var app = angular.module("stockManagement",
-                               ["ui.router", "common.services", "ngFileUpload", "blockUI"]);
+                               ["ui.router", "common.services", "ngFileUpload", "blockUI", "vcRecaptcha"]);
   
 
     app.config(["$stateProvider",
@@ -113,6 +113,13 @@
                             url: "/profile/editProfile",
                             templateUrl: "app/profile/editProfile.html",
                             controller: "EditProfileCtrl as vm"
+                        })
+
+                        // fogot password
+                        .state("fogotPassword", {
+                            url: "/login/fogotPassword",
+                            templateUrl: "app/login/fogotPassword.html",
+                            controller: "FogotPasswordCtrl as vm"
                         })
 
                         // logout 

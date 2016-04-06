@@ -50,7 +50,7 @@
 
         vm.fogotPassword = function ()
         {
-            fogotPassword(vm, $http, $rootScope);
+            fogotPassword(vm, $http, $rootScope, $window);
         }
 
         return vm;
@@ -249,8 +249,9 @@
 
 
     // manage fogot password 
-    function fogotPassword(vm, $http, $rootScope) {
-        alert("fogot password - under construction");
+    function fogotPassword(vm, $http, $rootScope, $window) {
+        //alert("fogot my password");
+        window.location = window.location.protocol + "//" + window.location.host + "/#/login/fogotPassword";
     }
      
     

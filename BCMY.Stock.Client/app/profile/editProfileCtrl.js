@@ -261,6 +261,9 @@
                 url: serverUrl
             }).success(function (data) {
                 if (data.indexOf('Success') > -1) {
+                    vm.currentPassword = '';
+                    vm.newPassword = '';
+                    vm.confirmNewPassword = '';
                     vm.errorMessageChangePassword = data;
                     defineUserInfo(vm);
                     toastr.success(data);

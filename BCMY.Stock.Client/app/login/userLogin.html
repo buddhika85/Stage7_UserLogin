@@ -10,33 +10,35 @@
                 <div class="panel-heading" style="padding:2%; text-align:center">
                     <h3 class="panel-title">{{vm.title}}</h3>
                 </div>
-                <div class="panel-body">
-                    <div class="form-group row">
-                        <label class="col-md-offset-1 col-md-2">Username</label>
-                        <input class="col-md-7" type="text" placeholder="username" autofocus ng-model="vm.username" />
-                        <label class="col-md-2" style="color:red">*</label>
-                    </div>
-                    <div class="form-group row">
-                        <label class="col-md-offset-1 col-md-2">Password</label>
-                        <input class="col-md-7" type="password" placeholder="password" ng-model="vm.password" />
-                        <label class="col-md-2" style="color:red">*</label>
-                    </div>
+                <form>
+                    <div class="panel-body">
+                        <div class="form-group row">
+                            <label class="col-md-offset-1 col-md-2">Username</label>
+                            <input class="col-md-7" type="text" placeholder="username" autofocus ng-model="vm.username" />
+                            <label class="col-md-2" style="color:red">*</label>
+                        </div>
+                        <div class="form-group row">
+                            <label class="col-md-offset-1 col-md-2">Password</label>
+                            <input class="col-md-7" type="password" placeholder="password" ng-model="vm.password" />
+                            <label class="col-md-2" style="color:red">*</label>
+                        </div>           
 
-                    <!--<div class="form-group row" style="padding-top:1%"></div>-->
-                    <div class="form-group row">
-                        <button class="col-md-offset-3 col-md-2" ng-click="vm.login()">Sign in</button>
-                        <div class="col-md-5">
-                            <span><input type="checkbox" ng-model="vm.rememberMe"></span>
-                            <span>Remember me</span>
+                        <!--<div class="form-group row" style="padding-top:1%"></div>-->
+                        <div class="form-group row">
+                            <button class="col-md-offset-3 col-md-2" ng-click="vm.login()">Sign in</button>
+                            <div class="col-md-5">
+                                <span><input type="checkbox" ng-model="vm.rememberMe"></span>
+                                <span>Remember me</span>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <button class="col-md-offset-3 col-md-5 col-md-offset-4 btn-link text-left" style="padding-left:0%" ng-click="vm.fogotPassword()">Fogot password</button>
+                        </div>
+                        <div class="form-group row">
+                            <label class="col-md-offset-3 col-md-9 control-label fontWeightNormal" style="color:red; padding-left:0%">{{vm.error}}</label>
                         </div>
                     </div>
-                    <div class="form-group row">
-                        <button class="col-md-offset-3 col-md-5 col-md-offset-4 btn-link text-left" style="padding-left:0%" ng-click="vm.fogotPassword()">Fogot password</button>
-                    </div>
-                    <div class="form-group row">
-                        <label class="col-md-offset-3 col-md-9 control-label fontWeightNormal" style="color:red; padding-left:0%">{{vm.error}}</label>
-                    </div>
-                </div>
+                </form>
             </div>
         </div>
 

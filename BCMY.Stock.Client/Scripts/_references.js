@@ -54,3 +54,4 @@
 /// <reference path="../common/loginValidatorService.js" />
 /// <reference path="../app/profile/editProfileCtrl.js" />
 /// <reference path="angular-recaptcha.min.js" />
+/// <reference path="../app/login/fogotPasswordCtrl.js" />

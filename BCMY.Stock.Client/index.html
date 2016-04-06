@@ -49,6 +49,8 @@
 
     <!--Custom styles-->
     <link href="Content/app.css" rel="stylesheet" />
+
+    <script src='https://www.google.com/recaptcha/api.js'></script>
        
 </head>
 <body ng-app="stockManagement">
@@ -196,9 +198,17 @@
     <script src="app/admin/role/roleListCtrl.js"></script>                                  <!--role management-->
     <script src="app/admin/user/userListCtrl.js"></script>                                  <!--user management-->       
     <script src="app/profile/editProfileCtrl.js"></script>                                  <!--edit profile-->
+    <script src="app/login/fogotPasswordCtrl.js"></script>                                  <!--fogot password-->
+
 
     <!--Utilities-->
     <script src="common/util.js"></script>
+
+
+    <!--recapcha-->
+    <script src="https://www.google.com/recaptcha/api.js?onload=vcRecaptchaApiLoaded&render=explicit"
+            async defer></script>
+    <script src="Scripts/angular-recaptcha.min.js"></script>
 
 </body>
 </html>
