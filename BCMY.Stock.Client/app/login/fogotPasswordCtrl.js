@@ -12,12 +12,14 @@
         //$('#topNavigationBar').hide();
 
         var vm = this;
+        blockUI.start();
         DisableTopNavigationBar();
         //vm.showTopNavigationBar = true;
         
         vm = defineModel(vm, $http, blockUI);
         vm = prepareInitialUI(vm);
         vm = wireCommands(vm, $http, $location, $rootScope, $timeout, $window);
+        blockUI.stop();
     }
 
 
@@ -47,19 +49,14 @@
 
     function resetPassword(vm)
     {
-        debugger
-        //var v = grecaptcha.getResponse();
-        //if (v.length == 0) {
-        //    vm.error = "You can't leave Captcha Code empty";
-        //    return false;
-        //}
-        //if (v.length != 0) {
-        //    vm.error = "Captcha completed";
-        //    return true;
-        //}
+        debugger        
         var isValid = validateUsername(vm);
         if (isValid)
         {
+            isValid = validateRecapcha(vm);
+        }        
+        if (isValid)
+        { 
             var dataForBody = "username=" + vm.username;
             var serverUrl = ('https://localhost:44302/api/ResetPasswordAsync?' + dataForBody);
             vm.httpService({
@@ -81,11 +78,7 @@
                 vm.error = data;     // display error message
                 toastr.error(data);
             });
-        }
-        else {
-            // invalid username or password - client side validation fails
-            vm.error = 'Error - The username is incorrect.';
-        }
+        }        
     }
 
     // used to disable the top navigation bar - before login
@@ -104,6 +97,26 @@
         // username - validate for an email
         if (validateEmail(vm.username)) {
             isValid = true;           
+        }
+        else {
+            // invalid username or password - client side validation fails
+            vm.error = 'Error - The username is incorrect.';
+        }
+        return isValid;
+    }
+
+    // verifies the recapcha inputs of the user
+    function validateRecapcha(vm)
+    {
+        var isValid = false;
+        var v = grecaptcha.getResponse();
+        if (v.length == 0) {
+            vm.error = "You can't leave Captcha Code empty";
+            isValid = false;
+        }
+        if (v.length != 0) {
+            
+            isValid = true;
         }
         return isValid;
     }

@@ -10,11 +10,13 @@
         var vm = this;
         vm.scope = $scope;
         if (loginValidatorService.loginValidator()) {
+            blockUI.start();
             EnableTopNavigationBar();
             vm.title = "Main Dashboard";
             $("#loggedInUserWithTime").text(localStorage["userName"]);
             vm.exchangeRatesDateJson = null;
             DrawExchangeRatesChart($http);
+            blockUI.stop();
         }
         else {
             localStorage["userName"] = null;

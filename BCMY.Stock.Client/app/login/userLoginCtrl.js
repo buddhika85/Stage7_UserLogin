@@ -17,7 +17,7 @@
         
         vm = defineModel(vm, $http, blockUI);
         vm = prepareInitialUI(vm);
-        vm = wireCommands(vm, $http, $location, $rootScope, $timeout, $window);
+        vm = wireCommands(vm, $http, $location, $rootScope, $timeout, $window, blockUI);
     }
 
 
@@ -42,7 +42,7 @@
         return vm;
     }
 
-    function wireCommands(vm, $http, $location, $rootScope, $timeout, $window)
+    function wireCommands(vm, $http, $location, $rootScope, $timeout, $window, blockUI)
     {
         vm.login = function () {
             loginUser(vm, $http, $location, $rootScope, $timeout, $window);
@@ -50,7 +50,7 @@
 
         vm.fogotPassword = function ()
         {
-            fogotPassword(vm, $http, $rootScope, $window);
+            fogotPassword(vm, $http, $rootScope, $window, blockUI);
         }
 
         return vm;
@@ -246,10 +246,12 @@
 
 
     // manage fogot password 
-    function fogotPassword(vm, $http, $rootScope, $window) {
+    function fogotPassword(vm, $http, $rootScope, $window, blockUI) {
         //alert("fogot my password");
+        blockUI.start();
         window.location = window.location.protocol + "//" + window.location.host + "/#/login/fogotPassword";
         window.location.reload();
+        blockUI.stop();
     }
      
     
