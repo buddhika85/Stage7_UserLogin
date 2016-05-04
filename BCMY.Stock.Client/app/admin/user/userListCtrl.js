@@ -382,6 +382,7 @@
     function saveUserEdit(vm) {
         //alert('save edit - popup ' + vm.username + ' , ' + vm.position + ' , ' + vm.firstname  + ' , ' + vm.lastname  + ' , ' + vm.telephone  + ' , ' + vm.extension  + ' , ' + 
         //    vm.rolesInPopup + ' , ' + vm.employmentDate + ' , ' + vm.registrationDate + ' , ' + vm.locked);
+        debugger
         var isValid = validateEditPopup(vm);
         //alert('save edit - popup ' + isValid);
         if (isValid) {
@@ -899,7 +900,7 @@
         if (isValid) {
             vm.employmentDate = $.trim(vm.employmentDate);
             var date = Date.parse(vm.employmentDate);
-            if (isNotEmptyOrSpaces(vm.employmentDate) && (!isNaN(date))) {
+            if (isNotEmptyOrSpaces(vm.employmentDate)) {
                 vm.errorMessagePopup = '';
                 vm.empDateClass = '';
                 isValid = true;
@@ -915,7 +916,7 @@
         if (isValid) {
             vm.registrationDate = $.trim(vm.registrationDate);
             var date = Date.parse(vm.registrationDate);
-            if (isNotEmptyOrSpaces(vm.registrationDate) && (!isNaN(date))) {
+            if (isNotEmptyOrSpaces(vm.registrationDate)) {
                 vm.errorMessagePopup = '';
                 vm.regDateClass = '';
                 isValid = true;
@@ -1053,7 +1054,7 @@
         {
             vm.empDateCreate = $.trim(vm.empDateCreate);
             var date = Date.parse(vm.empDateCreate);
-            if (isNotEmptyOrSpaces(vm.empDateCreate) && (!isNaN(date))) {
+            if (isNotEmptyOrSpaces(vm.empDateCreate)) {
                 vm.errorMessageCreate = '';
                 vm.empDateCreateClass = '';
                 isValid = true;
@@ -1070,7 +1071,7 @@
         {
             vm.regDateCreate = $.trim(vm.regDateCreate);
             var date = Date.parse(vm.regDateCreate);
-            if (isNotEmptyOrSpaces(vm.regDateCreate) && (! isNaN(date))) {
+            if (isNotEmptyOrSpaces(vm.regDateCreate)) {
                 vm.errorMessageCreate = '';
                 vm.regDateCreateClass = '';
                 isValid = true;

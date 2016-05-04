@@ -122,6 +122,13 @@
                             controller: "FogotPasswordCtrl as vm"
                         })
 
+                        // reset password
+                        .state("resetPassword", {
+                            url: "/login/resetPassword",
+                            templateUrl: "app/login/resetPassword.html",
+                            controller: "ResetPasswordCtrl as vm"
+                        })
+
                         // logout 
                         .state("userLogout", {
                             url: "/logout",

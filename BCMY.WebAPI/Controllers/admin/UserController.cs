@@ -313,18 +313,16 @@ namespace BCMY.WebAPI.Controllers.admin
             {
                 string[] roles = rolescsv.Split(',');                
                 ApplicationUser user = await userManager.FindByNameAsync(username);
+                List<string> userAssignedRoles = new List<string>();
                 foreach (ApplicationUserRole aur in user.Roles)
-                {
-                    foreach (string role in roles)
-                    {
-                        ApplicationRole applicationRole = roleManager.FindByName(role);
-                        if (applicationRole != null && applicationRole.Id == aur.RoleId)
-                        {
-                            roles = roles.Where(r => r != role).ToArray<string>();
-                        }
-                    }
+                {                    
+                    ApplicationRole applicationRole = await roleManager.FindByIdAsync(aur.RoleId);
+                    userAssignedRoles.Add(applicationRole.Name);
                 }
-                IdentityResult result = await userManager.AddToRolesAsync(user.Id, roles);
+                IdentityResult result = await userManager.RemoveFromRolesAsync(user.Id, userAssignedRoles.ToArray());
+                result = await userManager.UpdateAsync(user);
+                result = await userManager.AddToRolesAsync(user.Id, roles);
+                result = await userManager.UpdateAsync(user);
                 message = "Success - Role assignment successful";
             }
             catch (Exception ex)

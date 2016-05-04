@@ -55,3 +55,4 @@
 /// <reference path="../app/profile/editProfileCtrl.js" />
 /// <reference path="angular-recaptcha.min.js" />
 /// <reference path="../app/login/fogotPasswordCtrl.js" />
+/// <reference path="../app/login/resetPasswordCtrl.js" />

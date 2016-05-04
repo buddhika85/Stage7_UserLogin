@@ -2,10 +2,10 @@
 (function () {
     "use strict";
     var module = angular.module("stockManagement");         // get module
-    module.controller("DashboardCtrl", ["$http", "$location", "$scope", "loginValidatorService", dashboardCtrl]);    // attach controller to the module
+    module.controller("DashboardCtrl", ["$http", "$location", "$scope", "blockUI", "loginValidatorService", dashboardCtrl]);    // attach controller to the module
 
 
-    function dashboardCtrl($http, $location, $scope, loginValidatorService)                   // controller function
+    function dashboardCtrl($http, $location, $scope, blockUI, loginValidatorService)                   // controller function
     {        
         var vm = this;
         vm.scope = $scope;

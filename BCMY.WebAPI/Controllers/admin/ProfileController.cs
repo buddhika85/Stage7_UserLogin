@@ -114,6 +114,93 @@ namespace BCMY.WebAPI.Controllers.admin
             return message;
         }
 
+        [HttpPost, Route("api/GetPasswordResetTokenAsync")]
+        public async Task<string> GetPasswordResetTokenAsync(string username)
+        {
+            string message = string.Empty;
+            try
+            {
+                ApplicationUser userToUpdate = userManager.FindByEmail(username);
+                if (userToUpdate != null)
+                {                    
+                    string resetPasswordToken = await userManager.GeneratePasswordResetTokenAsync(userToUpdate.Id);
+
+                    if (resetPasswordToken != null && resetPasswordToken != string.Empty)
+                    {
+                        bool wasEmailed = SendPasswordResetInstructionsEmail(username, resetPasswordToken);
+                        if (wasEmailed)
+                        {
+                            message = "Success - password reset instructions are notified via email";
+                        }
+                        else
+                        {
+                            message = string.Format("Error - Unable to send the password reset instructions email to {0}. Please contact IT-support", username);
+                        }
+                    }
+                    else
+                    {
+                        message = "Error - user password reset unsuccessful. Token error. Please contact IT-support";
+                    }
+                }
+                else
+                {
+                    // user not found 
+                    message = "Error - user password reset unsuccessful";
+                }
+            }
+            catch (Exception)
+            {
+                message = "Error - user password reset unsuccessful - Contact IT support";
+            }
+            return message;
+        }
+
+        [HttpPost, Route("api/ResetPasswordWithTokenAsync")]
+        public async Task<string> ResetPasswordWithTokenAsync(string username, string token)
+        {
+            string message = string.Empty;
+            try
+            {
+                ApplicationUser userToUpdate = userManager.FindByEmail(username);
+                if (userToUpdate != null)
+                {
+                    string temporaryPassword = CommonBehaviour.GenerateTempPassword();
+                    IdentityResult result = await userManager.ResetPasswordAsync(userToUpdate.Id, token.Trim(), temporaryPassword);
+                    if (result != null && result.Succeeded == true)
+                    {
+                        bool wasEmailed = SendPasswordResetEmail(username, temporaryPassword);
+                        if (wasEmailed)
+                        {
+                            message = "Success - user password reset successful and user notified via email";
+                        }
+                        else
+                        {
+                            message = string.Format("Error - user password reset successful, but unable to send the notification email to {0}. Please contact IT-support", username);
+                        }
+                    }
+                    else
+                    {
+                        string errors = string.Empty;
+                        foreach (string error in result.Errors)
+                        {
+                            errors += error + " ";
+                        }
+                        message = string.Format("Error : {0}", errors);
+                    }
+                }
+                else
+                {
+                    // user not found 
+                    message = "Error - user password reset unsuccessful";
+                }
+            }
+            catch (Exception)
+            {
+                message = "Error - user password reset unsuccessful - Contact IT support";
+            }
+            return message;
+        }
+
 
         [HttpPost, Route("api/ResetPasswordAsync")]
         public async Task<string> ResetPasswordAsync(string username)
@@ -150,16 +237,33 @@ namespace BCMY.WebAPI.Controllers.admin
                     }
                 }
                 else
-                { 
+                {
                     // user not found 
                     message = "Error - user password reset unsuccessful";
-                }                
+                }
             }
             catch (Exception)
             {
                 message = "Error - user password reset unsuccessful - Contact IT support";
             }
             return message;
+        }
+
+        // A helper method to email and inform user that the password reset instractions with password reset token and password reset link
+        private bool SendPasswordResetInstructionsEmail(string username, string resetPasswordToken)
+        {
+            bool isUserEmailed = false;
+            try
+            {
+                string message = string.Format("You have requested to reset your password on BCMY Stock management system - {0} at {1}\n\n\n\n Your password reset token : {2} \n\n\nPlease visit : {3} to proceed", ConfigurationManager.AppSettings["WwwUrl"], DateTime.Now, resetPasswordToken, ConfigurationManager.AppSettings["resetPasswordPage"] + "?user=" + username);
+                Emailer.InformViaEmail("BCMY Stock Management System - Password Reset Instructions", message, null, null, username);
+                isUserEmailed = true;
+            }
+            catch (Exception)
+            {
+                isUserEmailed = false;
+            }
+            return isUserEmailed;
         }
 
         // A helper method to email and inform user that the password reset is complete and temporary password can be used to login to the system

@@ -4,67 +4,72 @@
 
     var module = angular.module("stockManagement");
 
-    module.controller("FogotPasswordCtrl", ["$http", "blockUI", "$location", "$rootScope", "$timeout", "$window", fogotPasswordCtrl]);    // attach controller to the module
+    module.controller("ResetPasswordCtrl", ["$http", "blockUI", "$location", "$rootScope", "$timeout", "$window", resetPasswordCtrl]);    // attach controller to the module
 
 
-    function fogotPasswordCtrl($http, blockUI, $location, $rootScope, $timeout, $window)                   // controller funcion
+    function resetPasswordCtrl($http, blockUI, $location, $rootScope, $timeout, $window)                   // controller funcion
     {
         //$('#topNavigationBar').hide();
-
+        debugger
         var vm = this;
         blockUI.start();
         DisableTopNavigationBar();
         //vm.showTopNavigationBar = true;
-        
-        vm = defineModel(vm, $http, blockUI);
+
+        vm = defineModel(vm, $http, blockUI, $location);
         vm = prepareInitialUI(vm);
         vm = wireCommands(vm, $http, $location, $rootScope, $timeout, $window);
         blockUI.stop();
     }
 
 
-    function defineModel(vm, $http, blockUI)
-    {        
+    function defineModel(vm, $http, blockUI, $location) {
         vm.httpService = $http;
+        var searchObject = $location.search();                                                      // get username of the password reset user, that is passed with in query string
+        var username = searchObject.user;
+        vm.username = username;
+        vm.usernameDisabled = true;
+        vm.resetBtnDisabled = false;
+        vm.token = '';
         vm.error = '';
         return vm;
     }
 
-    function prepareInitialUI(vm)
-    {        
+    function prepareInitialUI(vm) {
         DisableTopNavigationBar();                          // disable the top navigation bar - before login
-        vm.title = "BCMY Stock Management - Fogot Password";
-       
+        vm.title = "BCMY Stock Management - Reset Password";
+
         return vm;
     }
 
-    function wireCommands(vm, $http, $location, $rootScope, $timeout, $window)
-    {        
-        vm.resetPassword = function ()
-        {
+    function wireCommands(vm, $http, $location, $rootScope, $timeout, $window) {
+        vm.resetPassword = function () {
             resetPassword(vm);
         }
         return vm;
     }
 
-    function resetPassword(vm)
-    {
-        debugger        
+    function resetPassword(vm) {
+        debugger
         var isValid = validateUsername(vm);
         if (isValid)
         {
-            isValid = validateRecapcha(vm);
-        }        
-        if (isValid)
-        { 
-            var dataForBody = "username=" + vm.username;
-            var serverUrl = ('https://localhost:44302/api/ResetPasswordAsync?' + dataForBody);
+            isValid = validateToken(vm);
+        }
+        //if (isValid)
+        //{
+        //    isValid = validateRecapcha(vm);
+        //}        
+        if (isValid) {
+            var dataForBody = "username=" + vm.username + "&token=" + vm.token;
+            var serverUrl = ('https://localhost:44302/api/ResetPasswordWithTokenAsync?' + dataForBody);
             vm.httpService({
                 method: "post",
-                headers: { 'Content-Type': 'application/json'},
+                headers: { 'Content-Type': 'application/json' },
                 url: serverUrl
             }).success(function (data) {
                 if (data.indexOf('Success') > -1) {
+                    vm.resetBtnDisabled = true;
                     vm.username = '';
                     vm.error = data;
                     toastr.success(data);
@@ -78,7 +83,7 @@
                 vm.error = data;     // display error message
                 toastr.error(data);
             });
-        }        
+        }
     }
 
     // used to disable the top navigation bar - before login
@@ -96,7 +101,7 @@
         var isValid = false;
         // username - validate for an email
         if (validateEmail(vm.username)) {
-            isValid = true;           
+            isValid = true;
         }
         else {
             // invalid username or password - client side validation fails
@@ -105,9 +110,22 @@
         return isValid;
     }
 
-    // verifies the recapcha inputs of the user
-    function validateRecapcha(vm)
+    // verifies the token input empty or not
+    function validateToken(vm)
     {
+        var isValid = false;        
+        if (vm.token.length == 0) {
+            vm.error = "Error - You can't leave token input empty";
+            isValid = false;
+        }
+        else {
+            isValid = true;
+        }
+        return isValid;
+    }
+
+    // verifies the recapcha inputs of the user
+    function validateRecapcha(vm) {
         var isValid = false;
         var v = grecaptcha.getResponse();
         if (v.length == 0) {
@@ -115,7 +133,7 @@
             isValid = false;
         }
         if (v.length != 0) {
-            
+
             isValid = true;
         }
         return isValid;
